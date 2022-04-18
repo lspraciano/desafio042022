@@ -9,11 +9,10 @@ class Configuration:
 
 
 class DevelopmentConfig(Configuration):
-    ...
-
+    SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:Vish_123123@127.0.0.1:5432/desafio042022'
 
 class ProductionConfig(Configuration):
-    ...
+    SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:Vish_123123@127.0.0.1:5432/desafio042022'
 
 
 app_configuration = {
