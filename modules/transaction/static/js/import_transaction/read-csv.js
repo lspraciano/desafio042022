@@ -1,8 +1,9 @@
 export async function readCsv(file) {
     return new Promise((resolve, reject) => {
         Papa.parse(file, {
-            header: true,
+            header: false,
             skipEmptyLines: true,
+            delimiter: ",",
             complete: (results) => {
                 return resolve(results.data);
             },

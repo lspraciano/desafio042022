@@ -1,4 +1,4 @@
-import {validateInputFile} from "./validateInputFile.js";
+import {validateInputFile} from "./validate-input-file.js";
 
 (() => {
     const fileInput = document.getElementById('input-file');

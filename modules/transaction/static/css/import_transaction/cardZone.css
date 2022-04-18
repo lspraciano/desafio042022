@@ -33,6 +33,7 @@
 #card-zone__mid__icon-off {
     display: flex;
 }
+
 #card-zone__mid__icon-on {
     display: none;
     border: solid 2px #5dfa7d;
@@ -68,3 +69,33 @@
     cursor: pointer;
 }
 
+
+@media only screen and (max-width: 1180px) and (orientation: portrait) {
+
+    .card-zone {
+        border: .8rem #f8f8f8 dashed;
+        width: 80%;
+        height: 50%;
+    }
+
+    .card-zone i {
+        font-size: 10rem;
+    }
+
+    .card-zone h1 {
+        font-size: 3rem;
+    }
+
+    .card-zone__bottom button {
+        font-size: 2.5rem;
+    }
+
+}
+
+@media only screen and (max-width: 1180px) and (orientation: landscape) {
+    .card-zone {
+        border: .4rem #f8f8f8 dashed;
+        width: 60%;
+        height: 80%;
+    }
+}
