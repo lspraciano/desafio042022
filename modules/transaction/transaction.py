@@ -9,8 +9,8 @@ transaction_blueprint = Blueprint('transaction', __name__,
                                   static_folder='static')
 
 
-@token_authentication
 @transaction_blueprint.route('/', methods=['GET', ])
+@token_authentication
 def transaction_():
     if request.method == 'GET':
         return render_template('import_transaction.html'), 200

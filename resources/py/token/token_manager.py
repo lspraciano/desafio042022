@@ -59,7 +59,8 @@ def token_authentication(function):
     def wrapper(*args, **kwargs):
 
         try:
-            token_from_cookie = request.cookies.get('alan_access_token')
+            token_name = Configuration.TOKEN_NAME
+            token_from_cookie = request.cookies.get(token_name)
             token_no_bearer = token_from_cookie
 
         except:

@@ -6,6 +6,7 @@ class Configuration:
     PORT = 5001
     SECRET_KEY = 'eb_54okkma5t_=z3z%tazp!xutgfif+3b76(apf-acr6m@71#$'
     ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+    TOKEN_NAME = 'new_app'
     TIME_EXP_TOKEN = 30  # minutes
     LIMIT_EXP_TOKEN = 1  # minutes
 
