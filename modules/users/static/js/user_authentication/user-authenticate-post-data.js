@@ -1,0 +1,58 @@
+import {deleteCookie, setCookie} from "../../../../../resources/js/cookie/cookie-manager.js";
+
+(() => {
+
+    const enterButtonForm = document.querySelector('[name="button"]');
+    const username = document.querySelector('[name="user"]');
+    const password = document.querySelector('[name="password"]');
+
+    const actionButton = async () => {
+
+        if (username.value === "") {
+            await alert("Preencha campo Usuário corretamente!");
+            username.focus();
+            return;
+        }
+
+        if (password.value === "") {
+            await alert("Preencha campo Senha corretamente!");
+            password.focus();
+            return;
+        }
+
+        const credentials = {"username": username.value, "password": password.value};
+
+
+        const url = `${window.location.origin}/user/authentication`;
+        const param = {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json"
+            },
+            body: JSON.stringify(credentials)
+
+        }
+
+        const response = await fetch(url, param)
+        const token = await response.json()
+
+        if ('error' in token) {
+            await alert("Acesso negado. Verifique suas credenciais e tente novamente");
+            await deleteCookie()
+            username.value = '';
+            password.value = '';
+            username.focus();
+
+        } else {
+            await setCookie(token['token']);
+            window.location.href = `${window.location.origin}/transaction/`;
+
+        }
+
+    }
+
+    enterButtonForm.addEventListener('click', async () => {
+        await actionButton();
+    })
+
+})()

@@ -2,13 +2,14 @@
 from flask import Blueprint, render_template, request
 
 # Created Imports
-
+from resources.py.token.token_manager import token_authentication
 
 transaction_blueprint = Blueprint('transaction', __name__,
                                   template_folder='templates',
                                   static_folder='static')
 
 
+@token_authentication
 @transaction_blueprint.route('/', methods=['GET', ])
 def transaction_():
     if request.method == 'GET':
