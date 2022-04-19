@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bem-Vindo</title>
+    <!-- CSS -->
+    <link rel="stylesheet" href="./static/css/user_authentication/_styles.css">
+</head>
+
+<div id="pre-loader" class="pre-loader">
+    <div id="gif-erlen" class="gif-erlen"></div>
+</div>
+
+<body>
+
+<div class="container col-11 col-md-9" id="form-container">
+    <div class="row align-items-center gx-5">
+        <div class="col-md-6 order-md-2">
+            <h2>Vamos Iniciar?</h2>
+            <form>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" name="user" id="user"
+                           placeholder="Digite o nome do usuário">
+                    <label for="user" class="form-label">Digite o nome do usuário</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="password" class="form-control" name="password" id="password" autocomplete="false"
+                           placeholder="Digite sua senha">
+                    <label for="password" class="form-label">Digite sua senha</label>
+                </div>
+                <input id="button-login" type="button" class="btn btn-primary" value="Entrar" name="button">
+            </form>
+        </div>
+        <div class="col-md-6 order-md-1">
+            <div class="col-12">
+                <img src="/user/static/images/user_authenticate/undraw_medicine_b-1-ol.svg" alt="Entrar no Sistema"
+                     class="img-fluid">
+            </div>
+            <div class="col-12" id="link-container">
+                <a href="/user/new">Ainda não tenho cadastro</a>
+            </div>
+            <div class="col-12" id="link-container-2">
+                <a href="/user/pass-reset">Recuperar ou trocar minha senha</a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
