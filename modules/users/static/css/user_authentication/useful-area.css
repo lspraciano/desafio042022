@@ -1,0 +1,29 @@
+.useful-area {
+    background-color: #f8f8f8;
+    display: flex;
+    border-radius: 20px;
+    box-shadow: .5px 10px 15px rgba(0, 0, 0, 0.2);
+    margin: 25px auto;
+    padding: 25px;
+    width: 70%;
+    height: 70%;
+    align-items: center;
+    justify-content: center;
+    /*box-shadow: 0 7rem 0 0  #5253a3 inset;*/
+}
+
+
+@media (max-width: 1180px) and (orientation: portrait) {
+    .useful-area {
+        width: 90%;
+        height: auto;
+        flex-direction: column;
+    }
+}
+
+@media only screen and (max-width: 1180px) and (orientation: landscape) {
+    .useful-area {
+        width: 90%;
+        height: 90%;
+    }
+}

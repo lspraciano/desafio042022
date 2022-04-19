@@ -8,7 +8,7 @@ user_blueprint = Blueprint('user', __name__,
                            static_folder='static')
 
 
-@user_blueprint.route('/')
-def login():
+@user_blueprint.route('/authentication')
+def user_authentication():
     return render_template('user_authentication.html'), 200
 

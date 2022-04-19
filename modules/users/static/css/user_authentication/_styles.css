@@ -1,4 +1,11 @@
 /* Geral */
 @import "general.css";
 
-/* Card Zone */
+/* Useful Area */
+@import "useful-area.css";
+
+/* Figure Zone */
+@import "figure-zone.css";
+
+/* Form Zone */
+@import "form-zone.css";
