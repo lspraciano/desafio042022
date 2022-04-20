@@ -45,7 +45,7 @@ import {deleteCookie, setCookie} from "../../../../../resources/js/cookie/cookie
 
         } else {
             await setCookie(token['token']);
-            window.location.href = `${window.location.origin}/transaction/`;
+            window.location.href = `${window.location.origin}/home`;
 
         }
 

@@ -1,0 +1,17 @@
+/* Configurações Gerais */
+@import "general.css";
+
+/* Menu Lateral*/
+@import "side-bar.css";
+
+/* Área Útil */
+@import "useful-area.css";
+
+/* Barra de Navegação Superior */
+@import "navigation-bar.css";
+
+/* Região de Plotagem */
+@import "plotting-area.css";
+
+/* Frame to HTML */
+@import "frame-to-html.css";

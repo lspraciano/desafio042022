@@ -1,0 +1,6 @@
+/* ZONA DE PLOTAGEM */
+.plotting-zone {
+    width: 100%;
+    height: 90%;
+    overflow-x: auto;
+}

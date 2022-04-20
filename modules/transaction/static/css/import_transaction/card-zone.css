@@ -2,7 +2,7 @@
     width: 50%;
     height: 50%;
     display: flex;
-    border: #f8f8f8 dashed;
+    border: #5253a3 dashed;
     flex-direction: column;
     justify-content: center;
     border-radius: 5px;
@@ -26,7 +26,7 @@
 
 .card-zone__mid label {
     font-size: 7rem;
-    color: #f8f8f8;
+    color: #5253a3;
     cursor: pointer;
 }
 
@@ -51,20 +51,20 @@
 .card-zone__bottom h1 {
     margin-top: 20px;
     text-align: center;
-    color: #f8f8f8;
+    color: #5253a3;
     min-width: 100%;
 }
 
 .card-zone__bottom button {
-    color: #5253a3;
+    color: #f0f2f5;
     font-weight: bold;
     margin-top: 20px;
-    background-color: #f8f8f8;
+    background-color: #5253a3;
     min-width: 90%;
     font-size: 1rem;
     border-radius: 4px;
     padding: 5px 10px;
-    border: solid white 2px;
+    border: solid #5253a3 2px;
     display: none;
     cursor: pointer;
 }
@@ -73,30 +73,42 @@
 @media only screen and (max-width: 1180px) and (orientation: portrait) {
 
     .card-zone {
-        border: .8rem #f8f8f8 dashed;
-        width: 80%;
-        height: 50%;
+        border: .3rem #5253a3 dashed;
+        width: 90%;
+        height: 80%;;
     }
 
     .card-zone i {
-        font-size: 10rem;
+        font-size: 5rem;
     }
 
     .card-zone h1 {
-        font-size: 3rem;
+        font-size: 2rem;
     }
 
     .card-zone__bottom button {
-        font-size: 2.5rem;
+        font-size: 1.5rem;
     }
 
 }
 
 @media only screen and (max-width: 1180px) and (orientation: landscape) {
     .card-zone {
-        border: .4rem #f8f8f8 dashed;
-        width: 60%;
+        border: .3rem #5253a3 dashed;
+        width: 80%;
         height: 80%;
+    }
+
+    .card-zone i {
+        font-size: 5rem;
+    }
+
+    .card-zone h1 {
+        font-size: 2rem;
+    }
+
+    .card-zone__bottom button {
+        font-size: 1.2rem;
     }
 
 }

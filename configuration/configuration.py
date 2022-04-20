@@ -7,8 +7,8 @@ class Configuration:
     SECRET_KEY = 'eb_54okkma5t_=z3z%tazp!xutgfif+3b76(apf-acr6m@71#$'
     ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
     TOKEN_NAME = 'new_app'
-    TIME_EXP_TOKEN = 30  # minutes
-    LIMIT_EXP_TOKEN = 1  # minutes
+    TIME_EXP_TOKEN = 30  # Time in minutes of JWT token
+    LIMIT_EXP_TOKEN = 1  # Time in minutes of JWT token to expire
 
 
 class DevelopmentConfig(Configuration):
