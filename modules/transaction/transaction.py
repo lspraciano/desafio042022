@@ -9,13 +9,14 @@ transaction_blueprint = Blueprint('transaction', __name__,
                                   static_folder='static')
 
 
-@transaction_blueprint.route('/', methods=['GET', ])
+@transaction_blueprint.route('/', methods=['GET', 'POST'])
 @token_authentication
 def transaction_():
     if request.method == 'GET':
-        return render_template('dashboard_transaction.html'), 200
-    if request.method == 'POST':
         return {'Em desenvolvimento': 'TRUE'}
+    if request.method == 'POST':
+        print(request.json)
+        return {'teste': request.json}
 
 
 @transaction_blueprint.route('/import-csv', methods=['GET', ])
