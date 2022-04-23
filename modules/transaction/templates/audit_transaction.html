@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auditoria Perfil de Exames</title>
+    <!--  Nosso CSS -->
+    <link rel="stylesheet" href="/exams/static/css/audit/audit-style.css">
+    <!--  BoxIcons CDN Link -->
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+
+</head>
+
+<div id="pre-loader" class="pre-loader">
+    <div id="pre-loader__gif-erlen" class="pre-loader__gif-erlen"></div>
+</div>
+
+<body>
+
+    <div id="side-zone" class="side-zone">
+
+        <div class="side-zone__menu">
+
+            <div class="menu__header">
+
+                <div class="menu__header__title">
+                    <span>ALAN MENU</span>
+                </div>
+
+
+            </div>
+
+            <div class="menu__body">
+
+                <ul>
+                    <li>
+                        <a href="/exams">
+                            <i class='bx bx-grid-alt'></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a id="body__option-exam">
+                            <div>
+                                <i class='bx bx-test-tube' ></i>
+                                <span>Perfil de Exames</span>
+                            </div>
+                            <span id="option-exam__arrow" class='bx bx-chevron-right' ></span>
+                        </a>
+                            <ul id="option-exam__sub-option-exam" class="sub-option">
+                                <li>
+                                    <a href="/exams/maintenance">
+                                        <i class='bx bx-wrench'></i>
+                                        <span>Manutenção</span>
+                                    </a>
+                                    <a>
+                                        <i class='bx bx-flag'></i>
+                                        <span>Auditoria</span>
+                                    </a>
+                                </li>
+                            </ul>
+                    </li>
+                </ul>
+
+            </div>
+
+            <div class="side-zone__footer">
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="useful-zone">
+
+        <div class="useful-zone__navigation-zone">
+
+            <div id="navigation-zone__menu-icon" class="navigation-zone__menu-icon">
+                <a class='bx bx-menu'></a>
+            </div>
+
+            <div class="navigation-zone__screen-name">
+                <div>
+                    Auditoria Perfil de Exames
+                </div>
+            </div>
+            <div class="navigation-zone__logout">
+                <a id="logout__icon"class='bx bx-log-out'></a>
+                <a id="logout__btn" class="logout__btn">Logout</a>
+            </div>
+
+        </div>
+
+        <div class="useful-zone__plotting-area">
+
+            <div id="plotting-area__table-zone" class="plotting-area__table-zone">
+
+               <div class="table-zone__search">
+                    <input type="text" id="search__term" class="search__term" placeholder="Qual exame você deseja auditar?">
+                    <button type="submit" id="search__button" class="search__button">
+                        <i class='bx bx-search-alt-2' ></i>
+                    </button>
+               </div>
+
+                <table class="table_zone__table-exams">
+                    <thead>
+                        <tr>
+                            <th>Exame</th>
+                            <th>Analizador</th>
+                            <th>Crít. Min</th>
+                            <th>Crít. Max</th>
+                            <th>Status</th>
+                            <th>Usuário</th>
+                            <th>Data e Hora</th>
+                        </tr>
+                    </thead>
+                    <tbody  id="table-exams__body">
+
+
+                    </tbody>
+                </table>
+
+            </div>
+
+            <div id="plotting-area__form-zone" class="plotting-area__form-zone">
+
+                <div class="form-zone__form">
+
+                    <div class="form__header">
+
+                        <div class="header__zone-exam">
+                            <a id="zone-exam__name">--</a>
+                        </div>
+
+                        <div class="header__zone-analyzer">
+                            <a id="zone-analyzer__name" >--</a>
+                        </div>
+
+                    </div>
+
+
+                    <div class="form__body">
+
+                        <div class="body__input-zone body__input-zone--disable">
+                            <span>id</span>
+                            <input  id="input-zone__value-id" name="id" type="text">
+                        </div>
+
+                        <div class="body__input-zone">
+                            <span>Crítico Mínimo</span>
+                            <input  id="input-zone__value-crit-min" name="Valor_Crítico_Mínimo" type="number">
+                        </div>
+
+                        <div class="body__input-zone">
+                            <span>Crítico Máximo</span>
+                            <input  id="input-zone__value-crit-max"  name="Valor_Crítico_Máximo" type="number">
+                        </div>
+
+                        <div class="body__input-zone">
+                            <span>Status</span>
+                            <!-- <input id="input-zone__value-status" name="status" type="text"> -->
+                            <input  id="input-zone__value-status" type="checkbox"/>
+                            <label for="input-zone__value-status"></label>
+                        </div>
+
+                    </div>
+
+                    <div class="form__footer">
+
+                        <div class="footer__buton-zone">
+                            <button id="buton-zone__btn--save" >Salvar</button>
+                        </div>
+
+                        <div class="footer__buton-zone">
+                            <button id="buton-zone__btn--back">Voltar</button>
+                        </div>
+
+                    </div>
+
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+    <!--  JS -->
+    <script type="text/javascript" src="/exams/static/js/audit/audit-sub-menu-exames.js" ></script>
+    <script type="text/javascript" src="/exams/static/js/audit/audit-recuar-barra-lateral.js" ></script>
+    <script type="text/javascript" src="/exams/static/js/audit/audit-table-search.js" ></script>
+    <script type="module" src="/exams/static/js/audit/audit-btn-logout.js" ></script>
+    <script type="module" src="/exams/static/js/audit/audit-load-data-on-table.js" ></script>
+</html>

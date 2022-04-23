@@ -1,15 +1,13 @@
 # Native Imports
 import sqlalchemy as sa
-from sqlalchemy.orm import sessionmaker
-from typing import Optional
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy.future.engine import Engine
 from sqlalchemy.ext.declarative import declarative_base
 
 # Created Imports
 from configuration.configuration import app_configuration, app_active
 
-__engine: Optional[Engine] = None
+__engine = None
 ModelBase = declarative_base()
 
 
@@ -28,7 +26,7 @@ def create_engine() -> Engine:
 
 def create_session() -> Session:
     """
-    Função para criar sessão de conexao ao banco de dados.
+    Função para criar sessão de conexão ao banco de dados.
     """
     global __engine
 
@@ -40,10 +38,3 @@ def create_session() -> Session:
     session: Session = __session()
 
     return session
-
-
-def init_db() -> None:
-    global __engine
-
-    if not __engine:
-        create_engine()

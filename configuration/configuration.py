@@ -4,6 +4,7 @@ import os
 class Configuration:
     HOST = '0.0.0.0'
     PORT = 5001
+    TEMPLATES_AUTO_RELOAD = True
     SECRET_KEY = 'eb_54okkma5t_=z3z%tazp!xutgfif+3b76(apf-acr6m@71#$'
     ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
     TOKEN_NAME = 'new_app'

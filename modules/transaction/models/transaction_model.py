@@ -14,7 +14,7 @@ class Transaction(ModelBase):
     transaction_destination_branch = Column(Integer, nullable=False)
     transaction_destination_account = Column(Integer, nullable=True)
     transaction_amount = Column(Float, nullable=False)
-    transaction_date_time = Column(DateTime(timezone=False), nullable=False)
+    transaction_date_time = Column(DateTime, nullable=False)
 
     def __repr__(self) -> str:
         return str({

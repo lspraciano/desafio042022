@@ -35,7 +35,7 @@ def check_login_password(login_request: dict) -> dict:
         username = login_request['username'].upper()
         password = login_request['password']
         user = get_user_by_username(username)
-        # print(generate_password_hash('Abcd@321', method='sha256'))
+        # print(generate_password_hash('senha_para_gerar_hash', method='sha256'))
 
         if user is None:
             return {"error": "access denied"}

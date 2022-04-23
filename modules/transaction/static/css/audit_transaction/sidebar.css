@@ -1,0 +1,126 @@
+/* Zona Menu Lateral */
+.side-zone {
+    width: 20%;
+    height: 100%;
+    min-width: 300px;
+    max-width: 300px;
+    z-index: 100;
+}
+
+.side-zone--disable {
+    /* Class para JS */
+    display: none;
+}
+
+
+/* MENU LATERAL */
+.side-zone__menu {
+    height: 97%;
+    width: 100%;
+    background: #11101d;
+    background-image: linear-gradient(5deg, #42424a, #191919);
+    border-radius: 10px;
+    margin: 11px 0px 0px 6px;
+    color: #fff;
+    padding: 0 15px 0 20px;
+    font-size: 1rem;
+}
+
+.menu__header {
+    display: flex;
+    align-items: center;
+    padding: 30px 0 20px 0;
+}
+
+.menu__header__title {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: center;
+}
+
+
+.menu__body ul li {
+    width: 100%;
+    height: 50px;
+    margin: 0 5px;
+    list-style: none;
+    line-height: 50px;
+}
+
+.menu__body ul li a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    transition: all 0.4s ease;
+    border-radius: 12px;
+}
+
+.menu__body ul li a:visited {
+    color: #fff;
+}
+
+
+.menu__body ul li a:hover {
+    color: #11101d;
+    background: #fff;
+}
+
+.menu__body ul li i {
+    height: 50px;
+    min-width: 50px;
+    border-radius: 12px;
+    line-height: 50px;
+    text-align: center;
+}
+
+#body__option-exam {
+    justify-content: space-between;
+    display: flex;
+}
+
+#option-exam__arrow {
+    padding: 20px;
+}
+
+.sub-option {
+    margin-left: 30px;
+    display: none;
+    animation-name: manifest;
+    animation-duration: .3s;
+    animation-timing-function: ease;
+}
+
+.sub-option--enable {
+    display: flex
+}
+
+.option-exam__arrow--rotate {
+    transform: rotate(90deg)
+}
+
+
+@keyframes manifest {
+
+    from {
+        opacity: 0;
+        transform: translateX(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0px);
+    }
+
+}
+
+@media only screen and (max-width: 1180px) {
+    .side-zone {
+        display: none;
+    }
+
+    .side-zone--disable {
+        /* Class para JS */
+        display: flex;
+
+    }
+}

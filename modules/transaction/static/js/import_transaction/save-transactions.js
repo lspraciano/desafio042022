@@ -1,4 +1,4 @@
-export const getDataForDashboard = async (transaction) => {
+    export const saveTransactions = async (transaction) => {
 
         const url = `${window.location.origin}/transaction/`;
         const param = {
@@ -11,7 +11,5 @@ export const getDataForDashboard = async (transaction) => {
         }
 
         const response = await fetch(url, param);
-        const data = await response.json();
-
-        return data;
+        return await response.json();
     }

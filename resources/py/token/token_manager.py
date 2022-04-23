@@ -91,15 +91,13 @@ def user_id_from_token():
     """
 
     try:
-        token_from_cookie = request.cookies.get('alan_access_token')
+        token_name = Configuration.TOKEN_NAME
+        token_from_cookie = request.cookies.get(token_name)
         token_no_bearer = token_from_cookie
-    except:
-        return redirect('/'), 302
 
-    if token_from_cookie is None:
-        return redirect('/'), 302
+        if token_from_cookie is None:
+            return redirect('/'), 302
 
-    try:
         decode = jwt.decode(token_no_bearer, Configuration.SECRET_KEY, algorithms=["HS256"])
         user_id = decode['id']
         return user_id
