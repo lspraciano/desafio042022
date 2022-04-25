@@ -6,7 +6,9 @@ from database.database import create_session
 from error.error import get_error_msg
 from modules.transaction.models.transaction_logs_model import TransactionLog
 from resources.py.token.token_manager import user_id_from_token
+from modules.transaction.serializers.transaction_log_schema import TransactionLogSchema
 
+TransactionLogSchema = TransactionLogSchema(many=True)
 session = create_session()
 
 
@@ -34,6 +36,11 @@ def save_transaction_log(log_date: datetime):
         return get_error_msg()
 
 
-def get_all_logs():
+def get_all_logs() -> dict:
+    """
+    Essa função retorna o histórico das transações importadas
+
+    :return: Dicionário contendo os logs ou erro
+    """
     logs = session.query(TransactionLog).all()
-    return {'logs': 'teste'}
+    return {'logs': TransactionLogSchema.dump(logs)}
