@@ -1,4 +1,4 @@
-export const formatOrderDate = (date) => {
+export const formatDateTime = (date) => {
 
     date = new Date(date);
     return (date.getDate()) + "/" +
@@ -7,5 +7,13 @@ export const formatOrderDate = (date) => {
         date.getHours() + ":" +
         date.getMinutes() + ":" +
         date.getSeconds()
+}
+
+export const formatDate = (date) => {
+
+    date = new Date(date);
+    return (date.getDate()) + "/" +
+        ((date.getMonth() + 1)) + "/" +
+        date.getFullYear()
 }
 

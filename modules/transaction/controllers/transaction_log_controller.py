@@ -2,6 +2,8 @@
 from datetime import datetime
 
 # Created Imports
+from sqlalchemy.orm import load_only
+
 from database.database import create_session
 from error.error import get_error_msg
 from modules.transaction.models.transaction_logs_model import TransactionLog
@@ -40,7 +42,9 @@ def get_all_logs() -> dict:
     """
     Essa função retorna o histórico das transações importadas
 
-    :return: Dicionário contendo os logs ou erro
+    :return: No caso de sucesso: { 'logs': [lista de logs]] } ||| No caso de erro: { 'error': erro ocorrido }
     """
     logs = session.query(TransactionLog).all()
+    session.close()
+    print(TransactionLogSchema.dump(logs))
     return {'logs': TransactionLogSchema.dump(logs)}

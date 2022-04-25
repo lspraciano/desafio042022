@@ -1,6 +1,7 @@
 # Native Imports
+from sqlalchemy.orm import relationship
 from database.database import ModelBase
-from sqlalchemy import Column, Integer, DateTime, UniqueConstraint
+from sqlalchemy import Column, Integer, DateTime, UniqueConstraint, ForeignKey
 
 
 class TransactionLog(ModelBase):
@@ -9,7 +10,8 @@ class TransactionLog(ModelBase):
     transactions_log_id = Column(Integer, primary_key=True, index=True)
     transactions_log_transactions_datetime = Column(DateTime, nullable=False)
     transactions_log_datetime = Column(DateTime, nullable=False)
-    transactions_log_user_id = Column(Integer, nullable=False)
+    transactions_log_user_id = Column(Integer, ForeignKey('tbusers.user_id'), nullable=False)
+    transactions_log_user_rl = relationship('User', lazy='joined')
     UniqueConstraint('transactions_log_transactions_datetime')
 
     def __repr__(self) -> str:
