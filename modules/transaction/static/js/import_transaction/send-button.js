@@ -9,11 +9,17 @@ const sendCsv = async () => {
     const data = await readCsv(fileInput.files[0]);
     const processedData = await preProcessingData(data);
     const result = await saveTransactions(processedData);
-    console.log(result);
 
-    alert('Arquivo enviado com sucesso!!!');
+    if('error' in result) {
+        let error = result['error']['error']['type']
+        alert('As transações NÃO foram salvas. Erro: ' + error);
+    } else {
+        alert('Transações importadas com SUCESSO!!!');
+    }
 
-    // location.reload();
+    location.reload();
+
+
 }
 
 sendButton.addEventListener('click', sendCsv);
