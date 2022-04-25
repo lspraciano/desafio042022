@@ -3,6 +3,7 @@ from flask import Blueprint, render_template, request
 
 # Created Imports
 from modules.transaction.controllers.transaction_controller import save_transactions_list
+from modules.transaction.controllers.transaction_log_controller import get_all_logs
 from resources.py.token.token_manager import token_authentication
 
 transaction_blueprint = Blueprint('transaction', __name__,
@@ -24,3 +25,15 @@ def transactions():
 @token_authentication
 def import_csv():
     return render_template('import_transaction.html'), 200
+
+
+@transaction_blueprint.route('/log', methods=['GET', ])
+@token_authentication
+def audit_transaction():
+    return render_template('transaction_log.html'), 200
+
+
+@transaction_blueprint.route('/log/get-log', methods=['GET', ])
+@token_authentication
+def audit_transaction_data():
+    return get_all_logs(), 200

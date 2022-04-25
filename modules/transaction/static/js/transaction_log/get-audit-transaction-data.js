@@ -1,6 +1,6 @@
-export const getExamsProfilesAudit = async () => {
+export const getAuditTransactionData = async () => {
 
-        const url = `${window.location.origin}/exams/exams-profiles-audit`;
+        const url = `${window.location.origin}/transaction/log/get-log`;
         const param = {
             method: "GET",
             headers: {
@@ -9,7 +9,5 @@ export const getExamsProfilesAudit = async () => {
         }
 
         const response = await fetch(url, param);
-        const data = await response.json();
-
-        return data;
+        return await response.json();
     }

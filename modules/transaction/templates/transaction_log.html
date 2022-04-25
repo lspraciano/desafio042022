@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auditoria Transações</title>
+    <!--  Nosso CSS -->
+    <link rel="stylesheet" href="static/css/transaction_log/_style.css">
+    <!--  BoxIcons CDN Link -->
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+
+</head>
+
+<div id="pre-loader" class="pre-loader">
+    <div id="pre-loader__gif-erlen" class="pre-loader__gif-erlen"></div>
+</div>
+
+<body>
+    <div class="table-zone">
+        <table class="table-zone__table-transaction-logs">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Lote</th>
+                    <th>Data e Hora</th>
+                    <th>Responsável</th>
+                </tr>
+            </thead>
+            <tbody  id="table-transaction-logs__body">
+
+
+            </tbody>
+        </table>
+    </div>
+</body>
+    <!--  JS -->
+    <script type="module" src="static/js/transaction_log/load-data-on-table.js" ></script>
+</html>

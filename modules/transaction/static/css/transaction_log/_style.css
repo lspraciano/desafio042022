@@ -1,0 +1,9 @@
+/* Configurações Gerais */
+@import "general.css";
+
+
+/* Table Zone */
+@import "table-zone.css";
+
+/* Table */
+@import "table-transaction-logs.css";
