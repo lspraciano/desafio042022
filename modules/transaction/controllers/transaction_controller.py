@@ -7,7 +7,6 @@ from error.error import get_error_msg
 from modules.transaction.controllers.transaction_log_controller import save_transaction_log
 from modules.transaction.models.transaction_model import Transaction
 
-
 session = create_session()
 
 
@@ -72,7 +71,7 @@ def save_transactions_list(transactions_list: list) -> dict:
 
         session.add_all(transactions)
         session.commit()
-
+        session.close()
         return {'success': {'transactions': len(transactions)}}
 
     except:

@@ -2,8 +2,6 @@
 from datetime import datetime
 
 # Created Imports
-from sqlalchemy.orm import load_only
-
 from database.database import create_session
 from error.error import get_error_msg
 from modules.transaction.models.transaction_logs_model import TransactionLog
@@ -31,6 +29,7 @@ def save_transaction_log(log_date: datetime):
 
         session.add(transaction_log)
         session.commit()
+        session.close()
         return {'success': 'log saved'}
 
     except:
@@ -46,5 +45,4 @@ def get_all_logs() -> dict:
     """
     logs = session.query(TransactionLog).all()
     session.close()
-    print(TransactionLogSchema.dump(logs))
     return {'logs': TransactionLogSchema.dump(logs)}

@@ -35,6 +35,6 @@ def create_session() -> Session:
 
     __session = sessionmaker(__engine, expire_on_commit=False, class_=Session)
 
-    session: Session = __session()
+    session = __session()
 
     return session
