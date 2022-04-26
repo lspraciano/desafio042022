@@ -2,6 +2,7 @@
 from flask import Flask
 
 # BluePrints Imports
+from database.database import create_db
 from modules.home.home import home_blueprint
 from modules.root.root import root_blueprint
 from modules.transaction.transaction import transaction_blueprint
@@ -13,6 +14,7 @@ def create_app(config) -> Flask:
     app = Flask(__name__)
     app.config.from_object(config)
     _register_blueprint(app)
+    create_db()
 
     return app
 

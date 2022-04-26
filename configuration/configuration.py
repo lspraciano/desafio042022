@@ -17,7 +17,7 @@ class DevelopmentConfig(Configuration):
 
 
 class ProductionConfig(Configuration):
-    SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:Vish_123123@127.0.0.1:5432/desafio042022'
+    SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:Vish_123123@db:5432/desafio042022'
 
 
 app_configuration = {

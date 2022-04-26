@@ -9,6 +9,7 @@ const sendCsv = async () => {
     const data = await readCsv(fileInput.files[0]);
     const processedData = await preProcessingData(data);
     const result = await saveTransactions(processedData);
+    console.log(result)
 
     if('error' in result) {
         let error = result['error']['error']['type']

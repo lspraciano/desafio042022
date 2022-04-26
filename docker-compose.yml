@@ -1,0 +1,29 @@
+version: '3.9'
+services:
+    web:
+        build:
+            context: .
+            dockerfile: ./docker/Dockerfile
+        command: gunicorn --workers=4 --threads=2  -b :5001 "run:run_server()"
+        image: lucaspraciano/desafio042022
+        container_name: desafio042022
+        ports:
+            - "5001:5001"
+        depends_on:
+            - db
+        environment:
+            - FLASK_ENV=production
+
+    db:
+        image: postgres:13
+        ports:
+            - "5432:5432"
+        restart: always
+        environment:
+            - POSTGRES_PASSWORD=Vish_123123
+            - POSTGRES_USER=postgres
+            - POSTGRES_DB=desafio0420221
+        volumes:
+            -  postgresql-data:/var/lib/postgresql/data
+volumes:
+    postgresql-data:

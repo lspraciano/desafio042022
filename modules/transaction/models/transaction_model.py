@@ -9,10 +9,10 @@ class Transaction(ModelBase):
     transaction_id = Column(Integer, primary_key=True, index=True)
     transaction_home_bank = Column(String, nullable=False)
     transaction_home_branch = Column(Integer, nullable=False)
-    transaction_home_account = Column(Integer, nullable=False)
+    transaction_home_account = Column(String, nullable=False)
     transaction_destination_bank = Column(String, nullable=False)
     transaction_destination_branch = Column(Integer, nullable=False)
-    transaction_destination_account = Column(Integer, nullable=True)
+    transaction_destination_account = Column(String, nullable=True)
     transaction_amount = Column(Float, nullable=False)
     transaction_date_time = Column(DateTime, nullable=False)
 
