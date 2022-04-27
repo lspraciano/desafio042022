@@ -2,7 +2,7 @@
 FROM python:3.9.5
 
 # set work directory
-WORKDIR /var/www/SITE_ALAN
+WORKDIR /var/www/app
 
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -15,6 +15,7 @@ RUN pip install --upgrade pip
 RUN pip3 install -r /requirements.txt
 
 # copy project
-COPY . /var/www/SITE_ALAN
+COPY . /var/www/app
 
 # entrypoint
+ENTRYPOINT ["sh","/docker/entrypoints/web/entrypoint.sh"]

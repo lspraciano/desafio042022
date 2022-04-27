@@ -57,26 +57,31 @@ def create_db() -> None:
     from modules.transaction.models import transaction_model, transaction_logs_model
     from modules.users.models import user_model
 
-    ModelBase.metadata.drop_all(__engine)
+    # ModelBase.metadata.drop_all(__engine)
     ModelBase.metadata.create_all(__engine)
     create_admin_user(user_model)
 
 
 def create_admin_user(model) -> None:
     """
-    Esta função é destinada a criar o usuário inicial da aplicação, ou seja, o usuário administrador.
+    Esta função é destinada a criar o usuário inicial da aplicação, ou seja, o usuário administrador. Caso ele já
+    exista, não será gerado um novo usuário administrador.
 
     :return: None
     """
     session = create_session()
 
-    user = model.User(
-        user_name='LUCAS PRACIANO',
-        user_password=generate_password_hash('Abcd@123', method='sha256'),
-        user_email='LUSKCCT@GMAIL.COM',
-        user_status=1,
-    )
+    user = session.query(model.User).filter_by(user_name='LUCAS PRACIANO').first()
 
-    session.add(user)
-    session.commit()
+    if not user:
+        user = model.User(
+            user_name='LUCAS PRACIANO',
+            user_password=generate_password_hash('Abcd@123', method='sha256'),
+            user_email='LUSKCCT@GMAIL.COM',
+            user_status=1,
+        )
+
+        session.add(user)
+        session.commit()
+
     session.close()
