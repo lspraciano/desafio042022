@@ -11,11 +11,9 @@ transaction_blueprint = Blueprint('transaction', __name__,
                                   static_folder='static')
 
 
-@transaction_blueprint.route('/', methods=['GET', 'POST'])
+@transaction_blueprint.route('/', methods=['POST'])
 @token_authentication
 def transactions():
-    if request.method == 'GET':
-        return {'Em desenvolvimento': 'TRUE'}
     if request.method == 'POST':
         transactions_list = request.json
         return save_transactions_list(transactions_list)

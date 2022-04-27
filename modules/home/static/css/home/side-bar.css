@@ -49,7 +49,7 @@
 
 .menu__body ul li {
     width: 100%;
-    height: 50px;
+    height: auto;
     margin: 0 5px;
     list-style: none;
     line-height: 50px;
@@ -81,16 +81,16 @@
     text-align: center;
 }
 
-#menu-body__option-transaction {
+.menu-body__options {
     justify-content: space-between;
     display: flex;
 }
 
-#option-transaction__arrow {
+.options__arrow {
     padding: 20px;
 }
 
-.option-transaction__suboption {
+.menu-body__suboptions {
     margin-left: 30px;
     display: none;
     animation-name: show;

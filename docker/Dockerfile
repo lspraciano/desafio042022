@@ -18,4 +18,4 @@ RUN pip3 install -r /requirements.txt
 COPY . /var/www/app
 
 # entrypoint
-ENTRYPOINT ["sh","/docker/entrypoints/web/entrypoint.sh"]
+ENTRYPOINT ["sh","/docker/entrypoints/entrypoint.sh"]

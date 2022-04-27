@@ -16,6 +16,8 @@ ModelBase = declarative_base()
 def create_engine() -> Engine:
     """
     Função para configurar a conexão ao banco de dados.
+
+    :return: engine
     """
     global __engine
 
@@ -29,6 +31,8 @@ def create_engine() -> Engine:
 def create_session() -> Session:
     """
     Função para criar sessão de conexão ao banco de dados.
+
+    :return: Session()
     """
     global __engine
 
@@ -49,13 +53,13 @@ def create_db() -> None:
     :return: None
     """
 
+    from modules.transaction.models import transaction_model, transaction_logs_model
+    from modules.users.models import user_model
+
     global __engine
 
     if not __engine:
         create_engine()
-
-    from modules.transaction.models import transaction_model, transaction_logs_model
-    from modules.users.models import user_model
 
     # ModelBase.metadata.drop_all(__engine)
     ModelBase.metadata.create_all(__engine)
