@@ -1,3 +1,5 @@
+import {showAndHideMenuZoneSubOptions} from "./side-bar-animation.js";
+
 const transactionImportSubOptions = document.getElementById("suboption_import");
 const transactionAuditSubOptions = document.getElementById("suboption_audit");
 const dashboardOptions = document.getElementById("menu-body__option-dashboard");
@@ -8,17 +10,20 @@ const screenName = document.getElementById("screen-name");
 async function callDashboardScreen() {
     iframeToHtml.src = '';
     screenName.innerText = 'Dashboard'
+    showAndHideMenuZoneSubOptions();
 }
 
 
 function callImportTransactionScreen() {
     iframeToHtml.src = '/transaction/import-csv';
-    screenName.innerText = 'Importar Transações'
+    screenName.innerText = 'Importar Transações';
+    showAndHideMenuZoneSubOptions();
 }
 
 function callAuditTransactionScreen() {
     iframeToHtml.src = '/transaction/log';
-    screenName.innerText = 'Log de Transações'
+    screenName.innerText = 'Log de Transações';
+    showAndHideMenuZoneSubOptions();
 }
 
 function checkIfRedirected() {
