@@ -13,7 +13,7 @@
 }
 
 
-@media (max-width: 1180px) and (orientation: portrait) {
+@media only screen and (max-width: 1180px) and (orientation: portrait) {
     .useful-area {
         width: 90%;
         height: auto;
