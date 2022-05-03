@@ -1,8 +1,10 @@
 import {showAndHideMenuZoneSubOptions} from "./side-bar-animation.js";
 
+const dashboardOptions = document.getElementById("menu-body__option-dashboard");
 const transactionImportSubOptions = document.getElementById("suboption_import");
 const transactionAuditSubOptions = document.getElementById("suboption_audit");
-const dashboardOptions = document.getElementById("menu-body__option-dashboard");
+const userManagerSubOptions = document.getElementById("suboption_user-manager");
+
 const iframeToHtml = document.getElementById("plotting-zone__frame-to-html");
 const screenName = document.getElementById("screen-name");
 
@@ -26,6 +28,13 @@ function callAuditTransactionScreen() {
     showAndHideMenuZoneSubOptions();
 }
 
+function callUserManagerSubOptionsScreen() {
+    iframeToHtml.src = '/user/manager';
+    screenName.innerText = 'Gerenciar Usuários';
+    showAndHideMenuZoneSubOptions();
+}
+
+
 function checkIfRedirected() {
     if (iframeToHtml.contentWindow.document.title === 'Bem-Vindo'){
         location.reload();
@@ -36,4 +45,5 @@ function checkIfRedirected() {
 dashboardOptions.addEventListener('click', callDashboardScreen);
 transactionImportSubOptions.addEventListener('click', callImportTransactionScreen);
 transactionAuditSubOptions.addEventListener('click', callAuditTransactionScreen);
+userManagerSubOptions.addEventListener('click', callUserManagerSubOptionsScreen);
 iframeToHtml.addEventListener('load', checkIfRedirected);

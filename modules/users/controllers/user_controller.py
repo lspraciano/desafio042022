@@ -5,9 +5,11 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from database.database import create_session
 from error.error import get_error_msg
 from modules.users.models.user_model import User
+from modules.users.serializers.user_seriallizer import UserBasicSchema
 from resources.py.token import token_manager
 
 session = create_session()
+UserBasicSchema = UserBasicSchema(many=True)
 
 
 def get_user_by_username(username: str) -> User:
@@ -50,3 +52,16 @@ def check_login_password(login_request: dict) -> dict:
 
     except:
         return get_error_msg()
+
+
+def get_all_users() -> dict:
+    """
+    Esta função retorna todos os usuários do banco sql.
+
+    :return: Dicionário contendo as informações dos usuários
+    """
+
+    user = session.query(User).all()
+    session.close()
+
+    return {'users': UserBasicSchema.dump(user)}

@@ -14,6 +14,8 @@ class UserSchema(Schema):
     user_status = fields.Integer()
 
 
-class UserOnlyUserName(Schema):
+class UserBasicSchema(Schema):
     user_id = fields.Integer()
     user_name = fields.String()
+    user_email = fields.String()
+    user_status = fields.Integer()

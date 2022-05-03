@@ -28,12 +28,10 @@ import {getAuditTransactionData} from "./get-audit-transaction-data.js";
             let rowUser = document.createElement('td');
             rowUser.innerHTML = data['logs'][i]['transactions_log_user_rl']['user_name'];
 
-
             row.appendChild(rowCod);
             row.appendChild(rowBatch);
             row.appendChild(rowDateTime);
             row.appendChild(rowUser);
-
 
             tableBody.appendChild(row);
         }
