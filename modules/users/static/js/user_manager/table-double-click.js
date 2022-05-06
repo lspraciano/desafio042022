@@ -13,12 +13,13 @@ import {loadDataOnForm} from "./form-data-controller.js";
             userValuesList.push(cell.innerText);
         }
 
+        let userCod = userValuesList[0];
         let userName = userValuesList[1];
         let userEmail = userValuesList[2];
         let userStatus = userValuesList[3];
 
         hideTableShowForm();
-        loadDataOnForm(userName, userEmail, userStatus);
+        loadDataOnForm(userCod, userName, userEmail, userStatus);
 
     });
 

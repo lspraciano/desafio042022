@@ -25,6 +25,19 @@ def get_user_by_username(username: str) -> User:
     return user
 
 
+def get_user_by_email(email: str) -> User:
+    """
+    Esta função retorna um usuário do banco sql através do seu email
+
+    :param email: Nome do email
+    :return: Objeto usuário contendo as informações do usuário consultado
+    """
+
+    user = session.query(User).filter_by(user_email=email).first()
+    session.close()
+    return user
+
+
 def check_login_password(login_request: dict) -> dict:
     """
     Função para autenticar o usuário e caso ele seja aceito, esta função ira registrar no REDIS o perfil de exames
@@ -65,3 +78,30 @@ def get_all_users() -> dict:
     session.close()
 
     return {'users': UserBasicSchema.dump(user)}
+
+
+def save_user(user_name: str,
+              user_email: str,
+              user_status: bool,
+              user_cod: str = '') -> dict:
+    """
+    Esta fução pode inserir ou atualizar um usuário. Se o Código do Usuário for informado, a função irá atualizar, caso
+    contrário, o usuário referente ao código informado será atualizado. Para o usuário criado sua senha será gerada
+    de forma aleatória. Esta função não possui o recurso de atualizar senha.
+
+
+    :param user_cod: Id do Usário
+    :param user_name: Nome do Usuário
+    :param user_email: Email
+    :param user_status: Status
+    :return: Em caso de sucesso: {'user': user} ou em caso de erro {'error': error}
+    """
+
+    if user_cod != '':
+        print('Atualizar')
+    else:
+        print('Criar')
+
+    print(user_name, user_email, user_status, user_cod)
+
+    return {'': ''}

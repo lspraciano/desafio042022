@@ -15,6 +15,11 @@
     font-weight: bold;
 }
 
+.header__user-cod-zone {
+    display: none;
+    pointer-events:none;
+}
+
 .user-name-zone__input {
     color: #f8f8f8;
     font-weight: 900;
