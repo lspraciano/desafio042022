@@ -13,6 +13,12 @@ class Configuration:
     TOKEN_NAME = 'new_app'  # Name of Cookie to set to the browser
     TIME_EXP_TOKEN = 30  # Time in minutes of JWT token
     LIMIT_EXP_TOKEN = 1  # Time in minutes of JWT token to expire
+    MAIL_SERVER = "smtp.gmail.com"
+    MAIL_PORT = 465
+    MAIL_USE_TLS = False
+    MAIL_USE_SSL = True
+    MAIL_USERNAME = os.getenv('MAIL_USERNAME')
+    MAIL_PASSWORD = os.getenv('MAIL_PASSWORD')
 
 
 class DevelopmentConfig(Configuration):
