@@ -1,4 +1,4 @@
-.table-zone__search {
+.search-zone {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -24,7 +24,7 @@
     color: #5253A3FF;
 }
 
-.search__button {
+.search__button-new-user {
     width: 15%;
     height: 100%;
     min-width: 30px;

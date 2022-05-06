@@ -9,9 +9,9 @@ class User(ModelBase):
     __tablename__ = "tbusers"
 
     user_id = Column(Integer, primary_key=True, index=True)
-    user_name = Column(String, nullable=False)
+    user_name = Column(String, unique=True, nullable=False)
     user_password = Column(String, nullable=False)
-    user_email = Column(String, nullable=False)
+    user_email = Column(String, unique=True, nullable=False)
     user_token = Column(String, nullable=True)
     user_status = Column(Integer, nullable=False)
 

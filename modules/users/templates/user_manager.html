@@ -17,32 +17,75 @@
 
 <body>
 
-   <div class="table-zone__search">
-        <input type="text" id="search__term" class="search__term" placeholder="Qual sua pesquisa?">
-        <button type="submit" id="search__button" class="search__button">
+<div class="search-zone" id="search-zone">
+    <input type="text" id="search__term" class="search__term" placeholder="Qual sua pesquisa?">
+    <button type="button" id="search__button-new-user" class="search__button-new-user">
         <i class='bx bx-user-plus'></i>
-        </button>
-   </div>
+    </button>
+</div>
 
-    <div class="table-zone">
-        <table class="table-zone__table-user">
-            <thead>
-                <tr>
-                    <th>Código</th>
-                    <th>Nome</th>
-                    <th>Email</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody  id="table-users__body">
+<div class="table-zone" id="table-zone">
+    <table class="table-zone__table-user">
+        <thead>
+        <tr>
+            <th>Código</th>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Status</th>
+        </tr>
+        </thead>
+        <tbody id="table-users__body">
 
 
-            </tbody>
-        </table>
-    </div>
+        </tbody>
+    </table>
+</div>
+
+<div class="form-zone" id="form-zone">
+    <form class="form-zone__form">
+
+        <div class="form__header">
+
+            <div class="header__user-name-zone">
+                <input class="user-name-zone__input" id="user-name-zone__input" type="text" autocomplete="off"
+                       placeholder="USUÁRIO" required/>
+            </div>
+
+        </div>
+
+        <div class="form__body">
+
+            <div class="body__user-email-zone">
+                <input class="user-email-zone__input input-text" id="user-email-zone__input" type="text"
+                       autocomplete="off" required/>
+                <label class="user-email-zone__label label-input-text">Email</label>
+            </div>
+
+            <div class="body__status-zone">
+                <span>Status</span>
+                <input id="input-zone__value-status" type="checkbox" checked required/>
+                <label for="input-zone__value-status"></label>
+            </div>
+
+        </div>
+
+        <div class="form__footer">
+
+            <div class="footer__button-zone">
+                <button id="buton-zone__btn--save" class=" button" type="button">Salvar</button>
+                <button id="buton-zone__btn--back" class=" button" type="button">Voltar</button>
+            </div>
+
+        </div>
+
+    </form>
+</div>
 
 </body>
-    <!--  JS -->
-    <script type="module" src="static/js/user_manager/load-data-on-table.js"></script>
-    <script type="text/javascript" src="static/js/user_manager/table-search.js"></script>
+<!--  JS -->
+<script type="module" src="static/js/user_manager/load-data-on-table.js"></script>
+<script type="text/javascript" src="static/js/user_manager/table-search.js"></script>
+<script type="module" src="static/js/user_manager/table-double-click.js"></script>
+<script type="module" src="static/js/user_manager/form-back-button.js"></script>
+<script type="module" src="static/js/user_manager/button-new-user.js"></script>
 </html>

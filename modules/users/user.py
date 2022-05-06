@@ -32,5 +32,3 @@ def user_authentication():
 def user_manager():
     if request.method == 'GET':
         return render_template('user_manager.html'), 200
-    elif request.method == 'POST':
-        return {'...': 'true'}

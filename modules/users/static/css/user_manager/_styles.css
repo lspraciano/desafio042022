@@ -7,3 +7,9 @@
 
 /* Table */
 @import "table-user.css";
+
+/* Form Zone */
+@import "form-zone.css";
+
+/* Form */
+@import "user-form.css";
