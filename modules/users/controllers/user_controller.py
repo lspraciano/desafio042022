@@ -10,10 +10,24 @@ from modules.users.serializers.user_seriallizer import UserBasicSchema
 from resources.py.password.password_manager import generate_password
 from resources.py.token import token_manager
 from resources.py.email.email_manager import validate_email, send_email_password_new_user
+from resources.py.token.token_manager import user_id_from_token
 
 session = create_session()
 
 UserBasicSchema = UserBasicSchema(many=True)
+
+
+def get_user_by_id(user_id: int) -> User:
+    """
+    Esta função retorna um usuário do banco sql através do seu ID
+
+    :param user_id: ID do usuário
+    :return: Objeto usuário contendo as informações do usuário consultado
+    """
+
+    user = session.query(User).filter_by(user_id=user_id).first()
+    session.close()
+    return user
 
 
 def get_user_by_username(username: str) -> User:
@@ -74,7 +88,7 @@ def check_login_password(login_request: dict) -> dict:
 
 def get_all_users() -> dict:
     """
-    Esta função retorna todos os usuários do banco sql com exeção do usuário administrador
+    Esta função retorna todos os usuários do banco sql com exceção do usuário administrador
 
     :return: Dicionário contendo uma lista de usuários
     """
@@ -85,7 +99,7 @@ def get_all_users() -> dict:
     return {'users': UserBasicSchema.dump(user)}
 
 
-def check_username_email(username: str, email: str):
+def check_username_email(username: str = None, email: str = None):
     """
     Esta função realiza a validação do username e email, verificando no banco de dados se já estão previamente
     cadastrados, bem como, realiza a validação do email através de uma REGEX
@@ -95,14 +109,18 @@ def check_username_email(username: str, email: str):
     :return: Em caso de sucesso será retornado {'success': 'ok'} e em caso de não sucesso será retornado
      {'error': foo}
     """
+    if username == '' or email == '':
+        return {'error': 'invalid username or email'}
 
-    user_by_email = get_user_by_email(email)
-    if user_by_email or not validate_email(email):
-        return {'error': 'invalid email'}
+    if email:
+        user_by_email = get_user_by_email(email)
+        if user_by_email or not validate_email(email):
+            return {'error': 'invalid email'}
 
-    user_by_username = get_user_by_username(username)
-    if user_by_username:
-        return {'error': 'invalid username'}
+    if username:
+        user_by_username = get_user_by_username(username)
+        if user_by_username:
+            return {'error': 'invalid username'}
 
     return {'success': 'ok'}
 
@@ -151,9 +169,50 @@ def create_new_user(user_name: str,
     return {'user': UserBasicSchema.dump([user])}
 
 
-def update_user(user_name: str,
+def update_user(user_cod: int,
+                user_name: str,
                 user_email: str,
                 user_status: bool,
                 user_password: str = '',
-                user_cod: str = '') -> dict:
-    ...
+                user_token: str = '') -> dict:
+    if not user_cod:
+        return {'error': 'invalid cod'}
+
+    user = get_user_by_id(user_cod)
+
+    if not user:
+        return {'error': 'non-existing user'}
+
+    if user_cod == user_id_from_token() and not user_status:
+        return {'error': 'you cannot disable your access'}
+
+    if user.user_name != user_name:
+        validate_username = check_username_email(username=user_name)
+        if 'error' in validate_username.keys():
+            return validate_username
+        user.user_name = user_name
+
+    if user.user_email != user_email:
+        validate_user_email = check_username_email(email=user_email)
+        if 'error' in validate_user_email.keys():
+            return validate_user_email
+        user.user_email = user_email
+
+    if user_status is True:
+        user.user_status = 1
+    elif user_status is False:
+        user.user_status = 0
+    else:
+        return {'error': 'invalid status'}
+
+    if user_password != '':
+        user.user_password = user_password
+
+    if user_token != '':
+        user.user_token = user_token
+
+    session.add(user)
+    session.commit()
+    session.close()
+
+    return {'user': UserBasicSchema.dump([user])}
