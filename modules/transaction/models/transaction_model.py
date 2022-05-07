@@ -6,7 +6,7 @@ from sqlalchemy import Column, Integer, String, Float, DateTime
 class Transaction(ModelBase):
     __tablename__ = "tbtransactions"
 
-    transaction_id = Column(Integer, primary_key=True, index=True)
+    transaction_id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     transaction_home_bank = Column(String, nullable=False)
     transaction_home_branch = Column(Integer, nullable=False)
     transaction_home_account = Column(String, nullable=False)

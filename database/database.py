@@ -55,18 +55,18 @@ def create_db() -> None:
 
     from modules.transaction.models import transaction_model, transaction_logs_model
     from modules.users.models import user_model
+    from modules.users.models import user_audit_model
 
     global __engine
 
     if not __engine:
         create_engine()
 
-    # ModelBase.metadata.drop_all(__engine)
     ModelBase.metadata.create_all(__engine)
     create_admin_user(user_model)
 
 
-def create_admin_user(model) -> None:
+def create_admin_user(user_model) -> None:
     """
     Esta função é destinada a criar o usuário inicial da aplicação, ou seja, o usuário administrador. Caso ele já
     exista, não será gerado um novo usuário administrador.
@@ -75,14 +75,15 @@ def create_admin_user(model) -> None:
     """
     session = create_session()
 
-    user = session.query(model.User).filter_by(user_name=Configuration.ADMIN_USER_NAME).first()
+    user = session.query(user_model.User).filter_by(user_name=Configuration.ADMIN_USER_NAME).first()
 
     if not user:
-        user = model.User(
+        user = user_model.User(
             user_name=Configuration.ADMIN_USER_NAME,
             user_password=generate_password_hash(Configuration.ADMIN_PASSWORD, method='sha256'),
             user_email=Configuration.ADMIN_EMAIL,
             user_status=Configuration.ADMIN_STATUS,
+            user_last_modification_user_id=Configuration.ADMIN_USER_ID
         )
 
         session.add(user)

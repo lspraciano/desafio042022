@@ -14,6 +14,7 @@ class User(ModelBase):
     user_email = Column(String, unique=True, nullable=False)
     user_token = Column(String, nullable=True)
     user_status = Column(Integer, nullable=False)
+    user_last_modification_user_id = Column(Integer, nullable=False)
 
     def __repr__(self) -> str:
         return f'User(id={self.user_id}, username={self.user_name})'

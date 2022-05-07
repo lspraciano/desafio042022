@@ -154,6 +154,7 @@ def create_new_user(user_name: str,
         user_password=generate_password_hash(user_password, method='sha256'),
         user_email=user_email.upper(),
         user_status=user_status,
+        user_last_modification_user_id=user_id_from_token()
     )
 
     session.add(user)
@@ -183,7 +184,7 @@ def update_user(user_cod: int,
     if not user:
         return {'error': 'non-existing user'}
 
-    if user_cod == user_id_from_token() and not user_status:
+    if int(user_cod) == user_id_from_token() and user_status is False:
         return {'error': 'you cannot disable your access'}
 
     if user.user_name != user_name:
@@ -210,6 +211,8 @@ def update_user(user_cod: int,
 
     if user_token != '':
         user.user_token = user_token
+
+    user.user_last_modification_user_id = user_id_from_token()
 
     session.add(user)
     session.commit()
