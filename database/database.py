@@ -7,7 +7,7 @@ from sqlalchemy.ext.declarative import declarative_base
 # Created Imports
 from werkzeug.security import generate_password_hash
 
-from configuration.configuration import app_configuration, app_active
+from configuration.configuration import app_configuration, app_active, Configuration
 
 __engine = None
 ModelBase = declarative_base()
@@ -75,14 +75,14 @@ def create_admin_user(model) -> None:
     """
     session = create_session()
 
-    user = session.query(model.User).filter_by(user_name='LUCAS PRACIANO').first()
+    user = session.query(model.User).filter_by(user_name=Configuration.ADMIN_USER_NAME).first()
 
     if not user:
         user = model.User(
-            user_name='LUCAS PRACIANO',
-            user_password=generate_password_hash('Abcd@123', method='sha256'),
-            user_email='LUSKCCT@GMAIL.COM',
-            user_status=1,
+            user_name=Configuration.ADMIN_USER_NAME,
+            user_password=generate_password_hash(Configuration.ADMIN_PASSWORD, method='sha256'),
+            user_email=Configuration.ADMIN_EMAIL,
+            user_status=Configuration.ADMIN_STATUS,
         )
 
         session.add(user)

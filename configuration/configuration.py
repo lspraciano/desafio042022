@@ -10,6 +10,11 @@ class Configuration:
     TEMPLATES_AUTO_RELOAD = True
     SECRET_KEY = os.getenv('SECRET_KEY')
     ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+    ADMIN_USER_ID = 1  # System user admin ID
+    ADMIN_USER_NAME = 'LUCAS PRACIANO'  # System user admin ID
+    ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD')  # System user password
+    ADMIN_EMAIL = os.getenv('ADMIN_EMAIL')  # System user email
+    ADMIN_STATUS = 1  # System user status
     TOKEN_NAME = 'new_app'  # Name of Cookie to set to the browser
     TIME_EXP_TOKEN = 30  # Time in minutes of JWT token
     LIMIT_EXP_TOKEN = 1  # Time in minutes of JWT token to expire

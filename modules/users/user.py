@@ -2,7 +2,7 @@
 from flask import Blueprint, render_template, request
 
 # Created Imports
-from modules.users.controllers.user_controller import check_login_password, get_all_users, save_user
+from modules.users.controllers.user_controller import check_login_password, get_all_users, create_new_user
 from resources.py.token.token_manager import token_authentication
 
 user_blueprint = Blueprint('user', __name__,
@@ -17,11 +17,12 @@ def user():
         return get_all_users()
     elif request.method == 'POST':
         data = request.json
-        save_user(user_name=data['username'],
-                  user_email=data['user_email'],
-                  user_status=data['user_status'],
-                  user_cod=data['user_cod'])
-        return {'...': 'true'}
+        if data['user_cod'] == '':
+            created_user = create_new_user(user_name=data['username'],
+                                           user_email=data['user_email'])
+            return created_user
+        else:
+            return {'created_user': 'desenvolvendo'}
 
 
 @user_blueprint.route('/authentication', methods=['GET', 'POST'])

@@ -8,7 +8,7 @@ from database.database import ModelBase
 class User(ModelBase):
     __tablename__ = "tbusers"
 
-    user_id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     user_name = Column(String, unique=True, nullable=False)
     user_password = Column(String, nullable=False)
     user_email = Column(String, unique=True, nullable=False)

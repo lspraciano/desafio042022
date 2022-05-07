@@ -1,44 +1,50 @@
 # Native Imports
 from flask_mail import Mail, Message
+import re
 
 # Created Imports
 from configuration.configuration import Configuration
-# from controllers.user_controller import save_mail_token
-from resources.py.token.token_manager import mail_token_generate
 
 mail = Mail()
 
 
-def send_cod_confirmation_register(email: str) -> dict:
+def send_email_password_new_user(email: str, password: str) -> dict:
     """
-    Esta função envia um email com um token de 6 números gerados aleatoriamente e ao mesmo tempo salva no banco SQL
-    este token no registro referente a ao email informado.
+    Esta função envia um email contendo a senha passada informada.
 
-    :param email: email
+    :param password: senha do usuário recém cadastrado
+    :param email: email do usuário destino
     :return: {'success': 'mail sent'} para sucesso ao enviar ou {'error': 'send mail failed to send'} em caso de error
     """
 
     try:
-        random_cod = mail_token_generate()
         body = f'''
         
-        Aqui está o código solicitado:
+        Esta é sua senha temporária. Você pode troca-la para aumentar sua segurança:
     
-       <<<  {random_cod}  >>> 
+       {password}
     
         '''
 
         msg = Message(
-            subject='Sua senha de acesso.',
+            subject='Senha de acesso.',
             sender=Configuration.MAIL_USERNAME,
             recipients=email.split(),
             body=body
         )
 
         mail.send(msg)
-        # save_mail_token(email, random_cod)
 
         return {'success': 'mail sent'}
 
     except:
-        return {'error': 'send mail failed to send'}
+        return {'error': 'failed to send email'}
+
+
+def validate_email(email: str) -> bool:
+    regex = re.compile(r"([-!#-'*+/-9=?A-Z^-~]+(\.[-!#-'*+/-9=?A-Z^-~]+)*|\"([]!#-[^-~ \t]|(\\[\t -~]))+\")@([-!#-'*+/-9=?A-Z^-~]+(\.[-!#-'*+/-9=?A-Z^-~]+)*|\[[\t -Z^-~]*])")
+    result = re.fullmatch(regex, email)
+    if result:
+        return True
+    else:
+        return False

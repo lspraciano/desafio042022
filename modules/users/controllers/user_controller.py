@@ -2,13 +2,17 @@
 from werkzeug.security import check_password_hash, generate_password_hash
 
 # Created Imports
+from configuration.configuration import Configuration
 from database.database import create_session
 from error.error import get_error_msg
 from modules.users.models.user_model import User
 from modules.users.serializers.user_seriallizer import UserBasicSchema
+from resources.py.password.password_manager import generate_password
 from resources.py.token import token_manager
+from resources.py.email.email_manager import validate_email, send_email_password_new_user
 
 session = create_session()
+
 UserBasicSchema = UserBasicSchema(many=True)
 
 
@@ -49,6 +53,7 @@ def check_login_password(login_request: dict) -> dict:
     try:
         username = login_request['username'].upper()
         password = login_request['password']
+
         user = get_user_by_username(username)
         # print(generate_password_hash('senha_para_gerar_hash', method='sha256'))
 
@@ -69,39 +74,86 @@ def check_login_password(login_request: dict) -> dict:
 
 def get_all_users() -> dict:
     """
-    Esta função retorna todos os usuários do banco sql.
+    Esta função retorna todos os usuários do banco sql com exeção do usuário administrador
 
-    :return: Dicionário contendo as informações dos usuários
+    :return: Dicionário contendo uma lista de usuários
     """
 
-    user = session.query(User).all()
+    user = session.query(User).filter(User.user_id != Configuration.ADMIN_USER_ID).all()
     session.close()
 
     return {'users': UserBasicSchema.dump(user)}
 
 
-def save_user(user_name: str,
-              user_email: str,
-              user_status: bool,
-              user_cod: str = '') -> dict:
+def check_username_email(username: str, email: str):
     """
-    Esta fução pode inserir ou atualizar um usuário. Se o Código do Usuário for informado, a função irá atualizar, caso
-    contrário, o usuário referente ao código informado será atualizado. Para o usuário criado sua senha será gerada
-    de forma aleatória. Esta função não possui o recurso de atualizar senha.
+    Esta função realiza a validação do username e email, verificando no banco de dados se já estão previamente
+    cadastrados, bem como, realiza a validação do email através de uma REGEX
 
-
-    :param user_cod: Id do Usário
-    :param user_name: Nome do Usuário
-    :param user_email: Email
-    :param user_status: Status
-    :return: Em caso de sucesso: {'user': user} ou em caso de erro {'error': error}
+    :param username: nome do usuário
+    :param email: email do usuário
+    :return: Em caso de sucesso será retornado {'success': 'ok'} e em caso de não sucesso será retornado
+     {'error': foo}
     """
 
-    if user_cod != '':
-        print('Atualizar')
-    else:
-        print('Criar')
+    user_by_email = get_user_by_email(email)
+    if user_by_email or not validate_email(email):
+        return {'error': 'invalid email'}
 
-    print(user_name, user_email, user_status, user_cod)
+    user_by_username = get_user_by_username(username)
+    if user_by_username:
+        return {'error': 'invalid username'}
 
-    return {'': ''}
+    return {'success': 'ok'}
+
+
+def create_new_user(user_name: str,
+                    user_email: str,
+                    user_status: int = 1,
+                    user_password: str = '') -> dict:
+    """
+    Esta função insere no banco SQL um usuário. Antes de inserir é verificado a existência do email ou username. Caso
+    não seja informado um password será gerada uma senha com 8 carácteres para este usuário.
+
+    :param user_name: nome do usuário
+    :param user_email:  email do usuário
+    :param user_status: status do usuário
+    :param user_password: senha do usuário
+    :return: em caso de sucesso será retornado {'user': user} ou em caso de não sucesso {'error': foo}
+    """
+
+    validate_username_and_email = check_username_email(username=user_name,
+                                                       email=user_email)
+
+    if 'error' in validate_username_and_email.keys():
+        return validate_username_and_email
+
+    if user_password == '':
+        user_password = generate_password()
+
+    user = User(
+        user_name=user_name.upper(),
+        user_password=generate_password_hash(user_password, method='sha256'),
+        user_email=user_email.upper(),
+        user_status=user_status,
+    )
+
+    session.add(user)
+    session.commit()
+    session.close()
+
+    validate_send_email = send_email_password_new_user(email=user_email,
+                                                       password=user_password)
+
+    if 'error' in validate_send_email.keys():
+        return validate_send_email
+
+    return {'user': UserBasicSchema.dump([user])}
+
+
+def update_user(user_name: str,
+                user_email: str,
+                user_status: bool,
+                user_password: str = '',
+                user_cod: str = '') -> dict:
+    ...

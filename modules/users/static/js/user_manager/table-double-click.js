@@ -4,6 +4,7 @@ import {loadDataOnForm} from "./form-data-controller.js";
 ( () => {
 
     const tableBody = document.getElementById("table-users__body");
+    const formCheckBox = document.getElementById("input-zone__value-status");
 
     tableBody.addEventListener("dblclick",  (e) => {
         const userValuesList = [];
@@ -19,6 +20,7 @@ import {loadDataOnForm} from "./form-data-controller.js";
         let userStatus = userValuesList[3];
 
         hideTableShowForm();
+        formCheckBox.disabled = false;
         loadDataOnForm(userCod, userName, userEmail, userStatus);
 
     });

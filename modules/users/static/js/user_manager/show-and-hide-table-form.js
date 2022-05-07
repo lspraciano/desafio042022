@@ -14,5 +14,3 @@ export const hideFormShowTable = () => {
     searchZone.style.display = "flex";
     formZone.style.display = "none";
 }
-
-
