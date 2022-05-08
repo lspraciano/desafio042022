@@ -22,6 +22,10 @@
     width: 100%;
 }
 
+.username__input{
+    text-transform: uppercase;
+}
+
 .username__input,
 .password__input {
     background-color: #f8f8f8;

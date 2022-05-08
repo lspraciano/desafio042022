@@ -16,10 +16,13 @@ const saveButtonEvent = async () => {
         let status = formData[3];
 
         const saveUserResult = await saveUser(cod, username, email, status);
-        await console.log(saveUserResult);
 
-        alert('Usuário salvo com sucesso');
-
+        if ('error' in saveUserResult) {
+            alert(saveUserResult['error']);
+        } else {
+            alert('Usuário salvo com sucesso');
+            window.location.reload();
+        }
     }
 
 }

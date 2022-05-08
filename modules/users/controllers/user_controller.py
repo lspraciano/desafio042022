@@ -130,8 +130,9 @@ def create_new_user(user_name: str,
                     user_status: int = 1,
                     user_password: str = '') -> dict:
     """
-    Esta função insere no banco SQL um usuário. Antes de inserir é verificado a existência do email ou username. Caso
-    não seja informado um password será gerada uma senha com 8 carácteres para este usuário.
+    Esta função insere no banco SQL um usuário. Antes de inserir é verificado a existência do email ou username
+    no banco para evitar duplicidade nos cadastros. Caso não seja informado um password será gerada uma senha com
+    8 carácteres para este usuário.
 
     :param user_name: nome do usuário
     :param user_email:  email do usuário
@@ -174,8 +175,24 @@ def update_user(user_cod: int,
                 user_name: str,
                 user_email: str,
                 user_status: bool,
-                user_password: str = '',
-                user_token: str = '') -> dict:
+                user_password: str = None,
+                user_token: str = None) -> dict:
+    """
+    Esta função atualiza um registro de usuário no banco SQL através do seu ID, que deve ser informado no parâmetro
+    código. Antes de atualizar, é realizada uma verificação do user name e email, tanto para evitar duplicidade
+    no banco como para evitar valores inválidos. O user_password e user_token não são obrigatórios, sendo assim,
+    quando não informados não serão atualizados. Caso deseje atualizar o password, ele deverá ser informado de forma
+    não criptografada.
+
+    :param user_cod: id do usuário
+    :param user_name: nome do usuário
+    :param user_email: email do usuário
+    :param user_status: status do usuário
+    :param user_password: senha do usuário
+    :param user_token: token do usuário
+    :return: em caso de sucesso será retornado {'user': user} ou em caso de não sucesso {'error': foo}
+    """
+
     if not user_cod:
         return {'error': 'invalid cod'}
 
@@ -206,10 +223,10 @@ def update_user(user_cod: int,
     else:
         return {'error': 'invalid status'}
 
-    if user_password != '':
-        user.user_password = user_password
+    if user_password:
+        user.user_password = generate_password_hash(user_password, method='sha256'),
 
-    if user_token != '':
+    if user_token:
         user.user_token = user_token
 
     user.user_last_modification_user_id = user_id_from_token()
