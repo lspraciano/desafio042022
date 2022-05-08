@@ -19,7 +19,7 @@
 
 <body>
     <div class="table-zone">
-        <table class="table-zone__table-transaction-logs">
+        <table class="table-zone__table-transaction-logs table">
             <thead>
                 <tr>
                     <th>Código</th>
@@ -32,7 +32,28 @@
 
 
             </tbody>
+
         </table>
+
+        <table class="table-zone__table-transaction-described table">
+            <thead>
+                <tr>
+                    <th>Banco origem</th>
+                    <th>Agência origem</th>
+                    <th>Conta origem</th>
+                    <th>Banco destino</th>
+                    <th>Agência destino</th>
+                    <th>Conta destino</th>
+                    <th>Valor da transação</th>
+                    <th>Data e hora da transação</th>
+                </tr>
+            </thead>
+            <tbody  id="table-transaction-described__body">
+
+
+            </tbody>
+        </table>
+
     </div>
 </body>
     <!--  JS -->

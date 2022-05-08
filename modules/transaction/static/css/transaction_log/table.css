@@ -1,4 +1,4 @@
-.table-zone__table-transaction-logs {
+.table {
     background-color: #fff;
     width: 85%;
     border-collapse: collapse;
@@ -9,7 +9,7 @@
     overflow: auto;
 }
 
-.table-zone__table-transaction-logs thead {
+.table thead {
     background-color: #5253a3;
     font-weight: 900;
     color: #f0f2f5;
@@ -17,37 +17,36 @@
     height: 7vh;
 }
 
-
-.table-zone__table-transaction-logs th:first-child{
+.table th:first-child{
   border-radius:5px 0 0 5px;
 }
 
-.table-zone__table-transaction-logs th:last-child{
+.table th:last-child{
   border-radius:0 5px 5px 0;
 }
 
-.table-zone__table-transaction-logs tbody tr:nth-last-of-type(even) {
+.table tbody tr:nth-last-of-type(even) {
     background-color: rgba(154, 154, 154, 0.10);
 }
 
 
-.table-zone__table-transaction-logs th,
-.table-zone__table-transaction-logs td {
+.table th,
+.table td {
     padding: 1px 15px;
 }
 
 
-.table-zone__table-transaction-logs tbody {
+.table tbody {
 
 }
 
 
-.table-zone__table-transaction-logs tbody tr {
+.table tbody tr {
     text-align: center;
     line-height: 7vh;
 }
 
-.table-zone__table-transaction-logs tbody tr:hover  {
+.table tbody tr:hover  {
     color: #f1f8ff;
     background-color: rgb(82, 83, 163);
     opacity: 0.5;
@@ -55,7 +54,7 @@
 
 @media only screen and (max-width: 1180px) {
 
-    .table-zone__table-transaction-logs {
+    .table {
         font-size: calc(1vw + 1vh);
     }
 }

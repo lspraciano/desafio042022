@@ -6,4 +6,5 @@
 @import "table-zone.css";
 
 /* Table */
-@import "table-transaction-logs.css";
+@import "table.css";
+@import "table-transaction-described.css";
