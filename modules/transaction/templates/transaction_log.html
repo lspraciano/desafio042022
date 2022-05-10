@@ -18,8 +18,17 @@
 </div>
 
 <body>
+
+    <div class="search-zone" id="search-zone">
+        <input type="text" id="search__term" class="search__term" placeholder="Qual sua pesquisa?">
+    </div>
+
+<!--    <button type="button" id="search__button-back" class="search__button-back">-->
+<!--            <i class='bx bx-x' id="button-back__icon"></i>-->
+<!--    </button>-->
+
     <div class="table-zone">
-        <table class="table-zone__table-transaction-logs table">
+        <table class="table-zone__table-transaction-logs table" id="table-zone__table-transaction-logs">
             <thead>
                 <tr>
                     <th>Código</th>
@@ -28,14 +37,14 @@
                     <th>Responsável</th>
                 </tr>
             </thead>
-            <tbody  id="table-transaction-logs__body">
+            <tbody  class="table-transaction-logs__body" id="table-transaction-logs__body">
 
 
             </tbody>
 
         </table>
 
-        <table class="table-zone__table-transaction-described table">
+        <table class="table-zone__table-transaction-described table" id="table-zone__table-transaction-described">
             <thead>
                 <tr>
                     <th>Banco origem</th>
@@ -57,5 +66,9 @@
     </div>
 </body>
     <!--  JS -->
-    <script type="module" src="static/js/transaction_log/load-data-on-table.js" ></script>
+    <script type="module" src="static/js/transaction_log/load-data-on-table-logs.js" ></script>
+    <script type="module" src="static/js/transaction_log/load-data-on-table-described.js" ></script>
+    <script type="module" src="static/js/transaction_log/input-event.js" ></script>
+    <script type="module" src="static/js/transaction_log/transaction-table-double-click.js" ></script>
+    <script type="text/javascript" src="static/js/transaction_log/button-x-event.js" ></script>
 </html>

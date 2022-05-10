@@ -16,7 +16,7 @@ import {validateInputFile} from "./validate-input-file.js";
             iconOff.style.display = 'none';
             sendButton.style.display = 'block';
         } else {
-            alert('Arquivo Inválido !!!!')
+            alert('invalid file')
             document.location.reload();
         }
     }

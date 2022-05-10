@@ -45,6 +45,7 @@
 .table-zone__table-user tbody tr {
     text-align: center;
     line-height: 7vh;
+    word-wrap: normal;
 }
 
 .table-zone__table-user tbody tr:hover  {
@@ -58,4 +59,17 @@
     .table-zone__table-user {
         font-size: calc(1vw + 1vh);
     }
+
+    .table-zone__table-user thead tr th:first-child {
+        display: none;
+    }
+
+    .table-zone__table-user tbody tr td:first-child {
+        display:  none;
+    }
+
+    .table-zone__table-user thead tr th:nth-child(2) {
+        border-radius: 5px 0 0 5px;
+    }
+
 }

@@ -9,18 +9,20 @@ import {deleteCookie, setCookie} from "../../../../../resources/js/cookie/cookie
     const actionButton = async () => {
 
         if (username.value === "") {
-            await alert("Preencha campo Usuário corretamente!");
+            await alert("invalid username field");
             username.focus();
             return;
         }
 
         if (password.value === "") {
-            await alert("Preencha campo Senha corretamente!");
+            await alert("invalid password field");
             password.focus();
             return;
         }
 
-        const credentials = {"username": username.value, "password": password.value};
+        const credentials = {
+            "username": username.value,
+            "password": password.value};
 
 
         const url = `${window.location.origin}/user/authentication`;
@@ -37,7 +39,7 @@ import {deleteCookie, setCookie} from "../../../../../resources/js/cookie/cookie
         const token = await response.json()
 
         if ('error' in token) {
-            await alert("Acesso negado. Verifique suas credenciais e tente novamente");
+            await alert(token['error']);
             await deleteCookie()
             username.value = '';
             password.value = '';

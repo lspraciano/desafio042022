@@ -12,10 +12,9 @@ const sendCsv = async () => {
     console.log(result)
 
     if('error' in result) {
-        let error = result['error']['error']['type']
-        alert('As transações NÃO foram salvas. Erro: ' + error);
+        alert(result['error']);
     } else {
-        alert('Transações importadas com SUCESSO!!!');
+        alert('file saved successfully');
     }
 
     location.reload();

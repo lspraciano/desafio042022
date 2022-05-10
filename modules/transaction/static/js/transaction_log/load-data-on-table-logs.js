@@ -1,5 +1,5 @@
 import {formatDate, formatDateTime} from "../../../../../resources/js/format-date/format-date.js";
-import {getAuditTransactionData} from "./get-audit-transaction-data.js";
+import {getLogsTransactionData} from "./get-logs-transaction-data.js";
 
 
 (() => {
@@ -8,7 +8,7 @@ import {getAuditTransactionData} from "./get-audit-transaction-data.js";
 
     const loadData = async () => {
 
-        const data = await getAuditTransactionData();
+        const data = await getLogsTransactionData();
 
         for (let i in data['logs']) {
 

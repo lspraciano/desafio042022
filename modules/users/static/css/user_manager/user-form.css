@@ -1,4 +1,6 @@
 .form-zone__form {
+    width: 90%;
+    max-width: 25rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -7,6 +9,7 @@
 }
 
 .form__header {
+    width: 100%;
     padding: 1rem;
     display: flex;
     justify-content: center;

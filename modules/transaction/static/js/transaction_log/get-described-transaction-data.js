@@ -1,6 +1,6 @@
-export const getAuditTransactionData = async () => {
+export const getDescribedTransactionData = async (date) => {
 
-        const url = `${window.location.origin}/transaction/log/get-log`;
+        const url = `${window.location.origin}/transaction?date=`+date;
         const param = {
             method: "GET",
             headers: {

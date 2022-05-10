@@ -3,7 +3,7 @@
     const input = document.getElementById("search__term");
     const tableBody = document.getElementById("table-users__body");
 
-    function filterExams() {
+    function filterUsers() {
 
         for (let tableRow of tableBody.rows) {
 
@@ -21,6 +21,6 @@
         }
     }
 
-    input.addEventListener("input", filterExams);
+    input.addEventListener("input", filterUsers);
 
 }) ()
