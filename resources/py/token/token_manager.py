@@ -64,20 +64,15 @@ def token_authentication(function):
             token_no_bearer = token_from_cookie
 
         except:
-            return redirect('/'), 302
+            return redirect('/')
 
         if token_from_cookie is None:
-            return redirect('/'), 302
+            return redirect('/')
 
         try:
             decode = jwt.decode(token_no_bearer, Configuration.SECRET_KEY, algorithms=["HS256"])
-            # user_id = decode['id']
-            #
-            # # if refresh_token(token_no_bearer):
-            # #     return token_generator(user_id)
-
         except:
-            return redirect('/'), 302
+            return redirect('/')
         return function()
 
     return wrapper
@@ -96,14 +91,14 @@ def user_id_from_token():
         token_no_bearer = token_from_cookie
 
         if token_from_cookie is None:
-            return redirect('/'), 302
+            return redirect('/')
 
         decode = jwt.decode(token_no_bearer, Configuration.SECRET_KEY, algorithms=["HS256"])
         user_id = decode['id']
         return user_id
 
     except:
-        return redirect('/'), 302
+        return redirect('/')
 
 
 def mail_token_generate() -> int:

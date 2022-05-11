@@ -134,7 +134,7 @@ def check_username_email(username: str = None, email: str = None):
     return {'success': 'ok'}
 
 
-def create_new_user(user_dict: dict) -> dict:
+def create_new_user(user_dict: dict):
     """
     Esta função insere no banco SQL um usuário. Antes de inserir é verificado a existência do email ou username
     no banco para evitar duplicidade nos cadastros. Será gerada uma senha com 8 carácteres para este usuário e

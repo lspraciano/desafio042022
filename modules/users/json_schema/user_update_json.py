@@ -31,7 +31,6 @@ json_user_update = {
 def json_validate_update_user(json):
     try:
         validate(json, json_user_update)
-    except Exception as e:
-        print(e)
+    except:
         return False
     return True
