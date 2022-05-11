@@ -50,7 +50,7 @@ def get_user_by_email(email: str) -> User:
     """
     Esta função retorna um usuário do banco sql através do seu email
 
-    :param email: Nome do email
+    :param email: Email do usuário
     :return: Objeto usuário contendo as informações do usuário consultado
     """
 
@@ -61,11 +61,12 @@ def get_user_by_email(email: str) -> User:
 
 def check_login_password(user_dict: dict) -> dict:
     """
-    Função para autenticar o usuário e caso ele seja aceito, esta função ira registrar no REDIS o perfil de exames
-    para este usuário e carregar os exames gerais usados pelo modelo
+    Função para autenticar o usuário e caso ele seja aceito será retornado um diconário contendo um token JWT que
+    deverá ser usado para atenticar as transações da aplicação.
 
-    :param user_dict: Request realizado pelo usuário
-    :return: Dicionário contendo um TOKEN para relizar futuras transações
+    :param user_dict: { "user_name": "type": "string", "user_email": "type": "string" }
+    :return: Em caso de sucesso será retornado { 'TOKEN': foo } e em caso de não sucesso será retornado
+     { 'error': foo }
     """
     try:
 
@@ -97,7 +98,7 @@ def get_all_users() -> dict:
     """
     Esta função retorna todos os usuários do banco sql com exceção do usuário administrador
 
-    :return: Dicionário contendo uma lista de usuários
+    :return: { 'user': [ { user }, ] }
     """
 
     user = session.query(User).filter(User.user_id != Configuration.ADMIN_USER_ID).all()
@@ -113,8 +114,8 @@ def check_username_email(username: str = None, email: str = None):
 
     :param username: nome do usuário
     :param email: email do usuário
-    :return: Em caso de sucesso será retornado {'success': 'ok'} e em caso de não sucesso será retornado
-     {'error': foo}
+    :return: Em caso de sucesso será retornado { 'success': 'ok' } e em caso de não sucesso será retornado
+     { 'error': foo }
     """
 
     if username == '' or email == '':
@@ -136,11 +137,11 @@ def check_username_email(username: str = None, email: str = None):
 def create_new_user(user_dict: dict) -> dict:
     """
     Esta função insere no banco SQL um usuário. Antes de inserir é verificado a existência do email ou username
-    no banco para evitar duplicidade nos cadastros. Caso não seja informado um password será gerada uma senha com
-    8 carácteres para este usuário. A senha será enviada automaticamente para o email informado
+    no banco para evitar duplicidade nos cadastros. Será gerada uma senha com 8 carácteres para este usuário e
+    enviada automaticamente para o email informado
 
-    :param user_dict: dicionário contendo os campos essênciais
-    :return: em caso de sucesso será retornado {'user': user} ou em caso de não sucesso {'error': foo}
+    :param user_dict: { "user_name": "type": "string", "user_email": "type": "string" }
+    :return: em caso de sucesso será retornado { 'user': {user} } ou em caso de não sucesso { 'error': foo }
     """
 
     if not json_validate_create_user(user_dict):
@@ -177,10 +178,13 @@ def create_new_user(user_dict: dict) -> dict:
 
 def update_user(user_dict: dict) -> dict:
     """
-    Esta função atualiza um registro de usuário no banco SQL através do seu ID.
+    Esta função atualiza um registro de usuário no banco de dados através do seu ID que deverá ser informado dentro
+    do dicionário com os outros dados que se deseja atualizar.
 
-    :param user_dict: dicionário contendo os campos essênciais
-    :return: em caso de sucesso será retornado {'user': user} ou em caso de não sucesso {'error': foo}
+    :param user_dict: { "user_id": "type": "integer", "user_name": "type": ["string" ou "null"],
+     "user_password": "type": ["string" ou "null"], "user_email": "type": ["string" ou "null"],
+     "user_token": "type": ["string" ou "null"], "user_status": "type": "integer" }
+    :return: em caso de sucesso será retornado { 'user': {user} } ou em caso de não sucesso { 'error': foo }
     """
 
     if not json_validate_update_user(user_dict):
@@ -214,12 +218,14 @@ def update_user(user_dict: dict) -> dict:
     else:
         return {'error': 'invalid status'}
 
-    if user_dict['user_password'] and user_dict['user_password'] != '':
+    if user_dict['user_password'] == '':
+        return {'error': 'invalid password'}
+
+    if user_dict['user_password']:
         user.user_password = generate_password_hash(user_dict['user_password'], method='sha256')
 
-    if 'user_token' in user_dict.keys():
-        if user_dict['user_token'] and user_dict['user_token'] != '':
-            user.user_token = user_dict['user_token']
+    if user_dict['user_token'] and user_dict['user_token'] != '':
+        user.user_token = user_dict['user_token']
 
     user.user_last_modification_user_id = user_id_from_token()
 
