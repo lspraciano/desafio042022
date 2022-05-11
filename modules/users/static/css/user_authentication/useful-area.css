@@ -21,9 +21,3 @@
     }
 }
 
-@media only screen and (max-width: 1180px) and (orientation: landscape) {
-    .useful-area {
-        width: 90%;
-        height: 90%;
-    }
-}

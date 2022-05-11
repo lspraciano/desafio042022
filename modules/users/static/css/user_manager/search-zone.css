@@ -1,6 +1,5 @@
 .search-zone {
-    /*display: flex;*/
-    display: none;
+    display: flex;
     align-items: center;
     justify-content: center;
     overflow-x: auto;

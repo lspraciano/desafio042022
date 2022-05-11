@@ -10,25 +10,17 @@ user_blueprint = Blueprint('user', __name__,
                            static_folder='static')
 
 
-@user_blueprint.route('/', methods=['GET', 'POST'])
+@user_blueprint.route('/', methods=['GET', 'POST', 'UPDATE'])
 @token_authentication
 def user():
     if request.method == 'GET':
         return get_all_users()
-
     elif request.method == 'POST':
-        data = request.json
-        if data['user_cod'] == '':
-            created_user = create_new_user(user_name=data['username'],
-                                           user_email=data['user_email'])
-            return created_user
-        else:
-            updated_user = update_user(user_cod=data['user_cod'],
-                                       user_name=data['username'],
-                                       user_email=data['user_email'],
-                                       user_status=data['user_status'])
-
-            return updated_user
+        created_user = create_new_user(request.json)
+        return created_user
+    elif request.method == 'UPDATE':
+        updated_user = update_user(request.json)
+        return updated_user
 
 
 @user_blueprint.route('/authentication', methods=['GET', 'POST'])

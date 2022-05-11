@@ -22,12 +22,12 @@ export const resetDataForm = () => {
 export const validateForm = async () => {
 
     if (userNameInput.value === '') {
-        alert('Usuário inválido');
+        alert('invalid username');
         return false;
     }
 
     if (await checkEmail(userEmailInput.value) === false) {
-        alert('Email inválido');
+        alert('invalid email');
         return false;
     }
 

@@ -5,6 +5,9 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from configuration.configuration import Configuration
 from database.database import create_session
 from error.error import get_error_msg
+from modules.users.json_schema.user_authentication_json import json_validate_user_authentication
+from modules.users.json_schema.user_create_json import json_validate_create_user
+from modules.users.json_schema.user_update_json import json_validate_update_user
 from modules.users.models.user_model import User
 from modules.users.serializers.user_seriallizer import UserBasicSchema
 from resources.py.password.password_manager import generate_password
@@ -56,17 +59,21 @@ def get_user_by_email(email: str) -> User:
     return user
 
 
-def check_login_password(login_request: dict) -> dict:
+def check_login_password(user_dict: dict) -> dict:
     """
     Função para autenticar o usuário e caso ele seja aceito, esta função ira registrar no REDIS o perfil de exames
     para este usuário e carregar os exames gerais usados pelo modelo
 
-    :param login_request: Request realizado pelo usuário
+    :param user_dict: Request realizado pelo usuário
     :return: Dicionário contendo um TOKEN para relizar futuras transações
     """
     try:
-        username = login_request['username'].upper()
-        password = login_request['password']
+
+        if not json_validate_user_authentication(user_dict):
+            return {'error': 'invalid json'}
+
+        username = user_dict['user_name'].upper()
+        password = user_dict['user_password']
 
         user = get_user_by_username(username)
         # print(generate_password_hash('senha_para_gerar_hash', method='sha256'))
@@ -109,6 +116,7 @@ def check_username_email(username: str = None, email: str = None):
     :return: Em caso de sucesso será retornado {'success': 'ok'} e em caso de não sucesso será retornado
      {'error': foo}
     """
+
     if username == '' or email == '':
         return {'error': 'invalid username or email'}
 
@@ -125,36 +133,32 @@ def check_username_email(username: str = None, email: str = None):
     return {'success': 'ok'}
 
 
-def create_new_user(user_name: str,
-                    user_email: str,
-                    user_status: int = 1,
-                    user_password: str = '') -> dict:
+def create_new_user(user_dict: dict) -> dict:
     """
     Esta função insere no banco SQL um usuário. Antes de inserir é verificado a existência do email ou username
     no banco para evitar duplicidade nos cadastros. Caso não seja informado um password será gerada uma senha com
-    8 carácteres para este usuário.
+    8 carácteres para este usuário. A senha será enviada automaticamente para o email informado
 
-    :param user_name: nome do usuário
-    :param user_email:  email do usuário
-    :param user_status: status do usuário
-    :param user_password: senha do usuário
+    :param user_dict: dicionário contendo os campos essênciais
     :return: em caso de sucesso será retornado {'user': user} ou em caso de não sucesso {'error': foo}
     """
 
-    validate_username_and_email = check_username_email(username=user_name,
-                                                       email=user_email)
+    if not json_validate_create_user(user_dict):
+        return {'error': 'invalid json'}
+
+    validate_username_and_email = check_username_email(username=user_dict['user_name'],
+                                                       email=user_dict['user_email'])
 
     if 'error' in validate_username_and_email.keys():
         return validate_username_and_email
 
-    if user_password == '':
-        user_password = generate_password()
+    user_password = generate_password()
 
     user = User(
-        user_name=user_name.upper(),
+        user_name=user_dict['user_name'].upper(),
         user_password=generate_password_hash(user_password, method='sha256'),
-        user_email=user_email.upper(),
-        user_status=user_status,
+        user_email=user_dict['user_email'].upper(),
+        user_status=1,
         user_last_modification_user_id=user_id_from_token()
     )
 
@@ -162,7 +166,7 @@ def create_new_user(user_name: str,
     session.commit()
     session.close()
 
-    validate_send_email = send_email_password_new_user(email=user_email,
+    validate_send_email = send_email_password_new_user(email=user_dict['user_email'],
                                                        password=user_password)
 
     if 'error' in validate_send_email.keys():
@@ -171,63 +175,51 @@ def create_new_user(user_name: str,
     return {'user': UserBasicSchema.dump([user])}
 
 
-def update_user(user_cod: int,
-                user_name: str,
-                user_email: str,
-                user_status: bool,
-                user_password: str = None,
-                user_token: str = None) -> dict:
+def update_user(user_dict: dict) -> dict:
     """
-    Esta função atualiza um registro de usuário no banco SQL através do seu ID, que deve ser informado no parâmetro
-    código. Antes de atualizar, é realizada uma verificação do user name e email, tanto para evitar duplicidade
-    no banco como para evitar valores inválidos. O user_password e user_token não são obrigatórios, sendo assim,
-    quando não informados não serão atualizados. Caso deseje atualizar o password, ele deverá ser informado de forma
-    não criptografada.
+    Esta função atualiza um registro de usuário no banco SQL através do seu ID.
 
-    :param user_cod: id do usuário
-    :param user_name: nome do usuário
-    :param user_email: email do usuário
-    :param user_status: status do usuário
-    :param user_password: senha do usuário
-    :param user_token: token do usuário
+    :param user_dict: dicionário contendo os campos essênciais
     :return: em caso de sucesso será retornado {'user': user} ou em caso de não sucesso {'error': foo}
     """
 
-    if not user_cod:
-        return {'error': 'invalid cod'}
+    if not json_validate_update_user(user_dict):
+        return {'error': 'invalid json'}
 
-    user = get_user_by_id(user_cod)
+    if not user_dict['user_id']:
+        return {'error': 'invalid user id'}
+
+    user = get_user_by_id(user_dict['user_id'])
 
     if not user:
         return {'error': 'non-existing user'}
 
-    if int(user_cod) == user_id_from_token() and user_status is False:
+    if user_dict['user_id'] == user_id_from_token() and user_dict['user_status'] == 0:
         return {'error': 'you cannot disable your access'}
 
-    if user.user_name != user_name:
-        validate_username = check_username_email(username=user_name)
+    if user.user_name != user_dict['user_name']:
+        validate_username = check_username_email(username=user_dict['user_name'])
         if 'error' in validate_username.keys():
             return validate_username
-        user.user_name = user_name
+        user.user_name = user_dict['user_name']
 
-    if user.user_email != user_email:
-        validate_user_email = check_username_email(email=user_email)
+    if user.user_email != user_dict['user_email']:
+        validate_user_email = check_username_email(email=user_dict['user_email'])
         if 'error' in validate_user_email.keys():
             return validate_user_email
-        user.user_email = user_email
+        user.user_email = user_dict['user_email']
 
-    if user_status is True:
-        user.user_status = 1
-    elif user_status is False:
-        user.user_status = 0
+    if user_dict['user_status'] in [0, 1]:
+        user.user_status = user_dict['user_status']
     else:
         return {'error': 'invalid status'}
 
-    if user_password:
-        user.user_password = generate_password_hash(user_password, method='sha256'),
+    if user_dict['user_password'] and user_dict['user_password'] != '':
+        user.user_password = generate_password_hash(user_dict['user_password'], method='sha256')
 
-    if user_token:
-        user.user_token = user_token
+    if 'user_token' in user_dict.keys():
+        if user_dict['user_token'] and user_dict['user_token'] != '':
+            user.user_token = user_dict['user_token']
 
     user.user_last_modification_user_id = user_id_from_token()
 

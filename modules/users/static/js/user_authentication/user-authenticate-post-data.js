@@ -21,8 +21,9 @@ import {deleteCookie, setCookie} from "../../../../../resources/js/cookie/cookie
         }
 
         const credentials = {
-            "username": username.value,
-            "password": password.value};
+            "user_name": username.value,
+            "user_password": password.value
+        };
 
 
         const url = `${window.location.origin}/user/authentication`;

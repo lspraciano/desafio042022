@@ -1,5 +1,5 @@
 import {getDescribedTransactionData} from "./get-described-transaction-data.js";
-import {formatDate, formatDateTime} from "../../../../../resources/js/format-date/format-date.js";
+import {formatDateTime} from "../../../../../resources/js/format-date/format-date.js";
 
 export const loadDataOnTableDescribed = async (date) => {
     const tableBody = document.getElementById("table-transaction-described__body");
@@ -29,10 +29,13 @@ export const loadDataOnTableDescribed = async (date) => {
         rowDestinationAccount.innerHTML = data['transactions'][i]['transaction_destination_account'];
 
         let rowAmount = document.createElement('td');
-        rowAmount.innerHTML = data['transactions'][i]['transaction_amount'];
+        rowAmount.innerHTML = data['transactions'][i]['transaction_amount'].toLocaleString('pt-br', {
+            style: 'currency',
+            currency: 'BRL'
+        });
 
         let rowDateTime = document.createElement('td');
-        rowDateTime.innerHTML = data['transactions'][i]['transaction_date_time'];
+        rowDateTime.innerHTML = formatDateTime(data['transactions'][i]['transaction_date_time']);
 
         row.appendChild(rowHomeBank);
         row.appendChild(rowHomeBranch);
