@@ -18,6 +18,12 @@ TransactionSchema = TransactionSchema(many=True)
 
 
 def get_transaction_by_date(transactions_date: datetime) -> dict:
+    """
+    Esta função retona uma lista de diocnário contendo as transações referentes a data informada.
+
+    :param transactions_date: data da(s) transação(ões)
+    :return: [ { transações } ]
+    """
     if not isinstance(transactions_date, datetime):
         return {'error': 'invalid date'}
 
@@ -37,8 +43,7 @@ def validate_transaction_list(transactions_list: list) -> dict:
     considerada válida, será retornado "True", caso contrário "False". A formatação da lista deve
     seguir esta ordem de valores:
 
-    [Banco origem, Agência origem, Conta origem, Banco destino, Agência destino, Conta destino,
-    Valor da transação, Data e hora da transação]
+
 
     :param transactions_list: lista de transações
     :return: em caso de sucesso será retornado {'success': 'ok'} ou em caso de não sucesso
@@ -75,6 +80,7 @@ def get_transactions_list_by_date(transaction_request: request) -> make_response
 
     try:
         transactions_date = transaction_request.args.get('date')
+
         try:
             transactions_date = datetime.strptime(transactions_date, '%d/%m/%Y')
         except:
@@ -92,18 +98,15 @@ def get_transactions_list_by_date(transaction_request: request) -> make_response
 
 def save_transactions_list(transaction_request: list) -> make_response:
     """
-    Esta função salva uma lista de transações no banco SQL e retorna um dicionário contendo a chave "success", caso
-    tudo ocorra com esperado ou  retorna um diconário com a chave erro, caso algo inesperado ocorra. No caso de sucesso
-    dentro da chave "success" teremos o número de linhas inseridas.  A formatação da lista deve seguir esta ordem
-    de valores:
-
-    [[Banco origem, Agência origem, Conta origem, Banco destino, Agência destino, Conta destino,
-    Valor da transação, Data e hora da transação]]
-
+    Esta função salva uma lista de transações no banco de dados.  A formatação da lista de dicionário deve seguir
+    esta ordem de valores: { "transaction_home_bank" : "type": "string", "transaction_home_branch" : "type": "integer",
+    "transaction_home_account" : "type": "string", "transaction_destination_bank" : "type": "string",
+    "transaction_destination_branch" : "type": "integer", "transaction_destination_account" : "type": "string",
+    "transaction_amount" : "type": "number", "transaction_date_time" : "type": "string" }
 
     :param transaction_request: lista de transações
-    :return: No caso de sucesso: { 'success': { 'transactions': número de linhas } }
-     ||| No caso de erro: { 'error': erro ocorrido }
+    :return: no caso de sucesso: { 'success': { 'transactions': número de linhas } } ou em caso de NÃO sucesso
+     { 'error': foo }
     """
 
     try:

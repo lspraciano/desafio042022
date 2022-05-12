@@ -42,6 +42,13 @@ def send_email_password_new_user(email: str, password: str) -> dict:
 
 
 def validate_email(email: str) -> bool:
+    """
+    Esta função realiza a validação de uma string no formato de email. Caso considerado válido será retornado
+    o valor True.
+
+    :param email: email
+    :return: True ou False
+    """
     regex = re.compile(r"([-!#-'*+/-9=?A-Z^-~]+(\.[-!#-'*+/-9=?A-Z^-~]+)*|\"([]!#-[^-~ \t]|(\\[\t -~]))+\")@([-!#-'*+/-9=?A-Z^-~]+(\.[-!#-'*+/-9=?A-Z^-~]+)*|\[[\t -Z^-~]*])")
     result = re.fullmatch(regex, email)
     if result:

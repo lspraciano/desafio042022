@@ -11,10 +11,11 @@ from configuration.configuration import Configuration
 
 def token_generator(userid: int) -> dict:
     """
-    Função geradora do TOKEN JWT de acesso do usuário
+    Função geradora do TOKEN JWT de acesso do usuário. Este TOKEN deve ser armazenado nos cookies como local
+    padrão
 
-    :param userid: ID - Identificação do usuário
-    :return: Dicionário contendo TOKEN de acesso no formato {"token": foo}
+    :param userid: ID - identificação do usuário
+    :return: dicionário contendo TOKEN de acesso no formato {"token": foo}
     """
 
     payload = {
@@ -27,9 +28,9 @@ def token_generator(userid: int) -> dict:
 
 def token_authentication(function):
     """
-    Esta função faz a proteção de uma rota através da validação do TOKEN JWT de acesso
+    Esta função faz a proteção de uma rota através da validação do TOKEN JWT de acesso.
 
-    :param function: Função da rota de acesso que deseja proteger
+    :param function: função da rota de acesso que deseja proteger
     :return: Function() ou Diconário com erro encontrado na validação
     """
 
@@ -60,7 +61,7 @@ def user_id_from_token():
     """
     Esta função retorna o ID do usuário que esta solicitando alguma requisição através do seu TOKEN JWT
 
-    :return: Id do usuário ou Dicionário contendo o error
+    :return: ID do usuário ou Dicionário contendo o error
     """
 
     try:
@@ -81,8 +82,9 @@ def user_id_from_token():
 
 def mail_token_generate() -> int:
     """
-    Esta função gera uma sequência aleatória de 6 números
-    :return: sequência de números
+    Esta função gera uma sequência aleatória de 6 números que pode variar entre 100000 e 999999
+
+    :return: número
     """
     token = randrange(100000, 999999, 2)
     return token

@@ -26,7 +26,7 @@ def get_user_by_id(user_id: int) -> User:
     Esta função retorna um usuário do banco sql através do seu ID
 
     :param user_id: ID do usuário
-    :return: Objeto usuário contendo as informações do usuário consultado
+    :return: objeto usuário contendo as informações do usuário consultado
     """
 
     user = session.query(User).filter_by(user_id=user_id).first()
@@ -38,8 +38,8 @@ def get_user_by_username(username: str) -> User:
     """
     Esta função retorna um usuário do banco sql através do seu nome
 
-    :param username: Nome do usuário
-    :return: Objeto usuário contendo as informações do usuário consultado
+    :param username: nome do usuário
+    :return: objeto usuário contendo as informações do usuário consultado
     """
 
     user = session.query(User).filter_by(user_name=username).first()
@@ -52,7 +52,7 @@ def get_user_by_email(email: str) -> User:
     Esta função retorna um usuário do banco sql através do seu email
 
     :param email: Email do usuário
-    :return: Objeto usuário contendo as informações do usuário consultado
+    :return: objeto usuário contendo as informações do usuário consultado
     """
 
     user = session.query(User).filter_by(user_email=email).first()
@@ -66,7 +66,7 @@ def check_login_password(user_dict: dict) -> make_response:
     deverá ser usado para atenticar as transações da aplicação.
 
     :param user_dict: { "user_name": "type": "string", "user_email": "type": "string" }
-    :return: Em caso de sucesso será retornado { 'TOKEN': foo } e em caso de não sucesso será retornado
+    :return: em caso de sucesso será retornado { 'TOKEN': foo } e em caso de NÃO sucesso será retornado
      { 'error': foo }
     """
     try:
@@ -78,7 +78,6 @@ def check_login_password(user_dict: dict) -> make_response:
         password = user_dict['user_password']
 
         user = get_user_by_username(username)
-        # print(generate_password_hash('senha_para_gerar_hash', method='sha256'))
 
         if user is None:
             return make_response({"error": "access denied"}, 401)
@@ -108,18 +107,19 @@ def get_all_users() -> make_response:
     return make_response({'users': UserBasicSchema.dump(user)}, 200)
 
 
-def check_username_email(username: str = None, email: str = None) -> dict:
+def check_username_email(user_name: str = None, email: str = None) -> dict:
     """
     Esta função realiza a validação do username e email, verificando no banco de dados se já estão previamente
-    cadastrados, bem como, realiza a validação do email através de uma REGEX
+    cadastrados, bem como, realiza a validação do email através de uma REGEX. Caso deseje validdar apenas um dos
+    dois, você deverá informar apenas a opção desejada (user_name ou email)
 
-    :param username: nome do usuário
+    :param user_name: nome do usuário
     :param email: email do usuário
-    :return: Em caso de sucesso será retornado { 'success': 'ok' } e em caso de não sucesso será retornado
+    :return: em caso de sucesso será retornado { 'success': 'ok' } e em caso de não sucesso será retornado
      { 'error': foo }
     """
 
-    if username == '' or email == '':
+    if user_name == '' or email == '':
         return {'error': 'invalid username or email'}
 
     if email:
@@ -127,8 +127,8 @@ def check_username_email(username: str = None, email: str = None) -> dict:
         if user_by_email or not validate_email(email):
             return {'error': 'invalid email'}
 
-    if username:
-        user_by_username = get_user_by_username(username)
+    if user_name:
+        user_by_username = get_user_by_username(user_name)
         if user_by_username:
             return {'error': 'invalid username'}
 
@@ -145,11 +145,10 @@ def create_new_user(user_dict: dict) -> make_response:
     :return: em caso de sucesso será retornado { 'user': {user} } ou em caso de não sucesso { 'error': foo }
     """
 
-    print(user_dict)
     if not json_validate_create_user(user_dict):
         return make_response({'error': 'invalid json'}, 415)
 
-    validate_username_and_email = check_username_email(username=user_dict['user_name'],
+    validate_username_and_email = check_username_email(user_name=user_dict['user_name'],
                                                        email=user_dict['user_email'])
 
     if 'error' in validate_username_and_email.keys():
@@ -181,12 +180,13 @@ def create_new_user(user_dict: dict) -> make_response:
 def update_user(user_dict: dict) -> make_response:
     """
     Esta função atualiza um registro de usuário no banco de dados através do seu ID que deverá ser informado dentro
-    do dicionário com os outros dados que se deseja atualizar.
+    do dicionário com os outros dados que se deseja atualizar. Todos os campos do dicionário de entrada são
+    obrogatórios, porém caso não deseje atualizar algum dos campos, este campos deve ser nulo.
 
     :param user_dict: { "user_id": "type": "integer", "user_name": "type": ["string" ou "null"],
      "user_password": "type": ["string" ou "null"], "user_email": "type": ["string" ou "null"],
      "user_token": "type": ["string" ou "null"], "user_status": "type": "integer" }
-    :return: em caso de sucesso será retornado { 'user': {user} } ou em caso de não sucesso { 'error': foo }
+    :return: em caso de sucesso será retornado { 'user': {user} } ou em caso de NÃO sucesso { 'error': foo }
     """
 
     if not json_validate_update_user(user_dict):
@@ -204,7 +204,7 @@ def update_user(user_dict: dict) -> make_response:
         return make_response({'error': 'you cannot disable your access'}, 400)
 
     if user.user_name != user_dict['user_name']:
-        validate_username = check_username_email(username=user_dict['user_name'])
+        validate_username = check_username_email(user_name=user_dict['user_name'])
         if 'error' in validate_username.keys():
             return make_response(validate_username, 400)
         user.user_name = user_dict['user_name']
