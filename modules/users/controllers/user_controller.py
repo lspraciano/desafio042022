@@ -1,4 +1,5 @@
 # Native Imports
+from flask import make_response
 from werkzeug.security import check_password_hash, generate_password_hash
 
 # Created Imports
@@ -59,7 +60,7 @@ def get_user_by_email(email: str) -> User:
     return user
 
 
-def check_login_password(user_dict: dict) -> dict:
+def check_login_password(user_dict: dict) -> make_response:
     """
     Função para autenticar o usuário e caso ele seja aceito será retornado um diconário contendo um token JWT que
     deverá ser usado para atenticar as transações da aplicação.
@@ -71,7 +72,7 @@ def check_login_password(user_dict: dict) -> dict:
     try:
 
         if not json_validate_user_authentication(user_dict):
-            return {'error': 'invalid json'}
+            return make_response({'error': 'invalid json'}, 415)
 
         username = user_dict['user_name'].upper()
         password = user_dict['user_password']
@@ -80,21 +81,21 @@ def check_login_password(user_dict: dict) -> dict:
         # print(generate_password_hash('senha_para_gerar_hash', method='sha256'))
 
         if user is None:
-            return {"error": "access denied"}
+            return make_response({"error": "access denied"}, 401)
 
         if user.user_status == 0:
-            return {"error": "access denied"}
+            return make_response({"error": "access denied"}, 401)
 
         if not check_password_hash(user.user_password, password):
-            return {"error": "access denied"}
+            return make_response({"error": "access denied"}, 401)
 
-        return token_manager.token_generator(user.user_id)
+        return make_response(token_manager.token_generator(user.user_id), 200)
 
     except:
         return get_error_msg()
 
 
-def get_all_users() -> dict:
+def get_all_users() -> make_response:
     """
     Esta função retorna todos os usuários do banco sql com exceção do usuário administrador
 
@@ -104,10 +105,10 @@ def get_all_users() -> dict:
     user = session.query(User).filter(User.user_id != Configuration.ADMIN_USER_ID).all()
     session.close()
 
-    return {'users': UserBasicSchema.dump(user)}
+    return make_response({'users': UserBasicSchema.dump(user)}, 200)
 
 
-def check_username_email(username: str = None, email: str = None):
+def check_username_email(username: str = None, email: str = None) -> dict:
     """
     Esta função realiza a validação do username e email, verificando no banco de dados se já estão previamente
     cadastrados, bem como, realiza a validação do email através de uma REGEX
@@ -134,7 +135,7 @@ def check_username_email(username: str = None, email: str = None):
     return {'success': 'ok'}
 
 
-def create_new_user(user_dict: dict):
+def create_new_user(user_dict: dict) -> make_response:
     """
     Esta função insere no banco SQL um usuário. Antes de inserir é verificado a existência do email ou username
     no banco para evitar duplicidade nos cadastros. Será gerada uma senha com 8 carácteres para este usuário e
@@ -144,14 +145,15 @@ def create_new_user(user_dict: dict):
     :return: em caso de sucesso será retornado { 'user': {user} } ou em caso de não sucesso { 'error': foo }
     """
 
+    print(user_dict)
     if not json_validate_create_user(user_dict):
-        return {'error': 'invalid json'}
+        return make_response({'error': 'invalid json'}, 415)
 
     validate_username_and_email = check_username_email(username=user_dict['user_name'],
                                                        email=user_dict['user_email'])
 
     if 'error' in validate_username_and_email.keys():
-        return validate_username_and_email
+        return make_response(validate_username_and_email, 400)
 
     user_password = generate_password()
 
@@ -171,12 +173,12 @@ def create_new_user(user_dict: dict):
                                                        password=user_password)
 
     if 'error' in validate_send_email.keys():
-        return validate_send_email
+        return make_response(validate_send_email, 400)
 
-    return {'user': UserBasicSchema.dump([user])}
+    return make_response({'user': UserBasicSchema.dump([user])}, 200)
 
 
-def update_user(user_dict: dict) -> dict:
+def update_user(user_dict: dict) -> make_response:
     """
     Esta função atualiza um registro de usuário no banco de dados através do seu ID que deverá ser informado dentro
     do dicionário com os outros dados que se deseja atualizar.
@@ -188,38 +190,38 @@ def update_user(user_dict: dict) -> dict:
     """
 
     if not json_validate_update_user(user_dict):
-        return {'error': 'invalid json'}
+        return make_response({'error': 'invalid json'}, 415)
 
     if not user_dict['user_id']:
-        return {'error': 'invalid user id'}
+        return make_response({'error': 'invalid user id'}, 400)
 
     user = get_user_by_id(user_dict['user_id'])
 
     if not user:
-        return {'error': 'non-existing user'}
+        return make_response({'error': 'non-existing user'}, 400)
 
     if user_dict['user_id'] == user_id_from_token() and user_dict['user_status'] == 0:
-        return {'error': 'you cannot disable your access'}
+        return make_response({'error': 'you cannot disable your access'}, 400)
 
     if user.user_name != user_dict['user_name']:
         validate_username = check_username_email(username=user_dict['user_name'])
         if 'error' in validate_username.keys():
-            return validate_username
+            return make_response(validate_username, 400)
         user.user_name = user_dict['user_name']
 
     if user.user_email != user_dict['user_email']:
         validate_user_email = check_username_email(email=user_dict['user_email'])
         if 'error' in validate_user_email.keys():
-            return validate_user_email
+            return make_response(validate_user_email, 400)
         user.user_email = user_dict['user_email']
 
     if user_dict['user_status'] in [0, 1]:
         user.user_status = user_dict['user_status']
     else:
-        return {'error': 'invalid status'}
+        return make_response({'error': 'invalid status'}, 400)
 
     if user_dict['user_password'] == '':
-        return {'error': 'invalid password'}
+        return make_response({'error': 'invalid password'}, 400)
 
     if user_dict['user_password']:
         user.user_password = generate_password_hash(user_dict['user_password'], method='sha256')
@@ -233,4 +235,4 @@ def update_user(user_dict: dict) -> dict:
     session.commit()
     session.close()
 
-    return {'user': UserBasicSchema.dump([user])}
+    return make_response({'user': UserBasicSchema.dump([user])}, 200)

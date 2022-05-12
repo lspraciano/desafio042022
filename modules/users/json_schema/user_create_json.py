@@ -1,15 +1,17 @@
 from jsonschema import validate
 
 json_user_create = {
-    "title": "user",
+    "title": "user_create",
     "type": "object",
     "required": ["user_name", "user_email"],
     "properties": {
         "user_name": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
         },
         "user_email": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
         }
     }
 }

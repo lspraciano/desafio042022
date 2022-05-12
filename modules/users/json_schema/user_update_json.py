@@ -1,7 +1,7 @@
 from jsonschema import validate
 
 json_user_update = {
-    "title": "user",
+    "title": "user_update",
     "type": "object",
     "required": ["user_id", "user_name", "user_password", "user_email", "user_token", "user_status"],
     "properties": {

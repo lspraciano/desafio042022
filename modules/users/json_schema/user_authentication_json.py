@@ -6,10 +6,12 @@ json_user_authentication = {
     "required": ["user_name", "user_password"],
     "properties": {
         "user_name": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
         },
         "user_password": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
         }
     }
 }

@@ -26,13 +26,13 @@ def user():
 @user_blueprint.route('/authentication', methods=['GET', 'POST'])
 def user_authentication():
     if request.method == 'GET':
-        return render_template('user_authentication.html'), 200
+        return render_template('user_authentication.html')
     elif request.method == 'POST':
-        return check_login_password(request.json), 200
+        return check_login_password(request.json)
 
 
 @user_blueprint.route('/manager', methods=['GET'])
 @token_authentication
 def user_manager():
     if request.method == 'GET':
-        return render_template('user_manager.html'), 200
+        return render_template('user_manager.html')

@@ -8,7 +8,7 @@ const fileInput = document.getElementById('input-file');
 const sendCsv = async () => {
     const data = await readCsv(fileInput.files[0]);
     const processedData = await preProcessingData(data);
-    const result = await saveTransactions(processedData);
+    const result = await saveTransactions(processedData.outputValidData);
 
     if('error' in result) {
         alert(result['error']);

@@ -23,7 +23,7 @@ const saveButtonEvent = async () => {
             status = 0;
         }
 
-        if (cod === '') {
+        if (isNaN(cod)) {
             result = await saveNewUser(username, email);
         } else {
             result = await updateUser(cod, username, email, status);

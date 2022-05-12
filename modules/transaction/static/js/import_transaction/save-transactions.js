@@ -6,7 +6,7 @@
             headers: {
                 "Content-type": "application/json"
             },
-            body: JSON.stringify(transaction.outputValidData)
+            body: JSON.stringify(transaction)
 
         }
 
