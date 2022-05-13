@@ -11,3 +11,8 @@ export const deleteCookie = async () => {
     document.cookie = 'new_app' + "=" + ('' || "") + ";" +
         " expires=" + 'Thu, 01 Jan 1970 00:00:01 GMT' + "; path=/";
 }
+
+export const checkCookie = async () => {
+    let cookie = document.cookie
+    return !!cookie;
+}

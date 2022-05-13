@@ -11,7 +11,7 @@ export const updateUser = async (cod, username, email, status) => {
 
     const url = `${window.location.origin}/user/`;
     const param = {
-        method: "UPDATE",
+        method: "PATCH",
         headers: {
             "Content-type": "application/json"
         },

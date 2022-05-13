@@ -1,6 +1,7 @@
 import {getFormData, validateForm} from "./form-data-controller.js";
 import {saveNewUser} from "./post-user.js";
 import {updateUser} from "./update-user.js";
+import {checkCookie} from "../../../../../resources/js/cookie/cookie-manager.js";
 
 
 const backButton = document.getElementById("buton-zone__btn--save");
@@ -21,6 +22,11 @@ const saveButtonEvent = async () => {
             status = 1;
         } else {
             status = 0;
+        }
+
+        if(await checkCookie() !== true) {
+            window.location.href = window.location.origin;
+            return;
         }
 
         if (isNaN(cod)) {
