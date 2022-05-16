@@ -16,7 +16,7 @@ def create_app(config) -> Flask:
     app.config.from_object(config)
     _register_extensions(app)
     _register_blueprint(app)
-    create_db()
+    create_db(app)
 
     return app
 

@@ -3,10 +3,10 @@ import sqlalchemy as sa
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy.future.engine import Engine
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy_utils import create_database, database_exists
 
 # Created Imports
 from werkzeug.security import generate_password_hash
-
 from configuration.configuration import app_configuration, app_active, Configuration
 
 __engine = None
@@ -46,9 +46,11 @@ def create_session() -> Session:
     return session
 
 
-def create_db() -> None:
+def create_db(app) -> None:
     """
-    Função destinada para criação do banco de dados requisitado pela aplicação
+    Função destinada para criação do banco de dados requisitado pela aplicação. Caso não existe database criada,
+    ela será gerada para criação das tabelas. No caso de a aplicação ser rodada no modo de test, o banco de
+    test será criado, caso não exista, e as tabelas do banco de test serão recriadas.
 
     :return: None
     """
@@ -61,6 +63,12 @@ def create_db() -> None:
 
     if not __engine:
         create_engine()
+
+    if not database_exists(app.config['SQLALCHEMY_DATABASE_URI']):
+        create_database(app.config['SQLALCHEMY_DATABASE_URI'])
+
+    if "test" in app.config['SQLALCHEMY_DATABASE_URI']:
+        ModelBase.metadata.drop_all(__engine)
 
     ModelBase.metadata.create_all(__engine)
     create_admin_user(user_model)
