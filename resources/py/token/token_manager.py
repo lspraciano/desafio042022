@@ -40,6 +40,7 @@ def token_authentication(function):
         try:
             token_name = Configuration.TOKEN_NAME
             token_from_cookie = request.cookies.get(token_name)
+            print(token_from_cookie)
             token_no_bearer = token_from_cookie
 
         except:

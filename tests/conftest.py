@@ -3,7 +3,6 @@ import pytest
 
 # Created Imports
 from run import run_server
-from configuration.configuration import Configuration
 
 
 @pytest.fixture(scope="module")
@@ -15,3 +14,8 @@ def app():
     """
     app = run_server()
     return app
+
+
+@pytest.fixture
+def client(app):
+    return app.test_client()

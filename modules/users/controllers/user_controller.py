@@ -174,7 +174,7 @@ def create_new_user(user_dict: dict) -> make_response:
     if 'error' in validate_send_email.keys():
         return make_response(validate_send_email, 400)
 
-    return make_response({'user': UserBasicSchema.dump([user])}, 200)
+    return make_response({'user': UserBasicSchema.dump([user])}, 201)
 
 
 def update_user(user_dict: dict) -> make_response:
