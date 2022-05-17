@@ -4,6 +4,7 @@ import re
 
 # Created Imports
 from configuration.configuration import Configuration
+from error.error import get_error_msg
 
 mail = Mail()
 
@@ -18,6 +19,13 @@ def send_email_password_new_user(email: str, password: str) -> dict:
     """
 
     try:
+
+        if not validate_email(email) or type(email) is not str:
+            return {'error': 'invalid email'}
+
+        if password == '' or password is None or type(password) is not str:
+            return {'error': 'invalid password'}
+
         body = f'''
         
         Esta é sua senha temporária. Você pode troca-la para aumentar sua segurança:
@@ -38,7 +46,7 @@ def send_email_password_new_user(email: str, password: str) -> dict:
         return {'success': 'mail sent'}
 
     except:
-        return {'error': 'failed to send email'}
+        return get_error_msg()
 
 
 def validate_email(email: str) -> bool:
@@ -49,7 +57,12 @@ def validate_email(email: str) -> bool:
     :param email: email
     :return: True ou False
     """
-    regex = re.compile(r"([-!#-'*+/-9=?A-Z^-~]+(\.[-!#-'*+/-9=?A-Z^-~]+)*|\"([]!#-[^-~ \t]|(\\[\t -~]))+\")@([-!#-'*+/-9=?A-Z^-~]+(\.[-!#-'*+/-9=?A-Z^-~]+)*|\[[\t -Z^-~]*])")
+
+    if not email or type(email) is not str:
+        return False
+
+    regex = re.compile(
+        r"([-!#-'*+/-9=?A-Z^-~]+(\.[-!#-'*+/-9=?A-Z^-~]+)*|\"([]!#-[^-~ \t]|(\\[\t -~]))+\")@([-!#-'*+/-9=?A-Z^-~]+(\.[-!#-'*+/-9=?A-Z^-~]+)*|\[[\t -Z^-~]*])")
     result = re.fullmatch(regex, email)
     if result:
         return True
