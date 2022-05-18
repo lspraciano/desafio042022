@@ -2,7 +2,6 @@
 from flask import json
 
 # Created Imports
-from database.database import create_session
 from modules.users.models.user_model import User
 
 
@@ -118,8 +117,8 @@ def test_create_user_without_jwt_token(client):
         headers={"Content-Type": "application/json"
                  })
 
-    assert response.status_code == 302
-    assert response.json is None
+    assert response.status_code == 401
+    assert 'error' in response.json
 
 
 def test_create_new_valid_user(client, app):

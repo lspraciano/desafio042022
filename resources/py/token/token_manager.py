@@ -2,24 +2,27 @@
 from functools import wraps
 import jwt
 import datetime
-from flask import request, redirect, make_response, url_for
+from flask import request, make_response
 from random import *
 
 # Created Imports
 from configuration.configuration import Configuration
 
 
-def token_generator(userid: int) -> dict:
+def token_generator(user_id: int) -> dict:
     """
     Função geradora do TOKEN JWT de acesso do usuário. Este TOKEN deve ser armazenado nos cookies como local
     padrão
 
-    :param userid: ID - identificação do usuário
+    :param user_id: ID - identificação do usuário
     :return: dicionário contendo TOKEN de acesso no formato {"token": foo}
     """
 
+    if type(user_id) is not int or not user_id:
+        return {'error': 'user_id must to be int type'}
+
     payload = {
-        "id": userid,
+        "id": user_id,
         "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=Configuration.TIME_EXP_TOKEN)
     }
     token = jwt.encode(payload, Configuration.SECRET_KEY)
@@ -43,15 +46,15 @@ def token_authentication(function):
             token_no_bearer = token_from_cookie
 
         except:
-            return make_response(redirect(url_for('user.user_authentication')), 302)
+            return make_response({'error': 'unauthorized'}, 401)
 
         if token_from_cookie is None:
-            return make_response(redirect(url_for('user.user_authentication')), 302)
+            return make_response({'error': 'unauthorized'}, 401)
 
         try:
             decode = jwt.decode(token_no_bearer, Configuration.SECRET_KEY, algorithms=["HS256"])
         except:
-            return make_response(redirect(url_for('user.user_authentication')), 302)
+            return make_response({'error': 'unauthorized'}, 401)
         return function()
 
     return wrapper
@@ -70,14 +73,14 @@ def user_id_from_token():
         token_no_bearer = token_from_cookie
 
         if token_from_cookie is None:
-            return make_response(redirect(url_for('user.user_authentication')), 302)
+            return make_response({'error': 'unauthorized'}, 401)
 
         decode = jwt.decode(token_no_bearer, Configuration.SECRET_KEY, algorithms=["HS256"])
         user_id = decode['id']
         return user_id
 
     except:
-        return make_response(redirect(url_for('user.user_authentication')), 302)
+        return make_response({'error': 'unauthorized'}, 401)
 
 
 def mail_token_generate() -> int:

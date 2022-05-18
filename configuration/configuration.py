@@ -33,6 +33,7 @@ class DevelopmentConfig(Configuration):
 
 class TestConfig(Configuration):
     SQLALCHEMY_DATABASE_URI = os.getenv('TEST_SQLALCHEMY_DATABASE_URI')
+    MAIL_SUPPRESS_SEND = True  # Evita o envio de email
     DEBUG = False
 
 

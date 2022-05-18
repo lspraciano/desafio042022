@@ -9,35 +9,35 @@ const iframeToHtml = document.getElementById("plotting-zone__frame-to-html");
 const screenName = document.getElementById("screen-name");
 
 
-async function callDashboardScreen() {
+const callDashboardScreen = async () => {
     iframeToHtml.src = '';
     screenName.innerText = 'Dashboard'
     showAndHideMenuZoneSubOptions();
 }
 
 
-function callImportTransactionScreen() {
+const callImportTransactionScreen = () => {
     iframeToHtml.src = '/transaction/import-csv';
     screenName.innerText = 'Importar Transações';
     showAndHideMenuZoneSubOptions();
 }
 
-function callAuditTransactionScreen() {
+const callAuditTransactionScreen = () =>  {
     iframeToHtml.src = '/transaction/log';
     screenName.innerText = 'Log de Transações';
     showAndHideMenuZoneSubOptions();
 }
 
-function callUserManagerSubOptionsScreen() {
+const callUserManagerSubOptionsScreen = () =>  {
     iframeToHtml.src = '/user/manager';
     screenName.innerText = 'Gerenciar Usuários';
     showAndHideMenuZoneSubOptions();
 }
 
 
-function checkIfRedirected() {
-    if (iframeToHtml.contentWindow.document.title === 'Bem-Vindo'){
-        location.reload();
+const checkIfRedirected = () =>  {
+    if (iframeToHtml.contentWindow.document.body.innerHTML.indexOf("unauthorized") !== -1){
+        window.location.href = window.location.origin;
     }
 }
 

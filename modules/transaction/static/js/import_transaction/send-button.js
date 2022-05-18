@@ -10,11 +10,6 @@ const sendCsv = async () => {
     const data = await readCsv(fileInput.files[0]);
     const processedData = await preProcessingData(data);
 
-    if(await checkCookie() !== true) {
-         window.location.href = window.location.origin;
-         return;
-    }
-
     const result = await saveTransactions(processedData.outputValidData);
 
     if('error' in result) {

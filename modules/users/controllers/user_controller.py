@@ -88,7 +88,12 @@ def check_login_password(user_dict: dict) -> make_response:
         if not check_password_hash(user.user_password, password):
             return make_response({"error": "access denied"}, 401)
 
-        return make_response(token_manager.token_generator(user.user_id), 200)
+        user_id = token_manager.token_generator(user.user_id)
+
+        if 'error' in user_id:
+            return make_response(user_id['error'], 401)
+
+        return make_response(user_id, 200)
 
     except:
         return get_error_msg()

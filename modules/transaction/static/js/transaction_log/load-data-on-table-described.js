@@ -6,6 +6,11 @@ export const loadDataOnTableDescribed = async (date) => {
 
     const data = await getDescribedTransactionData(date);
 
+    if (data.hasOwnProperty('error')) {
+        alert(data['error']);
+        location.reload();
+    }
+
     for (let i in data['transactions']) {
 
         let row = document.createElement('tr');

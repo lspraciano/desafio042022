@@ -10,6 +10,11 @@ import {getLogsTransactionData} from "./get-logs-transaction-data.js";
 
         const data = await getLogsTransactionData();
 
+        if (data.hasOwnProperty('error')) {
+            alert(data['error']);
+            location.reload();
+         }
+
         for (let i in data['logs']) {
 
             let row = document.createElement('tr');
