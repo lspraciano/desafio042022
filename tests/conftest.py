@@ -2,6 +2,8 @@
 import pytest
 
 # Created Imports
+from flask import template_rendered
+
 from database.database import create_session
 from run import run_server
 
@@ -38,3 +40,17 @@ def session(app):
     """
     with app.app_context():
         return create_session()
+
+
+@pytest.fixture
+def captured_templates(app):
+    recorded = []
+
+    def record(sender, template, context, **extra):
+        recorded.append((template, context))
+
+    template_rendered.connect(record, app)
+    try:
+        yield recorded
+    finally:
+        template_rendered.disconnect(record, app)

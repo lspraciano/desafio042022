@@ -19,3 +19,4 @@ class UserBasicSchema(Schema):
     user_name = fields.String()
     user_email = fields.String()
     user_status = fields.Integer()
+    user_last_modification_user_id = fields.Integer()

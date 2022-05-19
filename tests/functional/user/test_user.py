@@ -2,7 +2,6 @@
 from flask import json
 
 # Created Imports
-from modules.users.models.user_model import User
 
 
 def test_redirect_to_login(client):
@@ -10,9 +9,13 @@ def test_redirect_to_login(client):
     assert response.status_code == 302
 
 
-def test_user_authentication_template(client):
+def test_user_authentication_template(client, captured_templates):
     response = client.get("user/authentication")
+    template, context = captured_templates[0]
+
     assert response.status_code == 200
+    assert len(captured_templates) == 1
+    assert template.name == "user_authentication.html"
 
 
 def test_user_authentication_valid(client, app):
@@ -105,6 +108,29 @@ def test_user_authentication_json_user_password_value_not_string(client):
     assert "error" in response.json
 
 
+def test_user_manager_template_with_valid_token(app, client, captured_templates):
+    data = {
+        "user_name": app.config["ADMIN_USER_NAME"],
+        "user_password": app.config["ADMIN_PASSWORD"]
+    }
+
+    response_authentication = client.post(
+        "user/authentication",
+        data=json.dumps(data),
+        headers={"Content-Type": "application/json"})
+
+    cookie_name = app.config["TOKEN_NAME"]
+    cookie_value = response_authentication.json["token"]
+    client.set_cookie('localhost', cookie_name, cookie_value)
+
+    response = client.get("user/manager")
+    template, context = captured_templates[0]
+
+    assert response.status_code == 200
+    assert len(captured_templates) == 1
+    assert template.name == "user_manager.html"
+
+
 def test_create_user_without_jwt_token(client):
     data = {
         "user_name": 'TEST',
@@ -149,6 +175,10 @@ def test_create_new_valid_user(client, app):
 
     assert response.status_code == 201
     assert "user" in response.json
+    assert response.json["user"][0]["user_name"] == data["user_name"]
+    assert response.json["user"][0]["user_email"] == data["user_email"]
+    assert response.json["user"][0]["user_status"] == 1
+    assert response.json["user"][0]["user_last_modification_user_id"] == app.config["ADMIN_USER_ID"]
 
 
 def test_create_duplicate_user(client, app):

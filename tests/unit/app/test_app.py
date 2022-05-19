@@ -5,15 +5,15 @@ def test_app_is_created(app):
     assert app.name == 'app'
 
 
-def test_debug_is_false(app):
+def test_debug_is_equal_configuration(app):
     assert app.config["DEBUG"] == TestConfig.DEBUG
 
 
-def test_host_is_0_0_0_0(app):
+def test_host_is_equal_configuration(app):
     assert app.config['HOST'] == TestConfig.HOST
 
 
-def test_port_is_5001(app):
+def test_port_is_equal_configuration(app):
     assert app.config['PORT'] == TestConfig.PORT
 
 
