@@ -22,10 +22,16 @@ def save_transaction_log(log_date: datetime):
     """
 
     try:
+
+        user_from_token = user_id_from_token()
+
+        if 'user_id' not in user_from_token:
+            return user_from_token
+
         transaction_log = TransactionLog(
             transactions_log_transactions_datetime=log_date,
             transactions_log_datetime=datetime.now(),
-            transactions_log_user_id=user_id_from_token())
+            transactions_log_user_id=user_from_token['user_id'])
 
         session.add(transaction_log)
         session.commit()

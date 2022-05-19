@@ -60,11 +60,11 @@ def token_authentication(function):
     return wrapper
 
 
-def user_id_from_token():
+def user_id_from_token() -> dict:
     """
     Esta função retorna o ID do usuário que esta solicitando alguma requisição através do seu TOKEN JWT
 
-    :return: ID do usuário ou Dicionário contendo o error
+    :return: em caso de sucesso {'user_id': user_id} ou em caso de NÃO SUCESSO {'error': 'unauthorized'}
     """
 
     try:
@@ -73,19 +73,20 @@ def user_id_from_token():
         token_no_bearer = token_from_cookie
 
         if token_from_cookie is None:
-            return make_response({'error': 'unauthorized'}, 401)
+            return {'error': 'unauthorized'}
 
         decode = jwt.decode(token_no_bearer, Configuration.SECRET_KEY, algorithms=["HS256"])
         user_id = decode['id']
-        return user_id
+        return {'user_id': user_id}
 
     except:
-        return make_response({'error': 'unauthorized'}, 401)
+        return {'error': 'unauthorized'}
 
 
 def mail_token_generate() -> int:
     """
-    Esta função gera uma sequência aleatória de 6 números que pode variar entre 100000 e 999999
+    Esta função gera uma sequência aleatória de 6 números que pode variar entre 100000 e 999999. Não é necessário
+    passar nenhum parâmentro
 
     :return: número
     """

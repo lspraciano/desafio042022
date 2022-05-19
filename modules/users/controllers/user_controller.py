@@ -160,13 +160,17 @@ def create_new_user(user_dict: dict) -> make_response:
         return make_response(validate_username_and_email, 400)
 
     user_password = generate_password()
+    user_from_token = user_id_from_token()
+
+    if 'user_id' not in user_from_token:
+        return make_response(user_from_token, 400)
 
     user = User(
         user_name=user_dict['user_name'].upper(),
         user_password=generate_password_hash(user_password, method='sha256'),
         user_email=user_dict['user_email'].upper(),
         user_status=1,
-        user_last_modification_user_id=user_id_from_token()
+        user_last_modification_user_id=user_from_token['user_id']
     )
 
     session.add(user)
@@ -205,7 +209,12 @@ def update_user(user_dict: dict) -> make_response:
     if not user:
         return make_response({'error': 'non-existing user'}, 400)
 
-    if user_dict['user_id'] == user_id_from_token() and user_dict['user_status'] == 0:
+    user_from_token = user_id_from_token()
+
+    if 'user_id' not in user_from_token:
+        return make_response(user_from_token, 400)
+
+    if user_dict['user_id'] == user_from_token['user_id'] and user_dict['user_status'] == 0:
         return make_response({'error': 'you cannot disable your access'}, 400)
 
     if user.user_name != user_dict['user_name']:
@@ -234,7 +243,7 @@ def update_user(user_dict: dict) -> make_response:
     if user_dict['user_token'] and user_dict['user_token'] != '':
         user.user_token = user_dict['user_token']
 
-    user.user_last_modification_user_id = user_id_from_token()
+    user.user_last_modification_user_id = user_from_token['user_id']
 
     session.add(user)
     session.commit()

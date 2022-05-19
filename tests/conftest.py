@@ -17,7 +17,7 @@ def app():
     return app
 
 
-@pytest.fixture
+@pytest.fixture(scope="function")
 def client(app):
     """
     Esta função retorna um cliente HTTP para ser usado durante os teste desta aplicação
@@ -28,7 +28,7 @@ def client(app):
     return app.test_client()
 
 
-@pytest.fixture()
+@pytest.fixture(scope="function")
 def session(app):
     """
     Esta função retorna uma sessão do SQLAlchemy
