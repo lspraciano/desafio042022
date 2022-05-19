@@ -24,10 +24,10 @@ nos usuários e uma HomePage com Dashboards.
 
 
 ## Principais Desafios
-Por ter 8 meses de estudos nesta área, todos os aspectos deste projetos são
+Por ter 8 meses de estudos nesta área, todos os aspectos deste projeto são
 considerados desafiadores, porém o que menos havia estudado, que eram os testes
 automatizados, pesou bastante. Percebi que a criação de testes desde o início
-do projeto, facilita o desenvolvimento devido aos feedbacks que estes podem
+do projeto, facilita o desenvolvimento devido aos 'feedbacks' que estes podem
 gerar. Outro ponto é que apesar da pouca prática, não gostaria de apresentar
 um Front nada amigavel ao usuário final. Então as horas requeridas para estudo
 sobre este ponto foram reforçadas. No final das contas percebemos que, por ser
