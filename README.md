@@ -3,7 +3,7 @@ Esta aplicação tem como principal objetivo analisar transações suspeitas e l
 as transações suspeitas. Este foi um projeto sugerido em um desafio da plataforma
 de ensino ALURA, mas estamos incrementado algumas funcionalidade não listadas
 para este desafio, como por exemplo a Tabela SQL de auditória de modificações
-nos usuário e uma HomePage com Dashboards.
+nos usuários e uma HomePage com Dashboards.
 
 ## Tecnologia Usada
 ### Back-End
