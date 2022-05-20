@@ -217,7 +217,7 @@ def update_user(user_dict: dict) -> make_response:
     if user_dict['user_id'] == user_from_token['user_id'] and user_dict['user_status'] == 0:
         return make_response({'error': 'you cannot disable your access'}, 400)
 
-    if user.user_name != user_dict['user_name']:
+    if user.user_name != user_dict['user_name'] and user_dict['user_name']:
         validate_username = check_username_email(user_name=user_dict['user_name'])
         if 'error' in validate_username.keys():
             return make_response(validate_username, 400)

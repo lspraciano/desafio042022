@@ -501,10 +501,724 @@ def test_update_user_with_valid_json_and_only_user_name_updated(app, client):
 
     assert response.status_code == 200
     assert "user" in response.json
+    assert user_from_db_before_update.user_id == user_from_db_after_update.user_id
+    assert user_from_db_before_update.user_name != user_from_db_after_update.user_name
+    assert user_from_db_before_update.user_password == user_from_db_after_update.user_password
+    assert user_from_db_before_update.user_email == user_from_db_after_update.user_email
+    assert user_from_db_before_update.user_token == user_from_db_after_update.user_token
+    assert user_from_db_before_update.user_status == user_from_db_after_update.user_status
+
     assert response.json["user"][0]["user_id"] == data["user_id"]
     assert response.json["user"][0]["user_name"] == data["user_name"]
-    assert response.json["user"][0]["user_email"] == user_from_db_before_update.user_email
-    assert response.json["user"][0]["user_status"] == data["user_status"]
-    assert response.json["user"][0]["user_last_modification_user_id"] == app.config["ADMIN_USER_ID"]
+
+
+def test_update_user_with_valid_json_and_only_user_password_updated(app, client):
+    data = {
+        "user_name": app.config["ADMIN_USER_NAME"],
+        "user_password": app.config["ADMIN_PASSWORD"]
+    }
+
+    response_authentication = client.post(
+        "user/authentication",
+        data=json.dumps(data),
+        headers={"Content-Type": "application/json"})
+
+    cookie_name = app.config["TOKEN_NAME"]
+    cookie_value = response_authentication.json["token"]
+    client.set_cookie('localhost', cookie_name, cookie_value)
+
+    data = {"user_id": 2,
+            "user_name": None,
+            "user_password": 'foo',
+            "user_email": None,
+            "user_token": None,
+            "user_status": 1
+            }
+
+    user_from_db_before_update = get_user_by_id(data["user_id"])
+
+    response = client.patch(
+        "user/",
+        data=json.dumps(data),
+        headers={"Content-Type": "application/json"
+                 })
+
+    user_from_db_after_update = get_user_by_id(data["user_id"])
+
+    assert response.status_code == 200
+    assert "user" in response.json
+    assert user_from_db_before_update.user_id == user_from_db_after_update.user_id
+    assert user_from_db_before_update.user_name == user_from_db_after_update.user_name
+    assert user_from_db_before_update.user_password != user_from_db_after_update.user_password
+    assert user_from_db_before_update.user_email == user_from_db_after_update.user_email
     assert user_from_db_before_update.user_token == user_from_db_after_update.user_token
+    assert user_from_db_before_update.user_status == user_from_db_after_update.user_status
+
+    assert response.json["user"][0]["user_id"] == data["user_id"]
+    assert check_password_hash(user_from_db_after_update.user_password, data["user_password"])
+
+
+def test_update_user_with_valid_json_and_only_user_email_updated(app, client):
+    data = {
+        "user_name": app.config["ADMIN_USER_NAME"],
+        "user_password": app.config["ADMIN_PASSWORD"]
+    }
+
+    response_authentication = client.post(
+        "user/authentication",
+        data=json.dumps(data),
+        headers={"Content-Type": "application/json"})
+
+    cookie_name = app.config["TOKEN_NAME"]
+    cookie_value = response_authentication.json["token"]
+    client.set_cookie('localhost', cookie_name, cookie_value)
+
+    data = {"user_id": 2,
+            "user_name": None,
+            "user_password": None,
+            "user_email": 'FOO2@GMAIL.COM',
+            "user_token": None,
+            "user_status": 1
+            }
+
+    user_from_db_before_update = get_user_by_id(data["user_id"])
+
+    response = client.patch(
+        "user/",
+        data=json.dumps(data),
+        headers={"Content-Type": "application/json"
+                 })
+
+    user_from_db_after_update = get_user_by_id(data["user_id"])
+
+    assert response.status_code == 200
+    assert "user" in response.json
+    assert user_from_db_before_update.user_id == user_from_db_after_update.user_id
+    assert user_from_db_before_update.user_name == user_from_db_after_update.user_name
     assert user_from_db_before_update.user_password == user_from_db_after_update.user_password
+    assert user_from_db_before_update.user_email != user_from_db_after_update.user_email
+    assert user_from_db_before_update.user_token == user_from_db_after_update.user_token
+    assert user_from_db_before_update.user_status == user_from_db_after_update.user_status
+
+    assert response.json["user"][0]["user_id"] == data["user_id"]
+    assert response.json["user"][0]["user_email"] == data["user_email"]
+
+
+def test_update_user_with_valid_json_and_only_user_token_updated(app, client):
+    data = {
+        "user_name": app.config["ADMIN_USER_NAME"],
+        "user_password": app.config["ADMIN_PASSWORD"]
+    }
+
+    response_authentication = client.post(
+        "user/authentication",
+        data=json.dumps(data),
+        headers={"Content-Type": "application/json"})
+
+    cookie_name = app.config["TOKEN_NAME"]
+    cookie_value = response_authentication.json["token"]
+    client.set_cookie('localhost', cookie_name, cookie_value)
+
+    data = {"user_id": 2,
+            "user_name": None,
+            "user_password": None,
+            "user_email": None,
+            "user_token": '123456',
+            "user_status": 1
+            }
+
+    user_from_db_before_update = get_user_by_id(data["user_id"])
+
+    response = client.patch(
+        "user/",
+        data=json.dumps(data),
+        headers={"Content-Type": "application/json"
+                 })
+
+    user_from_db_after_update = get_user_by_id(data["user_id"])
+
+    assert response.status_code == 200
+    assert "user" in response.json
+    assert user_from_db_before_update.user_id == user_from_db_after_update.user_id
+    assert user_from_db_before_update.user_name == user_from_db_after_update.user_name
+    assert user_from_db_before_update.user_password == user_from_db_after_update.user_password
+    assert user_from_db_before_update.user_email == user_from_db_after_update.user_email
+    assert user_from_db_before_update.user_token != user_from_db_after_update.user_token
+    assert user_from_db_before_update.user_status == user_from_db_after_update.user_status
+
+    assert response.json["user"][0]["user_id"] == data["user_id"]
+    assert user_from_db_after_update.user_token == data["user_token"]
+
+
+def test_update_user_with_valid_json_and_only_user_status_updated(app, client):
+    data = {
+        "user_name": app.config["ADMIN_USER_NAME"],
+        "user_password": app.config["ADMIN_PASSWORD"]
+    }
+
+    response_authentication = client.post(
+        "user/authentication",
+        data=json.dumps(data),
+        headers={"Content-Type": "application/json"})
+
+    cookie_name = app.config["TOKEN_NAME"]
+    cookie_value = response_authentication.json["token"]
+    client.set_cookie('localhost', cookie_name, cookie_value)
+
+    data = {"user_id": 2,
+            "user_name": None,
+            "user_password": None,
+            "user_email": None,
+            "user_token": None,
+            "user_status": 0
+            }
+
+    user_from_db_before_update = get_user_by_id(data["user_id"])
+
+    response = client.patch(
+        "user/",
+        data=json.dumps(data),
+        headers={"Content-Type": "application/json"
+                 })
+
+    user_from_db_after_update = get_user_by_id(data["user_id"])
+
+    assert response.status_code == 200
+    assert "user" in response.json
+    assert user_from_db_before_update.user_id == user_from_db_after_update.user_id
+    assert user_from_db_before_update.user_name == user_from_db_after_update.user_name
+    assert user_from_db_before_update.user_password == user_from_db_after_update.user_password
+    assert user_from_db_before_update.user_email == user_from_db_after_update.user_email
+    assert user_from_db_before_update.user_token == user_from_db_after_update.user_token
+    assert user_from_db_before_update.user_status != user_from_db_after_update.user_status
+
+    assert response.json["user"][0]["user_id"] == data["user_id"]
+    assert response.json["user"][0]["user_status"] == data["user_status"]
+
+
+def test_update_user_with_invalid_json_field_user_id(app, client):
+    data = {
+        "user_name": app.config["ADMIN_USER_NAME"],
+        "user_password": app.config["ADMIN_PASSWORD"]
+    }
+
+    response_authentication = client.post(
+        "user/authentication",
+        data=json.dumps(data),
+        headers={"Content-Type": "application/json"})
+
+    cookie_name = app.config["TOKEN_NAME"]
+    cookie_value = response_authentication.json["token"]
+    client.set_cookie('localhost', cookie_name, cookie_value)
+
+    data = {"user_idd": 2,
+            "user_name": None,
+            "user_password": None,
+            "user_email": None,
+            "user_token": None,
+            "user_status": 0
+            }
+
+    response = client.patch(
+        "user/",
+        data=json.dumps(data),
+        headers={"Content-Type": "application/json"
+                 })
+
+    assert response.status_code == 415
+    assert "error" in response.json
+
+
+def test_update_user_with_invalid_json_field_user_name(app, client):
+    data = {
+        "user_name": app.config["ADMIN_USER_NAME"],
+        "user_password": app.config["ADMIN_PASSWORD"]
+    }
+
+    response_authentication = client.post(
+        "user/authentication",
+        data=json.dumps(data),
+        headers={"Content-Type": "application/json"})
+
+    cookie_name = app.config["TOKEN_NAME"]
+    cookie_value = response_authentication.json["token"]
+    client.set_cookie('localhost', cookie_name, cookie_value)
+
+    data = {"user_id": 2,
+            "user_namee": None,
+            "user_password": None,
+            "user_email": None,
+            "user_token": None,
+            "user_status": 0
+            }
+
+    response = client.patch(
+        "user/",
+        data=json.dumps(data),
+        headers={"Content-Type": "application/json"
+                 })
+
+    assert response.status_code == 415
+    assert "error" in response.json
+
+
+def test_update_user_with_invalid_json_field_user_password(app, client):
+    data = {
+        "user_name": app.config["ADMIN_USER_NAME"],
+        "user_password": app.config["ADMIN_PASSWORD"]
+    }
+
+    response_authentication = client.post(
+        "user/authentication",
+        data=json.dumps(data),
+        headers={"Content-Type": "application/json"})
+
+    cookie_name = app.config["TOKEN_NAME"]
+    cookie_value = response_authentication.json["token"]
+    client.set_cookie('localhost', cookie_name, cookie_value)
+
+    data = {"user_id": 2,
+            "user_name": None,
+            "user_passwordd": None,
+            "user_email": None,
+            "user_token": None,
+            "user_status": 0
+            }
+
+    response = client.patch(
+        "user/",
+        data=json.dumps(data),
+        headers={"Content-Type": "application/json"
+                 })
+
+    assert response.status_code == 415
+    assert "error" in response.json
+
+
+def test_update_user_with_invalid_json_field_user_email(app, client):
+    data = {
+        "user_name": app.config["ADMIN_USER_NAME"],
+        "user_password": app.config["ADMIN_PASSWORD"]
+    }
+
+    response_authentication = client.post(
+        "user/authentication",
+        data=json.dumps(data),
+        headers={"Content-Type": "application/json"})
+
+    cookie_name = app.config["TOKEN_NAME"]
+    cookie_value = response_authentication.json["token"]
+    client.set_cookie('localhost', cookie_name, cookie_value)
+
+    data = {"user_id": 2,
+            "user_name": None,
+            "user_password": None,
+            "user_emaill": None,
+            "user_token": None,
+            "user_status": 0
+            }
+
+    response = client.patch(
+        "user/",
+        data=json.dumps(data),
+        headers={"Content-Type": "application/json"
+                 })
+
+    assert response.status_code == 415
+    assert "error" in response.json
+
+
+def test_update_user_with_invalid_json_field_user_token(app, client):
+    data = {
+        "user_name": app.config["ADMIN_USER_NAME"],
+        "user_password": app.config["ADMIN_PASSWORD"]
+    }
+
+    response_authentication = client.post(
+        "user/authentication",
+        data=json.dumps(data),
+        headers={"Content-Type": "application/json"})
+
+    cookie_name = app.config["TOKEN_NAME"]
+    cookie_value = response_authentication.json["token"]
+    client.set_cookie('localhost', cookie_name, cookie_value)
+
+    data = {"user_id": 2,
+            "user_name": None,
+            "user_password": None,
+            "user_email": None,
+            "user_tokenn": None,
+            "user_status": 0
+            }
+
+    response = client.patch(
+        "user/",
+        data=json.dumps(data),
+        headers={"Content-Type": "application/json"
+                 })
+
+    assert response.status_code == 415
+    assert "error" in response.json
+
+
+def test_update_user_with_invalid_json_field_user_status(app, client):
+    data = {
+        "user_name": app.config["ADMIN_USER_NAME"],
+        "user_password": app.config["ADMIN_PASSWORD"]
+    }
+
+    response_authentication = client.post(
+        "user/authentication",
+        data=json.dumps(data),
+        headers={"Content-Type": "application/json"})
+
+    cookie_name = app.config["TOKEN_NAME"]
+    cookie_value = response_authentication.json["token"]
+    client.set_cookie('localhost', cookie_name, cookie_value)
+
+    data = {"user_id": 2,
+            "user_name": None,
+            "user_password": None,
+            "user_email": None,
+            "user_token": None,
+            "user_statuss": 0
+            }
+
+    response = client.patch(
+        "user/",
+        data=json.dumps(data),
+        headers={"Content-Type": "application/json"
+                 })
+
+    assert response.status_code == 415
+    assert "error" in response.json
+
+
+def test_update_user_with_invalid_json_value_user_id_not_int(app, client):
+    data = {
+        "user_name": app.config["ADMIN_USER_NAME"],
+        "user_password": app.config["ADMIN_PASSWORD"]
+    }
+
+    response_authentication = client.post(
+        "user/authentication",
+        data=json.dumps(data),
+        headers={"Content-Type": "application/json"})
+
+    cookie_name = app.config["TOKEN_NAME"]
+    cookie_value = response_authentication.json["token"]
+    client.set_cookie('localhost', cookie_name, cookie_value)
+
+    data = {"user_id": '2',
+            "user_name": None,
+            "user_password": None,
+            "user_email": None,
+            "user_token": None,
+            "user_status": 0
+            }
+
+    response = client.patch(
+        "user/",
+        data=json.dumps(data),
+        headers={"Content-Type": "application/json"
+                 })
+
+    assert response.status_code == 415
+    assert "error" in response.json
+
+
+def test_update_user_with_invalid_json_value_user_name_not_str(app, client):
+    data = {
+        "user_name": app.config["ADMIN_USER_NAME"],
+        "user_password": app.config["ADMIN_PASSWORD"]
+    }
+
+    response_authentication = client.post(
+        "user/authentication",
+        data=json.dumps(data),
+        headers={"Content-Type": "application/json"})
+
+    cookie_name = app.config["TOKEN_NAME"]
+    cookie_value = response_authentication.json["token"]
+    client.set_cookie('localhost', cookie_name, cookie_value)
+
+    data = {"user_id": 2,
+            "user_name": 123,
+            "user_password": None,
+            "user_email": None,
+            "user_token": None,
+            "user_status": 0
+            }
+
+    response = client.patch(
+        "user/",
+        data=json.dumps(data),
+        headers={"Content-Type": "application/json"
+                 })
+
+    assert response.status_code == 415
+    assert "error" in response.json
+
+
+def test_update_user_with_invalid_json_value_user_password_not_str(app, client):
+    data = {
+        "user_name": app.config["ADMIN_USER_NAME"],
+        "user_password": app.config["ADMIN_PASSWORD"]
+    }
+
+    response_authentication = client.post(
+        "user/authentication",
+        data=json.dumps(data),
+        headers={"Content-Type": "application/json"})
+
+    cookie_name = app.config["TOKEN_NAME"]
+    cookie_value = response_authentication.json["token"]
+    client.set_cookie('localhost', cookie_name, cookie_value)
+
+    data = {"user_id": 2,
+            "user_name": None,
+            "user_password": 123,
+            "user_email": None,
+            "user_token": None,
+            "user_status": 0
+            }
+
+    response = client.patch(
+        "user/",
+        data=json.dumps(data),
+        headers={"Content-Type": "application/json"
+                 })
+
+    assert response.status_code == 415
+    assert "error" in response.json
+
+
+def test_update_user_with_invalid_json_value_user_email_not_str(app, client):
+    data = {
+        "user_name": app.config["ADMIN_USER_NAME"],
+        "user_password": app.config["ADMIN_PASSWORD"]
+    }
+
+    response_authentication = client.post(
+        "user/authentication",
+        data=json.dumps(data),
+        headers={"Content-Type": "application/json"})
+
+    cookie_name = app.config["TOKEN_NAME"]
+    cookie_value = response_authentication.json["token"]
+    client.set_cookie('localhost', cookie_name, cookie_value)
+
+    data = {"user_id": 2,
+            "user_name": None,
+            "user_password": None,
+            "user_email": 123,
+            "user_token": None,
+            "user_status": 0
+            }
+
+    response = client.patch(
+        "user/",
+        data=json.dumps(data),
+        headers={"Content-Type": "application/json"
+                 })
+
+    assert response.status_code == 415
+    assert "error" in response.json
+
+
+def test_update_user_with_invalid_json_value_user_token_not_str(app, client):
+    data = {
+        "user_name": app.config["ADMIN_USER_NAME"],
+        "user_password": app.config["ADMIN_PASSWORD"]
+    }
+
+    response_authentication = client.post(
+        "user/authentication",
+        data=json.dumps(data),
+        headers={"Content-Type": "application/json"})
+
+    cookie_name = app.config["TOKEN_NAME"]
+    cookie_value = response_authentication.json["token"]
+    client.set_cookie('localhost', cookie_name, cookie_value)
+
+    data = {"user_id": 2,
+            "user_name": None,
+            "user_password": None,
+            "user_email": None,
+            "user_token": 123,
+            "user_status": 0
+            }
+
+    response = client.patch(
+        "user/",
+        data=json.dumps(data),
+        headers={"Content-Type": "application/json"
+                 })
+
+    assert response.status_code == 415
+    assert "error" in response.json
+
+
+def test_update_user_with_invalid_json_value_user_status_not_int(app, client):
+    data = {
+        "user_name": app.config["ADMIN_USER_NAME"],
+        "user_password": app.config["ADMIN_PASSWORD"]
+    }
+
+    response_authentication = client.post(
+        "user/authentication",
+        data=json.dumps(data),
+        headers={"Content-Type": "application/json"})
+
+    cookie_name = app.config["TOKEN_NAME"]
+    cookie_value = response_authentication.json["token"]
+    client.set_cookie('localhost', cookie_name, cookie_value)
+
+    data = {"user_id": 2,
+            "user_name": None,
+            "user_password": None,
+            "user_email": None,
+            "user_token": None,
+            "user_status": '0'
+            }
+
+    response = client.patch(
+        "user/",
+        data=json.dumps(data),
+        headers={"Content-Type": "application/json"
+                 })
+
+    assert response.status_code == 415
+    assert "error" in response.json
+
+
+def test_update_user_with_invalid_json_value_user_status_not_between_0_1(app, client):
+    data = {
+        "user_name": app.config["ADMIN_USER_NAME"],
+        "user_password": app.config["ADMIN_PASSWORD"]
+    }
+
+    response_authentication = client.post(
+        "user/authentication",
+        data=json.dumps(data),
+        headers={"Content-Type": "application/json"})
+
+    cookie_name = app.config["TOKEN_NAME"]
+    cookie_value = response_authentication.json["token"]
+    client.set_cookie('localhost', cookie_name, cookie_value)
+
+    data = {"user_id": 2,
+            "user_name": None,
+            "user_password": None,
+            "user_email": None,
+            "user_token": None,
+            "user_status": 2
+            }
+
+    response = client.patch(
+        "user/",
+        data=json.dumps(data),
+        headers={"Content-Type": "application/json"
+                 })
+
+    assert response.status_code == 415
+    assert "error" in response.json
+
+
+def test_update_user_with_existent_user_email(app, client):
+    data = {
+        "user_name": app.config["ADMIN_USER_NAME"],
+        "user_password": app.config["ADMIN_PASSWORD"]
+    }
+
+    response_authentication = client.post(
+        "user/authentication",
+        data=json.dumps(data),
+        headers={"Content-Type": "application/json"})
+
+    cookie_name = app.config["TOKEN_NAME"]
+    cookie_value = response_authentication.json["token"]
+    client.set_cookie('localhost', cookie_name, cookie_value)
+
+    data = {"user_id": 2,
+            "user_name": None,
+            "user_password": None,
+            "user_email": app.config["ADMIN_EMAIL"],
+            "user_token": None,
+            "user_status": 1
+            }
+
+    response = client.patch(
+        "user/",
+        data=json.dumps(data),
+        headers={"Content-Type": "application/json"
+                 })
+
+    assert response.status_code == 400
+    assert "error" in response.json
+
+
+def test_update_user_with_existent_user_name(app, client):
+    data = {
+        "user_name": app.config["ADMIN_USER_NAME"],
+        "user_password": app.config["ADMIN_PASSWORD"]
+    }
+
+    response_authentication = client.post(
+        "user/authentication",
+        data=json.dumps(data),
+        headers={"Content-Type": "application/json"})
+
+    cookie_name = app.config["TOKEN_NAME"]
+    cookie_value = response_authentication.json["token"]
+    client.set_cookie('localhost', cookie_name, cookie_value)
+
+    data = {"user_id": 2,
+            "user_name": app.config["ADMIN_USER_NAME"],
+            "user_password": None,
+            "user_email": None,
+            "user_token": None,
+            "user_status": 1
+            }
+
+    response = client.patch(
+        "user/",
+        data=json.dumps(data),
+        headers={"Content-Type": "application/json"
+                 })
+
+    assert response.status_code == 400
+    assert "error" in response.json
+
+
+def test_update_user_deactivating_himself(app, client):
+    data = {
+        "user_name": app.config["ADMIN_USER_NAME"],
+        "user_password": app.config["ADMIN_PASSWORD"]
+    }
+
+    response_authentication = client.post(
+        "user/authentication",
+        data=json.dumps(data),
+        headers={"Content-Type": "application/json"})
+
+    cookie_name = app.config["TOKEN_NAME"]
+    cookie_value = response_authentication.json["token"]
+    client.set_cookie('localhost', cookie_name, cookie_value)
+
+    data = {"user_id": app.config["ADMIN_USER_ID"],
+            "user_name": app.config["ADMIN_USER_NAME"],
+            "user_password": None,
+            "user_email": None,
+            "user_token": None,
+            "user_status": 0
+            }
+
+    response = client.patch(
+        "user/",
+        data=json.dumps(data),
+        headers={"Content-Type": "application/json"
+                 })
+
+    assert response.status_code == 400
+    assert "error" in response.json
