@@ -223,7 +223,7 @@ def update_user(user_dict: dict) -> make_response:
             return make_response(validate_username, 400)
         user.user_name = user_dict['user_name']
 
-    if user.user_email != user_dict['user_email']:
+    if user.user_email != user_dict['user_email'] and user_dict['user_email']:
         validate_user_email = check_username_email(email=user_dict['user_email'])
         if 'error' in validate_user_email.keys():
             return make_response(validate_user_email, 400)
