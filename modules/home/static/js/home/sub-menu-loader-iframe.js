@@ -17,7 +17,7 @@ const callDashboardScreen = async () => {
 
 
 const callImportTransactionScreen = () => {
-    iframeToHtml.src = '/transaction/import-csv';
+    iframeToHtml.src = '/transaction/import';
     screenName.innerText = 'Importar Transações';
     showAndHideMenuZoneSubOptions();
 }

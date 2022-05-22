@@ -22,7 +22,7 @@ def transactions():
         return save_transactions_list(request.json)
 
 
-@transaction_blueprint.route('/import-csv', methods=['GET', ])
+@transaction_blueprint.route('/import', methods=['GET', ])
 @token_authentication
 def import_csv():
     return render_template('import_transaction.html')

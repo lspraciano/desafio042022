@@ -40,8 +40,11 @@ def get_transaction_by_date(transactions_date: datetime) -> dict:
 def validate_transaction_list(transactions_list: list) -> dict:
     """
     Essa função é responsável por realizar a validação da lista de transações recebidas. Se a lista for
-    considerada válida, será retornado "True", caso contrário "False". A formatação da lista deve
-    seguir esta ordem de valores:
+    considerada válida, será retornado {'success': 'ok'}, caso contrário {'error': 'foo'}. A formatação da lista deve
+    seguir esta ordem de valores:[ { "transaction_home_bank" : "type": "string", "transaction_home_branch" : "type":
+    "integer", "transaction_home_account" : "type": "string", "transaction_destination_bank" : "type": "string",
+    "transaction_destination_branch" : "type": "integer", "transaction_destination_account" : "type": "string",
+    "transaction_amount" : "type": "number", "transaction_date_time" : "type": "string" }, ]
 
 
 
@@ -50,20 +53,20 @@ def validate_transaction_list(transactions_list: list) -> dict:
      { 'error': foo }
     """
     try:
-        transactions_date = transactions_list[0]['transaction_date_time']
-        transactions_date = datetime.strptime(transactions_date, "%Y-%m-%dT%H:%M:%S")
+        if not json_validate_transaction(transactions_list):
+            return {'error': 'invalid json'}
 
-        check_transactions = get_transaction_by_date(transactions_date)
-
-        if check_transactions['transactions']:
+        transactions_date = datetime.strptime(transactions_list[0]['transaction_date_time'], "%Y-%m-%dT%H:%M:%S")
+        check_transactions_existence_in_db = get_transaction_by_date(transactions_date)
+        if check_transactions_existence_in_db['transactions']:
             return {'error': 'file with this date already exists'}
 
         for transaction in transactions_list:
             current_transaction_date = datetime.strptime(transaction['transaction_date_time'], "%Y-%m-%dT%H:%M:%S")
             if current_transaction_date.date() != transactions_date.date() or '' in transaction.values():
                 return {'error': 'there are records other than the file date'}
-        return {'success': 'ok'}
 
+        return {'success': 'ok'}
     except:
         return get_error_msg()
 
@@ -110,9 +113,6 @@ def save_transactions_list(transaction_request: list) -> make_response:
     """
 
     try:
-        if not json_validate_transaction(transaction_request):
-            return make_response({'error': 'invalid json'}, 415)
-
         check_transactions = validate_transaction_list(transaction_request)
 
         if 'error' in check_transactions:
