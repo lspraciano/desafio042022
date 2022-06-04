@@ -23,6 +23,9 @@ def save_transaction_log(log_date: datetime):
 
     try:
 
+        if not isinstance(log_date, datetime):
+            return {'error': 'invalid date'}
+
         user_from_token = user_id_from_token()
 
         if 'user_id' not in user_from_token:

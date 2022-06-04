@@ -3,7 +3,7 @@ import re
 from datetime import datetime
 
 from flask import request, make_response
-from sqlalchemy import extract
+from sqlalchemy import extract, func
 
 # Created Imports
 from database.database import create_session
@@ -99,7 +99,7 @@ def get_transactions_list_by_date(transaction_request: request) -> make_response
         return get_error_msg()
 
 
-def save_transactions_list(transaction_request: list) -> make_response:
+def save_transactions_list(transactions_list: list) -> make_response:
     """
     Esta função salva uma lista de transações no banco de dados.  A formatação da lista de dicionário deve seguir
     esta ordem de valores: { "transaction_home_bank" : "type": "string", "transaction_home_branch" : "type": "integer",
@@ -107,13 +107,13 @@ def save_transactions_list(transaction_request: list) -> make_response:
     "transaction_destination_branch" : "type": "integer", "transaction_destination_account" : "type": "string",
     "transaction_amount" : "type": "number", "transaction_date_time" : "type": "string" }
 
-    :param transaction_request: lista de transações
+    :param transactions_list: lista de transações
     :return: no caso de sucesso: { 'success': { 'transactions': número de linhas } } ou em caso de NÃO sucesso
      { 'error': foo }
     """
 
     try:
-        check_transactions = validate_transaction_list(transaction_request)
+        check_transactions = validate_transaction_list(transactions_list)
 
         if 'error' in check_transactions:
             return make_response(check_transactions, 400)
@@ -121,7 +121,7 @@ def save_transactions_list(transaction_request: list) -> make_response:
         transactions = []
         transaction_date = ""
 
-        for transaction in transaction_request:
+        for transaction in transactions_list:
             transaction_date = datetime.strptime(transaction['transaction_date_time'], "%Y-%m-%dT%H:%M:%S")
             row = Transaction(transaction_home_bank=transaction['transaction_home_bank'],
                               transaction_home_branch=transaction['transaction_home_branch'],
@@ -147,3 +147,102 @@ def save_transactions_list(transaction_request: list) -> make_response:
     except:
         session.rollback()
         return get_error_msg()
+
+
+def get_suspects_transactions_report(suspect_request: request) -> make_response:
+    """
+    Esta função retorna um dicionário contendo as transações, agências e bancos suspeitos. Os valores que
+    definem quem são ou não suspeitos são denifinidos dentro desta função.
+
+    :param suspect_request: data referente ao mês investigado
+    :return: em caso de sucesso, será retornado um dicionário com esta formatação:
+            { 'transactions_suspect': [ foo ],
+            'transactions_suspect_home_account': [ boo ],
+            'transactions_suspect_destination_account': [ poo ],
+            'transactions_suspect_home_branch': [ loo ],
+            'transactions_suspect_destination_branch': [ too ] }
+            --  em caso de error retornado um dicionário {'error': foo }
+    """
+    try:
+
+        try:
+            suspect_date = suspect_request.args.get('date')
+            suspect_date = datetime.strptime(suspect_date, '%d/%m/%Y')
+        except:
+            return make_response({'error': 'invalid date'}, 400)
+
+        alert_value_for_transaction = 100000
+        alert_value_for_account = 550000
+        alert_value_for_branch = 500000000
+
+        transactions_suspect = session.query(Transaction).filter(
+            extract('month', Transaction.transaction_date_time) == suspect_date.month,
+            extract('year', Transaction.transaction_date_time) == suspect_date.year,
+            Transaction.transaction_amount >= alert_value_for_transaction
+        ).all()
+
+        transactions_suspect_home_account = session.query(Transaction.transaction_home_bank,
+                                                          Transaction.transaction_home_branch,
+                                                          Transaction.transaction_home_account,
+                                                          func.sum(Transaction.transaction_amount).label(
+                                                              "transaction_amount")).filter(
+            extract('month', Transaction.transaction_date_time) == suspect_date.month,
+            extract('year', Transaction.transaction_date_time) == suspect_date.year) \
+            .group_by(Transaction.transaction_home_bank,
+                      Transaction.transaction_home_branch,
+                      Transaction.transaction_home_account,
+                      ) \
+            .having(func.sum(Transaction.transaction_amount) >= alert_value_for_account) \
+            .all()
+
+        transactions_suspect_destination_account = session.query(Transaction.transaction_destination_bank,
+                                                                 Transaction.transaction_destination_branch,
+                                                                 Transaction.transaction_destination_account,
+                                                                 func.sum(Transaction.transaction_amount).label(
+                                                                     "transaction_amount")).filter(
+            extract('month', Transaction.transaction_date_time) == suspect_date.month,
+            extract('year', Transaction.transaction_date_time) == suspect_date.year) \
+            .group_by(Transaction.transaction_destination_bank,
+                      Transaction.transaction_destination_branch,
+                      Transaction.transaction_destination_account,
+                      ) \
+            .having(func.sum(Transaction.transaction_amount) >= alert_value_for_account) \
+            .all()
+
+        transactions_suspect_home_branch = session.query(Transaction.transaction_home_bank,
+                                                         Transaction.transaction_home_branch,
+                                                         func.sum(Transaction.transaction_amount).label(
+                                                             "transaction_amount")).filter(
+            extract('month', Transaction.transaction_date_time) == suspect_date.month,
+            extract('year', Transaction.transaction_date_time) == suspect_date.year) \
+            .group_by(Transaction.transaction_home_bank,
+                      Transaction.transaction_home_branch,
+                      ) \
+            .having(func.sum(Transaction.transaction_amount) >= alert_value_for_branch) \
+            .all()
+
+        transactions_suspect_destination_branch = session.query(Transaction.transaction_destination_bank,
+                                                                Transaction.transaction_destination_branch,
+                                                                func.sum(Transaction.transaction_amount).label(
+                                                                    "transaction_amount")).filter(
+            extract('month', Transaction.transaction_date_time) == suspect_date.month,
+            extract('year', Transaction.transaction_date_time) == suspect_date.year) \
+            .group_by(Transaction.transaction_destination_bank,
+                      Transaction.transaction_destination_branch,
+                      ) \
+            .having(func.sum(Transaction.transaction_amount) >= alert_value_for_branch) \
+            .all()
+
+        session.close()
+
+        return {'transactions_suspect': TransactionSchema.dump(transactions_suspect),
+                'transactions_suspect_home_account': TransactionSchema.dump(transactions_suspect_home_account),
+                'transactions_suspect_destination_account': TransactionSchema.dump(
+                    transactions_suspect_destination_account),
+                'transactions_suspect_home_branch': TransactionSchema.dump(transactions_suspect_home_branch),
+                'transactions_suspect_destination_branch': TransactionSchema.dump(
+                    transactions_suspect_destination_branch)
+                }, 200
+    except:
+        return make_response(get_error_msg(), 400)
+

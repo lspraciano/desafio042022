@@ -1,7 +1,5 @@
 # Imports Native
-from datetime import datetime
 from flask import json
-
 
 # Created Imports
 from modules.transaction.controllers.transaction_log_controller import get_all_logs
