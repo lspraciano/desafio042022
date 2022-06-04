@@ -20,7 +20,7 @@ nos usuários e uma HomePage com Dashboards.
 ## Status do Projeto
  - Em Desenvolvimento
  - 75% Completo
- - Previsão de Término: 01/06/2022
+ - Previsão de Término: 10/06/2022
 
 
 ## Principais Desafios
