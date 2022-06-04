@@ -172,8 +172,8 @@ def get_suspects_transactions_report(suspect_request: request) -> make_response:
             return make_response({'error': 'invalid date'}, 400)
 
         alert_value_for_transaction = 100000
-        alert_value_for_account = 550000
-        alert_value_for_branch = 500000000
+        alert_value_for_account = 700000
+        alert_value_for_branch = 4900000
 
         transactions_suspect = session.query(Transaction).filter(
             extract('month', Transaction.transaction_date_time) == suspect_date.month,
