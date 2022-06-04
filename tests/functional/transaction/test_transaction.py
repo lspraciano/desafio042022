@@ -4,8 +4,7 @@ from datetime import datetime
 from flask import json
 
 # Created Imports
-from modules.transaction.controllers.transaction_controller import get_transaction_by_date, \
-    get_suspects_transactions_report
+from modules.transaction.controllers.transaction_controller import get_transaction_by_date
 
 
 def test_import_transaction_template_with_valid_token(app, client_admin_authenticaded, captured_templates):

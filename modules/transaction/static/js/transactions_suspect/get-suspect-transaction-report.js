@@ -1,5 +1,4 @@
 export const getLogsTransactionData = async (date) => {
-        console.log(date);
 
         const url = `${window.location.origin}/transaction/suspect?date=`+date;
         const param = {

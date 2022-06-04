@@ -22,7 +22,6 @@ export const showOrHideTables = (table) => {
 export const loadDataOnTables = async (date) => {
 
     const data = await getLogsTransactionData(formatDate(date));
-    console.log(data);
 
     if ('error' in data) {
         alert(data['error']);
@@ -30,6 +29,16 @@ export const loadDataOnTables = async (date) => {
             window.location.reload();
         return;
     }
+
+    if (data['transactions_suspect'].length === 0
+        && data['transactions_suspect_destination_account'].length === 0
+        && data['transactions_suspect_destination_branch'].length === 0
+        && data['transactions_suspect_home_account'].length === 0
+        && data['transactions_suspect_home_branch'].length === 0) {
+        alert('data not found for this date');
+        return;
+    }
+
 
     const tableBodyTransactions = document.getElementById("table-suspect-transactions__body");
     const tableBodyAcconts = document.getElementById("table-suspect-accounts__body");
@@ -206,19 +215,16 @@ export const clearDataTables = async () => {
     const tableBodyAcconts = document.getElementById("table-suspect-accounts__body");
     const tableBodyBranch = document.getElementById("table-suspect-branch__body");
 
-    while(tableBodyTransactions.hasChildNodes())
-    {
-       tableBodyTransactions.removeChild(tableBodyTransactions.firstChild);
+    while (tableBodyTransactions.hasChildNodes()) {
+        tableBodyTransactions.removeChild(tableBodyTransactions.firstChild);
     }
 
-    while(tableBodyAcconts.hasChildNodes())
-    {
-       tableBodyAcconts.removeChild(tableBodyAcconts.firstChild);
+    while (tableBodyAcconts.hasChildNodes()) {
+        tableBodyAcconts.removeChild(tableBodyAcconts.firstChild);
     }
 
-    while(tableBodyBranch.hasChildNodes())
-    {
-       tableBodyBranch.removeChild(tableBodyBranch.firstChild);
+    while (tableBodyBranch.hasChildNodes()) {
+        tableBodyBranch.removeChild(tableBodyBranch.firstChild);
     }
 
 }

@@ -9,6 +9,7 @@
     padding: 5px;
     outline: none;
     color: #9DBFAF;
+    cursor: pointer;
 }
 
 .search-zone__button {
