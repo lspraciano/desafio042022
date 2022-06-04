@@ -477,3 +477,57 @@ def test_import_two_transactions_with_valid_json(app, client_admin_authenticaded
         assert transaction['transaction_destination_account'] == data[idx]['transaction_destination_account']
         assert transaction['transaction_amount'] == data[idx]['transaction_amount']
         assert transaction['transaction_date_time'] == data[idx]['transaction_date_time']
+
+
+def test_suspect_transaction_template_with_valid_token(app, client_admin_authenticaded, captured_templates):
+    response = client_admin_authenticaded.get("transaction/suspect/report")
+    template, context = captured_templates[0]
+
+    assert response.status_code == 200
+    assert len(captured_templates) == 1
+    assert template.name == "suspects_transaction.html"
+
+
+def test_suspect_transaction_template_with_invalid_token(client):
+    response = client.get("transaction/suspect/report")
+    assert response.status_code == 401
+
+
+def test_get_suspects_transactions_report_with_valid_token_and_date(app, client_admin_authenticaded):
+    response = client_admin_authenticaded.get("transaction/suspect?date=01/01/2022")
+    assert response.status_code == 200
+    assert "transactions_suspect" in response.json
+    assert "transactions_suspect_destination_account" in response.json
+    assert "transactions_suspect_destination_branch" in response.json
+    assert "transactions_suspect_home_account" in response.json
+    assert "transactions_suspect_home_branch" in response.json
+
+
+def test_get_suspects_transactions_report_with_invalid_token_and_valid_date(client):
+    response = client.get("transaction/suspect?date=01/01/2022")
+    assert response.status_code == 401
+
+
+def test_get_suspects_transactions_report_with_valid_token_and_invalid_date_format(client_admin_authenticaded):
+    response = client_admin_authenticaded.get("transaction/suspect?date=01-01-2022")
+    assert response.status_code == 400
+
+
+def test_get_suspects_transactions_report_with_invalid_token_and_date_format(client):
+    response = client.get("transaction/suspect?date=01-01-2022")
+    assert response.status_code == 401
+
+
+def test_get_suspects_transactions_report_with_valid_token_and_invalid_parameter_datey(client_admin_authenticaded):
+    response = client_admin_authenticaded.get("transaction/suspect?datey=01-01-2022")
+    assert response.status_code == 400
+
+
+def test_get_suspects_transactions_report_with_valid_token_and_invalid_date_blank(client_admin_authenticaded):
+    response = client_admin_authenticaded.get("transaction/suspect?date=")
+    assert response.status_code == 400
+
+
+def test_get_suspects_transactions_report_with_valid_token_and_no_parameter_date(client_admin_authenticaded):
+    response = client_admin_authenticaded.get("transaction/suspect")
+    assert response.status_code == 400

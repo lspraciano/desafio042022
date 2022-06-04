@@ -22,6 +22,7 @@ export const showOrHideTables = (table) => {
 export const loadDataOnTables = async (date) => {
 
     const data = await getLogsTransactionData(formatDate(date));
+    console.log(data);
 
     if ('error' in data) {
         alert(data['error']);
