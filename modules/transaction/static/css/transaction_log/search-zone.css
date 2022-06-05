@@ -23,17 +23,3 @@
 .search__term:focus {
     color: #5253A3FF;
 }
-
-/*.search__button-back {*/
-/*    width: 15%;*/
-/*    height: auto;*/
-/*    min-width: 30px;*/
-/*    border: 1px solid #5253A3FF;*/
-/*    background: #5253A3FF;*/
-/*    text-align: center;*/
-/*    color: #f1f8ff;*/
-/*    border-radius: 5px 5px 5px 5px;*/
-/*    cursor: pointer;*/
-/*    font-size: 20px;*/
-/*    margin-bottom: 1rem;*/
-/*}*/

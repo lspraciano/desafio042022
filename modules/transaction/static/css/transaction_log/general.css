@@ -19,6 +19,7 @@ body {
     flex-direction: column;
     background-color: #f0f2f5!important;
     align-items: center;
+    overflow-x: hidden;
 }
 
 body a {
