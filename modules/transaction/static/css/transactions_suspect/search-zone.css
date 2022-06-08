@@ -1,5 +1,6 @@
 .panel-zone__search-zone {
     display: flex;
+    margin-bottom: 1rem;
 }
 
 .search-zone__term {

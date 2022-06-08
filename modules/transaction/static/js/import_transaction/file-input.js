@@ -7,10 +7,10 @@ import {validateInputFile} from "./validate-input-file.js";
     const iconOff = document.getElementById('card-zone__mid__icon-off');
     const sendButton = document.getElementById('card-zone__bottom__button');
 
-    const handleFiles = () => {
+    const handleFiles = async () => {
         const selectedFiles = fileInput.files[0];
 
-        if (validateInputFile(selectedFiles)) {
+        if (await validateInputFile(selectedFiles) === true) {
             title.innerHTML = selectedFiles.name;
             iconOn.style.display = 'flex';
             iconOff.style.display = 'none';
