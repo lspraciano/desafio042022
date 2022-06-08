@@ -1,6 +1,8 @@
 .plotting-zone {
     width: 100%;
     height: 100%;
+    overflow-x: hidden;
+    overflow-y: hidden;
 }
 
 .plotting-zone__upper-zone {
@@ -34,4 +36,16 @@
 
 .card--border-blue {
     border-left: 10px solid #528da3;
+}
+
+@media only screen and (max-width: 1180px) and (orientation:portrait) {
+    .plotting-zone__upper-zone {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .plotting-zone__medial-zone {
+        flex-wrap: wrap;
+        height: auto;
+    }
 }

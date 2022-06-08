@@ -23,5 +23,12 @@
 }
 
 .body-zone__text {
-    font-size: 2rem;
+    font-size: 1.5rem;
+}
+
+@media only screen and (max-width: 1180px) and (orientation:portrait) {
+    .upper-zone__small-card {
+        width: 100%;
+        margin-bottom: 1rem;
+    }
 }
