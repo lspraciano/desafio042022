@@ -10,6 +10,11 @@ const amountMeanSuspectTransactionText = document.getElementById("amount-mean-su
 const afterLoader = async () => {
     const data = await getTransactionReport();
 
+    if ('error' in data) {
+        alert(data['error']);
+        return;
+    }
+
     totalTransactionText.innerText = data['transactions_total'];
     amountMeanTransactionText.innerText = 'R$ ' + data['transactions_amount_mean'];
     percSucpectTransactionText.innerText = data['transactions_suspect_percentage'] + '%';

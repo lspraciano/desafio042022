@@ -254,9 +254,12 @@ def get_transactions_report() -> make_response:
     """
     now = datetime.now()
     rows_transactions = session.query(Transaction).filter(
-        extract('month', Transaction.transaction_date_time) == 1,
+        extract('month', Transaction.transaction_date_time) == now.month,
         extract('year', Transaction.transaction_date_time) == now.year).all()
     session.close()
+
+    if not rows_transactions:
+        return make_response({'error': 'transactions not found'})
 
     transactions_total = len(rows_transactions)
     transactions_amount_total = 0.0
@@ -278,7 +281,7 @@ def get_transactions_report() -> make_response:
                                                     extract('day', Transaction.transaction_date_time).label(
                                                         'day'), ) \
         .filter(
-        extract('month', Transaction.transaction_date_time) == 1,
+        extract('month', Transaction.transaction_date_time) == now.month,
         extract('year', Transaction.transaction_date_time) == now.year) \
         .order_by(
         'day') \
@@ -291,7 +294,7 @@ def get_transactions_report() -> make_response:
     rows_transactions_total_per_bank = session.query(func.count(Transaction.transaction_id).label('total'),
                                                      Transaction.transaction_home_bank) \
         .filter(
-        extract('month', Transaction.transaction_date_time) == 1,
+        extract('month', Transaction.transaction_date_time) == now.month,
         extract('year', Transaction.transaction_date_time) == now.year) \
         .order_by(
         'total') \

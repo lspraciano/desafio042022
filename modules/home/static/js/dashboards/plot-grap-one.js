@@ -10,13 +10,14 @@ export const plotGrapOne = (labels, values) => {
         datasets: [{
             label: 'Total de Transações / Dia',
             data: values,
-            fill: true,
-            backgroundColor: gradient,
+            fill: false,
+            borderColor: 'rgb(75, 192, 192)',
+            tension: 0.1
         }]
     }
 
     const config = {
-        type: 'bar',
+        type: 'line',
         data: data,
         options: {
             maintainAspectRatio: false,

@@ -5,7 +5,14 @@ export const plotGrapTwo = (labels, values) => {
         datasets: [{
             label: 'Transsações / Banco',
             data: values,
-            hoverOffset: 4
+            hoverOffset: 4,
+            backgroundColor: [
+                'rgba(82,83,163,0.9)',
+                'rgba(163,82,82,0.9)',
+                'rgba(82,163,144,0.9)',
+                'rgba(190,186,93,0.9)',
+                'rgb(84,84,84)',
+            ],
         }]
     };
 
