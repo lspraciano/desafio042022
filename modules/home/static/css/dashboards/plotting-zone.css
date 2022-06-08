@@ -2,7 +2,6 @@
     width: 100%;
     height: 100%;
     overflow-x: hidden;
-    overflow-y: hidden;
 }
 
 .plotting-zone__upper-zone {
@@ -47,5 +46,11 @@
     .plotting-zone__medial-zone {
         flex-wrap: wrap;
         height: auto;
+    }
+}
+
+@media only screen and (max-width: 1180px) and (orientation:landscape) {
+    .plotting-zone__upper-zone {
+        min-height: 150px;
     }
 }

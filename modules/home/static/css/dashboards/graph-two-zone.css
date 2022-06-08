@@ -11,5 +11,6 @@
     .medial-zone__graph-two-zone {
         width: 100%;
         flex-direction: column;
+        margin-bottom: 1rem;
     }
 }
