@@ -13,3 +13,9 @@ home_blueprint = Blueprint('home', __name__,
 @token_authentication
 def home_page():
     return render_template('home.html'), 200
+
+
+@home_blueprint.route('/dashboard')
+@token_authentication
+def get_dashboards():
+    return render_template('dashboards.html'), 200

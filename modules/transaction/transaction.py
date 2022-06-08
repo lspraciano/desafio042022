@@ -5,7 +5,7 @@ from flask import Blueprint, render_template, request
 
 # Created Imports
 from modules.transaction.controllers.transaction_controller import save_transactions_list, \
-    get_transactions_list_by_date, get_suspects_transactions_report
+    get_transactions_list_by_date, get_suspects_transactions_report, get_transactions_report
 from modules.transaction.controllers.transaction_log_controller import get_all_logs
 from resources.py.token.token_manager import token_authentication
 
@@ -51,3 +51,8 @@ def report_transactions_suspect():
 @token_authentication
 def transactions_suspect():
     return get_suspects_transactions_report(request)
+
+
+@transaction_blueprint.route('/report', methods=['GET', ])
+def transactions_report():
+    return get_transactions_report()

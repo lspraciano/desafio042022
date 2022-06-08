@@ -1,7 +1,5 @@
 # Native Imports
-import re
 from datetime import datetime
-
 from flask import request, make_response
 from sqlalchemy import extract, func
 
@@ -246,3 +244,79 @@ def get_suspects_transactions_report(suspect_request: request) -> make_response:
     except:
         return make_response(get_error_msg(), 400)
 
+
+def get_transactions_report() -> make_response:
+    """
+    Esta função retorna um relatório geral contendo informações básicas sobre as transações importadas.
+    O relatório filtra as informações de acordo com mês corrente.
+
+    :return:
+    """
+    now = datetime.now()
+    rows_transactions = session.query(Transaction).filter(
+        extract('month', Transaction.transaction_date_time) == 1,
+        extract('year', Transaction.transaction_date_time) == now.year).all()
+    session.close()
+
+    transactions_total = len(rows_transactions)
+    transactions_amount_total = 0.0
+    transactions_suspect_total = 0.0
+    transactions_suspect_amount_total = 0.0
+
+    for r in rows_transactions:
+        transactions_amount_total += r.transaction_amount
+
+        if r.transaction_amount >= 100000:
+            transactions_suspect_total += 1
+            transactions_suspect_amount_total += r.transaction_amount
+
+    transactions_amount_mean = transactions_amount_total / transactions_total
+    transactions_suspect_mean = transactions_suspect_amount_total / transactions_suspect_total
+    transactions_suspect_percentage = transactions_suspect_total / transactions_total * 100
+
+    rows_transactions_total_per_day = session.query(func.count(Transaction.transaction_id).label('total'),
+                                                    extract('day', Transaction.transaction_date_time).label(
+                                                        'day'), ) \
+        .filter(
+        extract('month', Transaction.transaction_date_time) == 1,
+        extract('year', Transaction.transaction_date_time) == now.year) \
+        .order_by(
+        'day') \
+        .group_by(
+        extract('day', Transaction.transaction_date_time)) \
+        .all()
+
+    session.close()
+
+    rows_transactions_total_per_bank = session.query(func.count(Transaction.transaction_id).label('total'),
+                                                     Transaction.transaction_home_bank) \
+        .filter(
+        extract('month', Transaction.transaction_date_time) == 1,
+        extract('year', Transaction.transaction_date_time) == now.year) \
+        .order_by(
+        'total') \
+        .group_by(
+        Transaction.transaction_home_bank) \
+        .all()
+
+    session.close()
+
+    transactions_total_per_day = []
+    transactions_total_per_bank = []
+
+    for r in rows_transactions_total_per_day:
+        add = {'total': r[0], 'date': f'{int(r[1])}'}
+        transactions_total_per_day.append(add)
+
+    for r in rows_transactions_total_per_bank:
+        add = {'total': r[0], 'bank': r[1]}
+        transactions_total_per_bank.append(add)
+
+    return {
+       'transactions_total': transactions_total,
+       'transactions_amount_mean': round(transactions_amount_mean, 2),
+       'transactions_suspect_mean': round(transactions_suspect_mean, 2),
+       'transactions_suspect_percentage': round(transactions_suspect_percentage, 2),
+       'transactions_total_per_day': transactions_total_per_day,
+       'transactions_total_per_bank': transactions_total_per_bank,
+    }, 200

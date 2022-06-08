@@ -11,7 +11,7 @@ const screenName = document.getElementById("screen-name");
 
 
 const callDashboardScreen = async () => {
-    iframeToHtml.src = '';
+    iframeToHtml.src = '/home/dashboard';
     screenName.innerText = 'Dashboard'
     showAndHideMenuZoneSubOptions();
 }
