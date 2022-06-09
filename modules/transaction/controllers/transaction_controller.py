@@ -258,13 +258,13 @@ def get_transactions_report() -> make_response:
         extract('year', Transaction.transaction_date_time) == now.year).all()
     session.close()
 
-    if not rows_transactions:
-        return make_response({'error': 'transactions not found'})
-
     transactions_total = len(rows_transactions)
     transactions_amount_total = 0.0
+    transactions_amount_mean = 0.0
     transactions_suspect_total = 0.0
     transactions_suspect_amount_total = 0.0
+    transactions_suspect_mean = 0.0
+    transactions_suspect_percentage = 0.0
 
     for r in rows_transactions:
         transactions_amount_total += r.transaction_amount
@@ -273,9 +273,12 @@ def get_transactions_report() -> make_response:
             transactions_suspect_total += 1
             transactions_suspect_amount_total += r.transaction_amount
 
-    transactions_amount_mean = transactions_amount_total / transactions_total
-    transactions_suspect_mean = transactions_suspect_amount_total / transactions_suspect_total
-    transactions_suspect_percentage = transactions_suspect_total / transactions_total * 100
+    if transactions_total > 0:
+        transactions_amount_mean = transactions_amount_total / transactions_total
+        transactions_suspect_percentage = transactions_suspect_total / transactions_total * 100
+
+    if transactions_suspect_total > 0:
+        transactions_suspect_mean = transactions_suspect_amount_total / transactions_suspect_total
 
     rows_transactions_total_per_day = session.query(func.count(Transaction.transaction_id).label('total'),
                                                     extract('day', Transaction.transaction_date_time).label(
@@ -316,10 +319,10 @@ def get_transactions_report() -> make_response:
         transactions_total_per_bank.append(add)
 
     return {
-       'transactions_total': transactions_total,
-       'transactions_amount_mean': round(transactions_amount_mean, 2),
-       'transactions_suspect_mean': round(transactions_suspect_mean, 2),
-       'transactions_suspect_percentage': round(transactions_suspect_percentage, 2),
-       'transactions_total_per_day': transactions_total_per_day,
-       'transactions_total_per_bank': transactions_total_per_bank,
-    }, 200
+               'transactions_total': transactions_total,
+               'transactions_amount_mean': round(transactions_amount_mean, 2),
+               'transactions_suspect_mean': round(transactions_suspect_mean, 2),
+               'transactions_suspect_percentage': round(transactions_suspect_percentage, 2),
+               'transactions_total_per_day': transactions_total_per_day,
+               'transactions_total_per_bank': transactions_total_per_bank,
+           }, 200

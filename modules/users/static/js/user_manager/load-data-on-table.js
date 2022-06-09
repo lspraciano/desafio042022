@@ -1,4 +1,5 @@
 import {getUsers} from "./get-users.js";
+import {startPreloading, stopPreloading} from "../../../../../resources/js/preloader/preloader.js";
 
 (() => {
     const tableBody = document.getElementById("table-users__body");
@@ -37,7 +38,9 @@ import {getUsers} from "./get-users.js";
     }
 
     document.addEventListener("DOMContentLoaded", async () => {
+        await startPreloading();
         await loadDataOnTable();
+        await stopPreloading();
     })
 
     if (String(window.performance.getEntriesByType("navigation")[0].type) === "back_forward") {

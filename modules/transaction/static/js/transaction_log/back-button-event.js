@@ -1,3 +1,5 @@
+import {startPreloading, stopPreloading} from "../../../../../resources/js/preloader/preloader.js";
+
 (() => {
 
     const searchButton = document.getElementById("button-zone_button-back");
@@ -9,6 +11,10 @@
 
     }
 
-    searchButton.addEventListener("click", callEvent);
+    searchButton.addEventListener("click", async () => {
+        await startPreloading();
+        await callEvent();
+        await stopPreloading();
+    });
 
 })()

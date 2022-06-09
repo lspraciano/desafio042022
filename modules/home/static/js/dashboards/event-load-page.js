@@ -1,6 +1,7 @@
 import {plotGrapOne} from "./plot-grap-one.js";
 import {plotGrapTwo} from "./plot-grap-two.js";
 import {getTransactionReport} from "./get-transaction-report.js";
+import {startPreloading, stopPreloading} from "../../../../../resources/js/preloader/preloader.js";
 
 const totalTransactionText = document.getElementById("text-total-transaction");
 const amountMeanTransactionText = document.getElementById("amount-mean-transaction-text");
@@ -40,4 +41,8 @@ const afterLoader = async () => {
 }
 
 
-document.addEventListener('DOMContentLoaded', afterLoader)
+document.addEventListener('DOMContentLoaded', async  () => {
+    await startPreloading();
+    await afterLoader();
+    await stopPreloading ();
+})

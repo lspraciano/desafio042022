@@ -1,6 +1,9 @@
 /* Configurações Gerais */
 @import "general.css";
 
+/* Pre-Loader */
+@import "../../../../../resources/css/preloader.css";
+
 /* Menu Lateral*/
 @import "side-bar.css";
 

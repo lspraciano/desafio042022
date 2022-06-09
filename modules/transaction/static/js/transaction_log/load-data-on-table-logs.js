@@ -1,5 +1,6 @@
 import {formatDate, formatDateTime} from "../../../../../resources/js/format-date/format-date.js";
 import {getLogsTransactionData} from "./get-logs-transaction-data.js";
+import {startPreloading, stopPreloading} from "../../../../../resources/js/preloader/preloader.js";
 
 
 (() => {
@@ -43,7 +44,9 @@ import {getLogsTransactionData} from "./get-logs-transaction-data.js";
     }
 
     document.addEventListener("DOMContentLoaded", async () => {
+        await startPreloading();
         await loadData();
-    })
+        await stopPreloading();
+    });
 
 })()

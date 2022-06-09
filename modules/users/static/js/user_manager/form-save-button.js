@@ -1,6 +1,7 @@
 import {getFormData, validateForm} from "./form-data-controller.js";
 import {saveNewUser} from "./post-user.js";
 import {updateUser} from "./update-user.js";
+import {startPreloading, stopPreloading} from "../../../../../resources/js/preloader/preloader.js";
 
 
 const backButton = document.getElementById("buton-zone__btn--save");
@@ -41,5 +42,9 @@ const saveButtonEvent = async () => {
 
 }
 
-backButton.addEventListener('click', saveButtonEvent)
+backButton.addEventListener('click', async () => {
+    await startPreloading();
+    await saveButtonEvent();
+    await stopPreloading();
+})
 

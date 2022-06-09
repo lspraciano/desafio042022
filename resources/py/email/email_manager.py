@@ -45,7 +45,8 @@ def send_email_password_new_user(email: str, password: str) -> dict:
 
         return {'success': 'mail sent'}
 
-    except:
+    except Exception as e:
+        print(e)
         return get_error_msg()
 
 

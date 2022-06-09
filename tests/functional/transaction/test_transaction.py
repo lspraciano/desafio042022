@@ -544,3 +544,19 @@ def test_report_transaction_template_with_valid_token(app, client_admin_authenti
 def test_report_transaction_template_with_invalid_token(client):
     response = client.get("home/dashboard")
     assert response.status_code == 401
+
+
+def test_get_transactions_report_with_valid_token(app, client_admin_authenticaded):
+    response = client_admin_authenticaded.get("transaction/report")
+    assert response.status_code == 200
+    assert "transactions_total" in response.json
+    assert "transactions_amount_mean" in response.json
+    assert "transactions_suspect_mean" in response.json
+    assert "transactions_suspect_percentage" in response.json
+    assert "transactions_total_per_day" in response.json
+    assert "transactions_total_per_bank" in response.json
+
+
+def test_get_transactions_report_with_invalid_token(client):
+    response = client.get("transaction/report")
+    assert response.status_code == 401

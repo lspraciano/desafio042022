@@ -2,7 +2,7 @@ import {readCsv} from "./read-csv.js";
 import {preProcessingData} from "./pre-processing-data.js";
 import {saveTransactions} from "./save-transactions.js";
 import {readXml} from "./read-xml.js";
-
+import {startPreloading, stopPreloading} from "../../../../../resources/js/preloader/preloader.js";
 const sendButton = document.getElementById("card-zone__bottom__button");
 const fileInput = document.getElementById('input-file');
 
@@ -32,4 +32,8 @@ const sendCsv = async () => {
 
 }
 
-sendButton.addEventListener('click', sendCsv);
+sendButton.addEventListener('click', async () => {
+    await startPreloading();
+    await sendCsv();
+    await stopPreloading();
+});

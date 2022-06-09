@@ -1,4 +1,5 @@
 import {loadDataOnTableDescribed} from "./load-data-on-table-described.js";
+import {startPreloading, stopPreloading} from "../../../../../resources/js/preloader/preloader.js";
 
 (() => {
 
@@ -28,9 +29,11 @@ import {loadDataOnTableDescribed} from "./load-data-on-table-described.js";
     }
 
     tableTransactionLogsBody.addEventListener("dblclick", async (e) => {
-        showOrHideTables();
+        await startPreloading();
+        await showOrHideTables();
         const dateFromClick = e.target.parentElement.cells[1].innerText;
         await loadDataOnTableDescribed(dateFromClick);
+        await stopPreloading();
 
     })
 

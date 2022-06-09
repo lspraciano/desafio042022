@@ -11,10 +11,10 @@ class Configuration:
     SECRET_KEY = os.getenv('SECRET_KEY')
     ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
     ADMIN_USER_ID = 1  # System user admin ID
-    ADMIN_USER_NAME = 'ADMIN'  # System user admin ID
-    ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD')  # System user password
-    ADMIN_EMAIL = os.getenv('ADMIN_EMAIL')  # System user email
-    ADMIN_STATUS = 1  # System user status
+    ADMIN_USER_NAME = 'ADMIN'  # System user admin name
+    ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD')  # System user admin password
+    ADMIN_EMAIL = os.getenv('ADMIN_EMAIL')  # System user admin email
+    ADMIN_STATUS = 1  # System user admin status
     TOKEN_NAME = 'new_app'  # Name of Cookie to set to the browser
     TIME_EXP_TOKEN = 30  # Time in minutes of JWT token
     LIMIT_EXP_TOKEN = 1  # Time in minutes of JWT token to expire
@@ -33,7 +33,7 @@ class DevelopmentConfig(Configuration):
 
 class TestConfig(Configuration):
     SQLALCHEMY_DATABASE_URI = os.getenv('TEST_SQLALCHEMY_DATABASE_URI')
-    MAIL_SUPPRESS_SEND = True  # Evita o envio de email
+    MAIL_SUPPRESS_SEND = True  # Evita o envio de email durante os testes
     DEBUG = False
 
 

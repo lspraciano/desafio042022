@@ -1,21 +1,14 @@
-const gifPreloadingErlen = document.getElementById('pre-loader')
-const boxGif = document.getElementById('gif-erlen')
+const gifPreloadingErlen = parent.document.getElementById('pre-loader_gif')
+const boxGif = parent.document.getElementById('pre-loader')
 
 
 export const startPreloading = () => {
-
-    gifPreloadingErlen.style.display = "flex"
-    boxGif.style.display = "flex"
-
-
+    gifPreloadingErlen.style.display = "flex";
+    boxGif.style.display = "flex";
 }
 
 export const stopPreloading = () => {
-
-    gifPreloadingErlen.style.display = "none"
-    boxGif.style.display = "none"
-
-
-
+    gifPreloadingErlen.style.display = "none";
+    boxGif.style.display = "none";
 }
 

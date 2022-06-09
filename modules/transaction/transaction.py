@@ -54,5 +54,6 @@ def transactions_suspect():
 
 
 @transaction_blueprint.route('/report', methods=['GET', ])
+@token_authentication
 def transactions_report():
     return get_transactions_report()
