@@ -530,3 +530,17 @@ def test_get_suspects_transactions_report_with_valid_token_and_invalid_date_blan
 def test_get_suspects_transactions_report_with_valid_token_and_no_parameter_date(client_admin_authenticaded):
     response = client_admin_authenticaded.get("transaction/suspect")
     assert response.status_code == 400
+
+
+def test_report_transaction_template_with_valid_token(app, client_admin_authenticaded, captured_templates):
+    response = client_admin_authenticaded.get("home/dashboard")
+    template, context = captured_templates[0]
+
+    assert response.status_code == 200
+    assert len(captured_templates) == 1
+    assert template.name == "dashboards.html"
+
+
+def test_report_transaction_template_with_invalid_token(client):
+    response = client.get("home/dashboard")
+    assert response.status_code == 401
