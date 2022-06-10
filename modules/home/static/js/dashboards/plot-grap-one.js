@@ -17,6 +17,18 @@ export const plotGrapOne = (labels, values) => {
         type: 'line',
         data: data,
         options: {
+            plugins: {
+                legend: {
+                    display: false
+                },
+                title: {
+                    display: true,
+                    text: 'Transações /  Dia',
+                    font: {
+                        size: 20,
+                    }
+                }
+            },
             maintainAspectRatio: false,
             responsive: true,
             scales: {

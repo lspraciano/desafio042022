@@ -20,6 +20,15 @@ export const plotGrapTwo = (labels, values) => {
         type: 'doughnut',
         data: data,
         options: {
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Transações /  Banco',
+                    font: {
+                        size: 20,
+                    }
+                }
+            },
             maintainAspectRatio: false,
             responsive: true,
         },
