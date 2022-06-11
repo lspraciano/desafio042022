@@ -127,3 +127,29 @@ Para acessar a tela de importação você irá escolher a opção do menu latera
 Você será redirecionado para esta página
 
 ![](readme/images/transaction-log.png)
+
+Esta tela é composta por uma barra de pesquisa e logo abaixo uma tabela.
+
+Barra de Pesquisa:
+
+    Pra filtar os dados listados na tabela você pode digitar dentro deste campo a sua
+    busca. A busca ocorre em todos os campos da tabela linha por linha.Caso não encontre
+    o que você busca dentro de uma linha, ela será ocultada. 
+
+Tabela:
+    
+    Esta tabela contém o log de transações realizadas. Cada arquivo importado através da
+    opção Transações >  Importar é considerado um lote. Por exemplo: Um arquivo contendo
+    transações do dia 01/06/2022 é considerado que essas transações fazem parte do lote
+    01/06/2022. Dentro deste contexto esta tabela exibe o histórico de lotes importados.
+    Caso deseje visualizar as transações contidas em um lote, você pode dar duplo click
+    em uma das linha desta tabela. Ao realizar este procedimento uma nova tabela será
+    exibida contendo as transações referente ao determinado lote da linha escolhida.
+
+A nova tabela exibida será assim
+
+![](readme/images/transaction-described.png)
+
+    Esta nova tabela contém todas as transações contidas em um determinado lote. Podemos
+    perceber que um botão com uma seta para esquerda foi habilitado. Este botão serve
+    para retorna a tabela anterior, caso o usuário deseje verificar outro lote.
