@@ -53,12 +53,25 @@ Para realizar o acesso criamos as credenciais de acesso para você testar:
     Nome do Usuário: ADMIN
     Senha: 123999
 
+    obs: Nesta tela de login na região inferior a imagem econtramos um link para
+    recuperação ou troca de senha. Esta funcionalidade esta em desenvolvimento.
+
 
 Após realizar o login, o usuário é redirecionado para nossa home page
 
 ![img.png](readme/images/home-page.png)
 
-Esta tela é composta por uma barra de menu lateral, dashboards e um menu superior.
+Esta tela é composta por: dashboards, menu superior e uma barra de menu lateral
+
+Dashboard:
+
+    Os dados contidos na Dashboard são relativos as transações importadas no mês vigente. 
+
+Menu Superior:
+
+    Essa região contém, a esquerda, o icone para recolher ou mostrar o menu lateral,
+    na região central fica o nome da tela, neste caso "Dashboard", a direita encontramos
+    o botão para relizar o logout da aplicação.
 
 Menu Lateral:
 
@@ -73,12 +86,7 @@ Menu Lateral:
     3. Usuários
         3.1 Gerenciar
 
-Dashboard:
+#### 1. Importar Transações
+Para acessar a tela de importação vocês deve escolher a opção do menu lateral:
 
-    Os dados contidos na Dashboard são relativos as transações importadas no mês vigente. 
-
-Menu Superior:
-
-    Essa região contém, a esquerda, o icone para recolher ou mostrar o menu lateral,
-    na região central fica o nome da tela, neste caso "Dashboard", a direita encontramos
-    o botão para relizar o logout da aplicação.
+    Transações >  Importar
