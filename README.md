@@ -156,7 +156,7 @@ A nova tabela exibida será assim
     tabela. Este botão serve para retorna a tabela anterior, caso o usuário deseje
     verificar outro lote.
 
-##### 4. Relatório de Suspeitas de Fraude
+##### 5. Relatório de Suspeitas de Fraude
 
 Para acessar a tela de importação você irá escolher a opção do menu lateral:
 
@@ -184,3 +184,55 @@ Campos para Marcar (Transações, Contas, Bancos)
     com nome Transações irá sumir da tela, conforme imagem abaixo
 
 ![img.png](readme/images/suspect-transaction-checkbox-exemple.png)
+
+
+##### 5. Cadastrar, Consultar, Alterar e Deletar usuário do sistema
+
+Para acessar a tela de importação você irá escolher a opção do menu lateral:
+
+    Usuário >  Gerenciar
+
+A tela de Gerenciar Usuário será carregada na home page
+
+![](readme/images/user.png)
+
+Esta tela é composta por um campo de busca na parte supeior, um botão para adicionar
+usuário na parte superior a direta do campo de busca, uma tabela e um formulário
+oculto. Ao entrar nesta tela ela exibirá todos os usuários cadastrados
+no sistema na tabela
+
+Campo de Busca
+
+    Pra filtar os dados listados na tabela você pode digitar dentro deste campo a sua
+    busca. A busca ocorre em todos os campos da tabela linha por linha.Caso não encontre
+    o que você busca dentro de uma linha, ela será ocultada.
+
+Botão Adicionar Novo Usuário
+
+    Este botão serve para a criação de um novo usuário. Ao ser clicado a tabela é
+    ocultada e um formulário com os campos necessários para cadastrar o usuário é
+    exibido. Conforme imagem abaixo
+    
+![](readme/images/new-user.png)    
+
+Formulário Oculto
+
+Este formulário possui em seu topo um campo para o nome do usuário, logo abaixo temos
+o campo para o email, em baixo deste campo o campo status, um botão de salvar e um
+botão de voltar
+
+    Caso o usuário clique no botão para criar um novo usuário este formulário
+    é exibido sem nenhum dos campos preenchidos, porém caso seja para alterar o usuário
+    este formulário será carregado com as informações do usuário selecionado. Após
+    preencher os campos ou edita-los, o usuário deverá clicar em salvar, mas caso
+    deseje retorna a tabela de consulta de usuário ele poderá clicar em volta,
+    fazendo isso as informações preenchidas não serão salvas no banco de dados
+
+Tabela
+
+    Esta tabela contem as informações básicas do usuário. Caso deseje alterar um deste
+    registro, você deverá realizar um duplo clique na linha desejad. Desta forma
+    a tabela irá ser ocultado e o formulário de usuário será exibido com as
+    informações referentes a linha escolhida.
+
+    
