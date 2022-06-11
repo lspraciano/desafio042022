@@ -13,6 +13,11 @@ nos usuários e uma HomePage com Dashboards.
 - 90% Completo
 - Previsão de Término: 15/06/2022
 
+### O que Falta?
+- Recuperação e mudança de senha do usuário
+- Documentar como clonar e executar o projeto
+- Documentar como consumir nossa API
+
 ## Tecnologia Usada
 
 ### Back-End
@@ -228,10 +233,15 @@ botão de voltar
     deseje retorna a tabela de consulta de usuário ele poderá clicar em volta,
     fazendo isso as informações preenchidas não serão salvas no banco de dados
 
-    obs: Ao cadastrar um novo usuário, o sistema enviará uma senha para o email
+    obs 1: Ao cadastrar um novo usuário, o sistema enviará uma senha para o email
     informado. Caso o usuário deseje realizar a troca desta senha, ele poderá,
     através da página de login, clicar no link "Recuperar ou Trocar senha" e
     realizar a troca.
+
+    obs 2: Todas as alterações realizadas são registradas em uma
+    tabela de auditoria através de uma Trigger registada no banco SQL. Deste
+    forma podemos auditar quaisquer mudanças realizas e identifcar o usuário
+    responsável
 
 Tabela
 
