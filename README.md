@@ -228,6 +228,11 @@ botão de voltar
     deseje retorna a tabela de consulta de usuário ele poderá clicar em volta,
     fazendo isso as informações preenchidas não serão salvas no banco de dados
 
+    obs: Ao cadastrar um novo usuário, o sistema enviará uma senha para o email
+    informado. Caso o usuário deseje realizar a troca desta senha, ele poderá,
+    através da página de login, clicar no link "Recuperar ou Trocar senha" e
+    realizar a troca.
+
 Tabela
 
     Esta tabela contem as informações básicas do usuário. Caso deseje alterar um deste
@@ -235,4 +240,11 @@ Tabela
     a tabela irá ser ocultado e o formulário de usuário será exibido com as
     informações referentes a linha escolhida.
 
+
+### 2. Clonando Repositório:
     
+    Seção do README não disponível neste momento 
+
+### 3. Consumir nossa API:
+    
+    Seção do README não disponível neste momento 
