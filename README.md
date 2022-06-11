@@ -48,7 +48,7 @@ Podemos usar esta aplicação de 3 formas:
 
 1. Autenticação de Usuário
 2. Importar Transações Bancárias
-3. Relatório Geral de Transalções
+3. Relatório Geral de Transações
 4. Histórico de Importações
 5. Relatório de Suspeitas de Fraude
 6. Cadastrar, Consultar, Alterar e Deletar usuário do sistema
@@ -109,7 +109,7 @@ Para acessar a tela de importação você irá escolher a opção do menu latera
 
     Transações >  Importar
 
-Você será redirecionado para esta página
+A tela de importação será carregada na home page
 
 ![](readme/images/import-transactions.png)
 
@@ -125,7 +125,7 @@ Para acessar a tela de importação você irá escolher a opção do menu latera
 
     Transações >  Histórico
 
-Você será redirecionado para esta página
+A tela de histórico será carregada na home page
 
 ![](readme/images/transaction-log.png)
 
@@ -155,3 +155,32 @@ A nova tabela exibida será assim
     perceber que um botão com uma seta para esquerda foi habilitado logo acima da
     tabela. Este botão serve para retorna a tabela anterior, caso o usuário deseje
     verificar outro lote.
+
+##### 4. Relatório de Suspeitas de Fraude
+
+Para acessar a tela de importação você irá escolher a opção do menu lateral:
+
+    Transações >  Suspeitas
+
+A tela de Suspeitas será carregada na home page
+
+![](readme/images/suspect-transactions.png)
+
+Esta tela é composta por um campo para a escolha do mês e ano no canto superior esquerdo,
+no canto superior direito temos 3 campos para marcar (Transações, Contas, Bancos)
+e 3 tabelas (Transações, Contas, Bancos) no centro da página.
+
+Campo para Escolher Mês e Ano
+
+    Através deste campo o usuário poderá escolher qual mês e ano que deseja realizar a
+    avaliação de suspeitas. Após selecionar a data desejada ele deverá clicar no botão
+    com a imagem de lupa, localizado no mesmo campo. Os dados referentes a data escolhida
+    irão preencher as tabelas
+
+Campos para Marcar (Transações, Contas, Bancos)
+
+    Estes campos servem para ocultar e mostrar as tabelas respecitvas aos seus nomes,
+    como por exemplo: caso o usuário desmarque o campo com nome Transações a tabela
+    com nome Transações irá sumir da tela, conforme imagem abaixo
+
+![img.png](readme/images/suspect-transaction-checkbox-exemple.png)
