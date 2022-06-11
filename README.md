@@ -6,6 +6,10 @@ de ensino ALURA, mas estou incrementado algumas funcionalidades não listadas
 para este desafio, como exemplo a Tabela SQL de auditória de modificações
 nos usuários e uma HomePage com Dashboards.
 
+<!--ts-->
+   * [Installation](#teste)
+<!--te-->
+
 ## Status do Projeto
 
 - Em Desenvolvimento
@@ -36,8 +40,8 @@ nos usuários e uma HomePage com Dashboards.
 ## Funcionalidades
 
 1. Autenticação de Usuário
-2. Home Page (Navegação + Relatório Geral de Transalções)
-3. Importar Transações Bancárias através de um arquivo CSV
+2. Importar Transações Bancárias através de um arquivo CSV
+3. Relatório Geral de Transalções
 4. Histórico de Importações
 5. Relatório de Suspeitas de Fraude
 6. Cadastrar, Consultar, Alterar e Deletar usuário do sistema
@@ -151,5 +155,9 @@ A nova tabela exibida será assim
 ![](readme/images/transaction-described.png)
 
     Esta nova tabela contém todas as transações contidas em um determinado lote. Podemos
-    perceber que um botão com uma seta para esquerda foi habilitado. Este botão serve
-    para retorna a tabela anterior, caso o usuário deseje verificar outro lote.
+    perceber que um botão com uma seta para esquerda foi habilitado logo acima da
+    tabela. Este botão serve para retorna a tabela anterior, caso o usuário deseje
+    verificar outro lote.
+
+
+teste
