@@ -1,9 +1,14 @@
 # Projeto de Registro e Avaliação de Transações Bancárias
 Esta aplicação tem como principal objetivo analisar transações suspeitas e listar
 as transações suspeitas. Este foi um projeto sugerido em um desafio da plataforma
-de ensino ALURA, mas estamos incrementado algumas funcionalidade não listadas
-para este desafio, como por exemplo a Tabela SQL de auditória de modificações
+de ensino ALURA, mas estou incrementado algumas funcionalidades não listadas
+para este desafio, como exemplo a Tabela SQL de auditória de modificações
 nos usuários e uma HomePage com Dashboards.
+
+## Status do Projeto
+ - Em Desenvolvimento
+ - 90% Completo
+ - Previsão de Término: 15/06/2022
 
 ## Tecnologia Usada
 ### Back-End
@@ -16,20 +21,56 @@ nos usuários e uma HomePage com Dashboards.
  1. Postgresql
 ### Infraestrutura
  1. Docker
+ 2. Heroku
 
-## Status do Projeto
- - Em Desenvolvimento
- - 75% Completo
- - Previsão de Término: 10/06/2022
+## Funcionalidades
+1. Login
+2. Importar Transações Bancárias através de um arquivo CSV
+3. Histórico de Importações
+4. Relatório Geral das Transações
+5. Relatório de Suspeitas de Fraude
+6. Cadastrar, Consultar, Alterar e Deletar usuário do sistema
 
 
-## Principais Desafios
-Por ter 8 meses de estudos nesta área, todos os aspectos deste projeto são
-considerados desafiadores, porém o que menos havia estudado, que eram os testes
-automatizados, pesou bastante. Percebi que a criação de testes desde o início
-do projeto, facilita o desenvolvimento devido aos 'feedbacks' que estes podem
-gerar. Outro ponto é que apesar da pouca prática, não gostaria de apresentar
-um Front nada amigavel ao usuário final. Então as horas requeridas para estudo
-sobre este ponto foram reforçadas. No final das contas percebemos que, por ser
-uma área muito dinâminca, o estudo e aprendizado constante são necessários e 
-indispensáveis.
+## Como Ultilizar?
+Podemos usar esta aplicação de 3 formas:
+1. Acesso via página Web
+2. Clonando o Repositório
+3. Consumo da nossa API
+
+### 1. Acessando Atráves da página Web:
+Nossa app esta disponibilizado para uso atráves do link: 
+    
+    http://transactions-analyzer.herokuapp.com/
+
+#### 1. Login
+Ao acessar o link, você irá se deparar com a nossa tela de login.
+
+![](readme/images/login.png)
+
+Para realizar o acesso criamos as credenciais de acesso para você testar:
+
+    Nome do Usuário: ADMIN
+    Senha: 123999
+
+
+Após realizar o login, o usuário é redirecionado para nossa home page
+
+![img.png](readme/images/home-page.png)
+
+Esta tela é composta por uma barra de menu lateral, dashboards e um menu superior.
+
+Menu Lateral:
+
+    Atrávez do menu de acesso lateral você pode navegar por nossa aplicação e acessar todas
+    nossas funcionalidades.
+
+Dashboard:
+
+    Os dados contidos na Dashboard são relativos as transações importadas no mês vigente. 
+
+Menu Superior:
+
+    Essa região contém, a esquerda, o icone para recolher ou mostrar o menu lateral,
+    na região central fica o nome da tela, neste caso "Dashboard", a direita encontramos
+    o botão para relizar o logout da aplicação.
