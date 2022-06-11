@@ -24,7 +24,7 @@ nos usuários e uma HomePage com Dashboards.
  2. Heroku
 
 ## Funcionalidades
-1. Login
+1. Autenticação de Usuário
 2. Importar Transações Bancárias através de um arquivo CSV
 3. Histórico de Importações
 4. Relatório Geral das Transações
@@ -63,7 +63,15 @@ Esta tela é composta por uma barra de menu lateral, dashboards e um menu superi
 Menu Lateral:
 
     Atrávez do menu de acesso lateral você pode navegar por nossa aplicação e acessar todas
-    nossas funcionalidades.
+    nossas funcionalidades. Ele é composto por essa opções:
+    
+    1. Dashboard
+    2. Transações
+        2.1 Importar
+        2.2 Histórico
+        2.3 Suspeitas
+    3. Usuários
+        3.1 Gerenciar
 
 Dashboard:
 
