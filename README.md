@@ -6,9 +6,6 @@ de ensino ALURA, mas estou incrementado algumas funcionalidades não listadas
 para este desafio, como exemplo a Tabela SQL de auditória de modificações
 nos usuários e uma HomePage com Dashboards.
 
-<!--ts-->
-   * [Installation](#teste)
-<!--te-->
 
 ## Status do Projeto
 
@@ -37,15 +34,6 @@ nos usuários e uma HomePage com Dashboards.
 1. Docker
 2. Heroku
 
-## Funcionalidades
-
-1. Autenticação de Usuário
-2. Importar Transações Bancárias através de um arquivo CSV
-3. Relatório Geral de Transalções
-4. Histórico de Importações
-5. Relatório de Suspeitas de Fraude
-6. Cadastrar, Consultar, Alterar e Deletar usuário do sistema
-
 ## Como Ultilizar?
 
 Podemos usar esta aplicação de 3 formas:
@@ -54,13 +42,22 @@ Podemos usar esta aplicação de 3 formas:
 2. Clonando o Repositório
 3. Consumo da nossa API
 
-### 1. Acessando Atráves da página Web:
+### 1. Acesso via página Web:
+
+#### Funcionalidades do site
+
+1. Autenticação de Usuário
+2. Importar Transações Bancárias
+3. Relatório Geral de Transalções
+4. Histórico de Importações
+5. Relatório de Suspeitas de Fraude
+6. Cadastrar, Consultar, Alterar e Deletar usuário do sistema
 
 Nossa app esta disponibilizado para uso atráves do link:
 
     http://transactions-analyzer.herokuapp.com/
 
-#### 1. Login
+##### 1. Autenticação de Usuário
 
 Ao acessar o link, você irá se deparar com a nossa tela de login.
 
@@ -74,7 +71,7 @@ Para realizar o acesso criamos as credenciais de acesso para você testar:
     obs: Nesta tela de login na região inferior a imagem econtramos um link para
     recuperação ou troca de senha. Esta funcionalidade esta em desenvolvimento.
 
-#### 2. Home Page ( Navegação + Relatório Geral de Transalções )
+##### 2. Home Page (Navegação + Relatório Geral de Transalções)
 
 Após realizar o login, o usuário é redirecionado para nossa home page
 
@@ -106,7 +103,7 @@ Menu Lateral:
     3. Usuários
         3.1 Gerenciar
 
-#### 3. Importar Transações
+##### 3. Importar Transações
 
 Para acessar a tela de importação você irá escolher a opção do menu lateral:
 
@@ -122,7 +119,7 @@ Você será redirecionado para esta página
     Agora é só clicar em "Enviar"
 
 
-#### 4. Histórico de Importações
+##### 4. Histórico de Importações
 
 Para acessar a tela de importação você irá escolher a opção do menu lateral:
 
@@ -158,6 +155,3 @@ A nova tabela exibida será assim
     perceber que um botão com uma seta para esquerda foi habilitado logo acima da
     tabela. Este botão serve para retorna a tabela anterior, caso o usuário deseje
     verificar outro lote.
-
-
-teste
