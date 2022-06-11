@@ -184,8 +184,8 @@ Campo para Escolher Mês e Ano
 
     obs: As regras de suspeição ultilizadas foram:
     Transações >= 100000 (cem mil)
-    Contas >= 700000 (setessentos mil)
-    Bancos >= 4900000 (quatro milhões e novecentos mil)
+    Valor Total de Transações por Conta no mês >= 700000 (setessentos mil)
+    Valor Total de Transações por Banco no mês >= 4900000 (quatro milhões e novecentos mil)
 
 Campos para Marcar (Transações, Contas, Bancos)
 
