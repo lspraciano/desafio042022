@@ -196,7 +196,7 @@ Campos para Marcar (Transações, Contas, Bancos)
 ![img.png](readme/images/suspect-transaction-checkbox-exemple.png)
 
 
-##### 5. Cadastrar, Consultar, Alterar e Deletar usuário do sistema
+##### 5. Cadastrar, Consultar, Alterar e Deletar Usuário do Sistema
 
 Para acessar a tela de importação você irá escolher a opção do menu lateral:
 
