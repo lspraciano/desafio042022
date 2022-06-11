@@ -180,7 +180,12 @@ Campo para Escolher Mês e Ano
     Através deste campo o usuário poderá escolher qual mês e ano que deseja realizar a
     avaliação de suspeitas. Após selecionar a data desejada ele deverá clicar no botão
     com a imagem de lupa, localizado no mesmo campo. Os dados referentes a data escolhida
-    irão preencher as tabelas
+    irão preencher as tabelas. 
+
+    obs: As regras de suspeição ultilizadas foram:
+    Transações >= 100000 (cem mil)
+    Contas >= 700000 (setessentos mil)
+    Bancos >= 4900000 (quatro milhões e novecentos mil)
 
 Campos para Marcar (Transações, Contas, Bancos)
 
