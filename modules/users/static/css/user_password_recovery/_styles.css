@@ -1,5 +1,11 @@
 /* Configurações Gerais */
 @import "general.css";
 
+/* Plotting Zone */
+@import "plotting-zone.css";
+
 /* Form Zone */
 @import "form-zone.css";
+
+/* Figure Zone */
+@import "figure-zone.css";
