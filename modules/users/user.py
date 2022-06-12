@@ -36,3 +36,9 @@ def user_authentication():
 def user_manager():
     if request.method == 'GET':
         return render_template('user_manager.html')
+
+
+@user_blueprint.route('/reset-password', methods=['GET'])
+def user_reset_password():
+    if request.method == 'GET':
+        return render_template('user_password_recovery.html')

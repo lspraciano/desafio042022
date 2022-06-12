@@ -9,15 +9,22 @@
     height: 70%;
     align-items: center;
     justify-content: center;
-    /*box-shadow: 0 7rem 0 0  #5253a3 inset;*/
 }
 
 
-@media only screen and (max-width: 1180px) and (orientation: portrait) {
+@media only screen and (max-width: 768px) {
     .useful-area {
         width: 90%;
-        height: auto;
-        flex-direction: column;
+        height: 80%;
+        min-height: 600px;
+        flex-wrap: wrap;
     }
 }
 
+@media (max-device-height: 500px) {
+    .useful-area {
+        width: 90%;
+        min-height: 320px;
+    }
+
+}

@@ -27,29 +27,16 @@
     color: #5253a3;
 }
 
-@media (max-width: 1180px) and (orientation: portrait){
+@media (max-width: 768px){
     .useful-area__figure-zone {
         order: 2;
-        height: 95%;
-        width: 90%;
+        width: 100%;
+        height: 50%;
     }
 
     .figure-zone__link-new-user a,
     .figure-zone__link-pass-reset a{
         text-align: center;
-        font-size: .9rem;
-    }
-
-}
-
-@media only screen and (max-width: 1180px) and (orientation: landscape) {
-    .useful-area {
-        width: 90%;
-        height: 90%;
-    }
-
-    .figure-zone__link-new-user a,
-    .figure-zone__link-pass-reset a {
         font-size: .9rem;
     }
 
