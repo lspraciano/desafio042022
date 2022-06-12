@@ -41,6 +41,7 @@ const controlStep = async () => {
     }
 
     if (formTitle.innerText === 'Sua Senha foi Atualizada') {
+        await window.location.reload();
         window.location.href = `${window.location.origin}/`;
     }
 

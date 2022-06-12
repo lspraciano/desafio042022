@@ -14,5 +14,6 @@
     .plotting-zone {
         width: 90%;
         min-width: 200px;
+        min-height: 600px;
     }
 }
