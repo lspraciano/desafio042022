@@ -19,8 +19,7 @@
     height: 100%;
 }
 
-.figure-zone__link-new-user a,
-.figure-zone__link-pass-reset a{
+.figure-zone__link-pass-reset a {
     text-align: center;
     font-size: 1.2rem;
     text-decoration: none;
@@ -40,4 +39,11 @@
         font-size: .9rem;
     }
 
+}
+
+
+@media (max-device-height: 500px) {
+    .figure-zone__link-pass-reset a{
+        font-size: .8rem;
+    }
 }
