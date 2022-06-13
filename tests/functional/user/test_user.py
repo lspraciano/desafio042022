@@ -1,4 +1,4 @@
-''# Imports Native
+''  # Imports Native
 from flask import json
 
 # Created Imports
@@ -289,21 +289,18 @@ def test_create_user_with_blank_user_email(client_admin_authenticaded, app):
 
 
 def test_update_user_with_valid_json(app, client_admin_authenticaded):
-    data = {"user_id": 2,
-            "user_name": 'FOO',
-            "user_password": 'FOO123',
-            "user_email": 'FOO@GMAIL.COM',
-            "user_token": 'FOO123',
-            "user_status": 1
-            }
+    data = {
+        "user_id": 2,
+        "user_name": 'FOO',
+        "user_email": 'FOO@GMAIL.COM',
+        "user_status": 1
+    }
 
     response = client_admin_authenticaded.patch(
         "user/",
         data=json.dumps(data),
         headers={"Content-Type": "application/json"
                  })
-
-    user_from_db = get_user_by_id(data["user_id"])
 
     assert response.status_code == 200
     assert "user" in response.json
@@ -312,18 +309,15 @@ def test_update_user_with_valid_json(app, client_admin_authenticaded):
     assert response.json["user"][0]["user_email"] == data["user_email"]
     assert response.json["user"][0]["user_status"] == data["user_status"]
     assert response.json["user"][0]["user_last_modification_user_id"] == app.config["ADMIN_USER_ID"]
-    assert user_from_db.user_token == data["user_token"]
-    assert check_password_hash(user_from_db.user_password, data["user_password"])
 
 
 def test_update_user_with_valid_json_and_only_user_name_updated(app, client_admin_authenticaded):
-    data = {"user_id": 2,
-            "user_name": 'BOO',
-            "user_password": None,
-            "user_email": None,
-            "user_token": None,
-            "user_status": 1
-            }
+    data = {
+        "user_id": 2,
+        "user_name": 'BOO',
+        "user_email": None,
+        "user_status": 1
+    }
 
     user_from_db_before_update = get_user_by_id(data["user_id"])
 
@@ -348,46 +342,13 @@ def test_update_user_with_valid_json_and_only_user_name_updated(app, client_admi
     assert response.json["user"][0]["user_name"] == data["user_name"]
 
 
-def test_update_user_with_valid_json_and_only_user_password_updated(app, client_admin_authenticaded):
-    data = {"user_id": 2,
-            "user_name": None,
-            "user_password": 'foo',
-            "user_email": None,
-            "user_token": None,
-            "user_status": 1
-            }
-
-    user_from_db_before_update = get_user_by_id(data["user_id"])
-
-    response = client_admin_authenticaded.patch(
-        "user/",
-        data=json.dumps(data),
-        headers={"Content-Type": "application/json"
-                 })
-
-    user_from_db_after_update = get_user_by_id(data["user_id"])
-
-    assert response.status_code == 200
-    assert "user" in response.json
-    assert user_from_db_before_update.user_id == user_from_db_after_update.user_id
-    assert user_from_db_before_update.user_name == user_from_db_after_update.user_name
-    assert user_from_db_before_update.user_password != user_from_db_after_update.user_password
-    assert user_from_db_before_update.user_email == user_from_db_after_update.user_email
-    assert user_from_db_before_update.user_token == user_from_db_after_update.user_token
-    assert user_from_db_before_update.user_status == user_from_db_after_update.user_status
-
-    assert response.json["user"][0]["user_id"] == data["user_id"]
-    assert check_password_hash(user_from_db_after_update.user_password, data["user_password"])
-
-
 def test_update_user_with_valid_json_and_only_user_email_updated(app, client_admin_authenticaded):
-    data = {"user_id": 2,
-            "user_name": None,
-            "user_password": None,
-            "user_email": 'FOO2@GMAIL.COM',
-            "user_token": None,
-            "user_status": 1
-            }
+    data = {
+        "user_id": 2,
+        "user_name": None,
+        "user_email": 'FOO2@GMAIL.COM',
+        "user_status": 1
+    }
 
     user_from_db_before_update = get_user_by_id(data["user_id"])
 
@@ -412,46 +373,13 @@ def test_update_user_with_valid_json_and_only_user_email_updated(app, client_adm
     assert response.json["user"][0]["user_email"] == data["user_email"]
 
 
-def test_update_user_with_valid_json_and_only_user_token_updated(app, client_admin_authenticaded):
-    data = {"user_id": 2,
-            "user_name": None,
-            "user_password": None,
-            "user_email": None,
-            "user_token": '123456',
-            "user_status": 1
-            }
-
-    user_from_db_before_update = get_user_by_id(data["user_id"])
-
-    response = client_admin_authenticaded.patch(
-        "user/",
-        data=json.dumps(data),
-        headers={"Content-Type": "application/json"
-                 })
-
-    user_from_db_after_update = get_user_by_id(data["user_id"])
-
-    assert response.status_code == 200
-    assert "user" in response.json
-    assert user_from_db_before_update.user_id == user_from_db_after_update.user_id
-    assert user_from_db_before_update.user_name == user_from_db_after_update.user_name
-    assert user_from_db_before_update.user_password == user_from_db_after_update.user_password
-    assert user_from_db_before_update.user_email == user_from_db_after_update.user_email
-    assert user_from_db_before_update.user_token != user_from_db_after_update.user_token
-    assert user_from_db_before_update.user_status == user_from_db_after_update.user_status
-
-    assert response.json["user"][0]["user_id"] == data["user_id"]
-    assert user_from_db_after_update.user_token == data["user_token"]
-
-
 def test_update_user_with_valid_json_and_only_user_status_updated(app, client_admin_authenticaded):
-    data = {"user_id": 2,
-            "user_name": None,
-            "user_password": None,
-            "user_email": None,
-            "user_token": None,
-            "user_status": 0
-            }
+    data = {
+        "user_id": 2,
+        "user_name": None,
+        "user_email": None,
+        "user_status": 0
+    }
 
     user_from_db_before_update = get_user_by_id(data["user_id"])
 
@@ -477,13 +405,12 @@ def test_update_user_with_valid_json_and_only_user_status_updated(app, client_ad
 
 
 def test_update_user_with_invalid_json_field_user_id(app, client_admin_authenticaded):
-    data = {"user_idd": 2,
-            "user_name": None,
-            "user_password": None,
-            "user_email": None,
-            "user_token": None,
-            "user_status": 0
-            }
+    data = {
+        "user_idd": 2,
+        "user_name": None,
+        "user_email": None,
+        "user_status": 0
+    }
 
     response = client_admin_authenticaded.patch(
         "user/",
@@ -496,32 +423,12 @@ def test_update_user_with_invalid_json_field_user_id(app, client_admin_authentic
 
 
 def test_update_user_with_invalid_json_field_user_name(app, client_admin_authenticaded):
-    data = {"user_id": 2,
-            "user_namee": None,
-            "user_password": None,
-            "user_email": None,
-            "user_token": None,
-            "user_status": 0
-            }
-
-    response = client_admin_authenticaded.patch(
-        "user/",
-        data=json.dumps(data),
-        headers={"Content-Type": "application/json"
-                 })
-
-    assert response.status_code == 415
-    assert "error" in response.json
-
-
-def test_update_user_with_invalid_json_field_user_password(app, client_admin_authenticaded):
-    data = {"user_id": 2,
-            "user_name": None,
-            "user_passwordd": None,
-            "user_email": None,
-            "user_token": None,
-            "user_status": 0
-            }
+    data = {
+        "user_id": 2,
+        "user_namee": None,
+        "user_email": None,
+        "user_status": 0
+    }
 
     response = client_admin_authenticaded.patch(
         "user/",
@@ -534,32 +441,12 @@ def test_update_user_with_invalid_json_field_user_password(app, client_admin_aut
 
 
 def test_update_user_with_invalid_json_field_user_email(app, client_admin_authenticaded):
-    data = {"user_id": 2,
-            "user_name": None,
-            "user_password": None,
-            "user_emaill": None,
-            "user_token": None,
-            "user_status": 0
-            }
-
-    response = client_admin_authenticaded.patch(
-        "user/",
-        data=json.dumps(data),
-        headers={"Content-Type": "application/json"
-                 })
-
-    assert response.status_code == 415
-    assert "error" in response.json
-
-
-def test_update_user_with_invalid_json_field_user_token(app, client_admin_authenticaded):
-    data = {"user_id": 2,
-            "user_name": None,
-            "user_password": None,
-            "user_email": None,
-            "user_tokenn": None,
-            "user_status": 0
-            }
+    data = {
+        "user_id": 2,
+        "user_name": None,
+        "user_emaill": None,
+        "user_status": 0
+    }
 
     response = client_admin_authenticaded.patch(
         "user/",
@@ -572,13 +459,12 @@ def test_update_user_with_invalid_json_field_user_token(app, client_admin_authen
 
 
 def test_update_user_with_invalid_json_field_user_status(app, client_admin_authenticaded):
-    data = {"user_id": 2,
-            "user_name": None,
-            "user_password": None,
-            "user_email": None,
-            "user_token": None,
-            "user_statuss": 0
-            }
+    data = {
+        "user_id": 2,
+        "user_name": None,
+        "user_email": None,
+        "user_statuss": 0
+    }
 
     response = client_admin_authenticaded.patch(
         "user/",
@@ -591,13 +477,12 @@ def test_update_user_with_invalid_json_field_user_status(app, client_admin_authe
 
 
 def test_update_user_with_invalid_json_value_user_id_not_int(app, client_admin_authenticaded):
-    data = {"user_id": '2',
-            "user_name": None,
-            "user_password": None,
-            "user_email": None,
-            "user_token": None,
-            "user_status": 0
-            }
+    data = {
+        "user_id": '2',
+        "user_name": None,
+        "user_email": None,
+        "user_status": 0
+    }
 
     response = client_admin_authenticaded.patch(
         "user/",
@@ -610,32 +495,12 @@ def test_update_user_with_invalid_json_value_user_id_not_int(app, client_admin_a
 
 
 def test_update_user_with_invalid_json_value_user_name_not_str(app, client_admin_authenticaded):
-    data = {"user_id": 2,
-            "user_name": 123,
-            "user_password": None,
-            "user_email": None,
-            "user_token": None,
-            "user_status": 0
-            }
-
-    response = client_admin_authenticaded.patch(
-        "user/",
-        data=json.dumps(data),
-        headers={"Content-Type": "application/json"
-                 })
-
-    assert response.status_code == 415
-    assert "error" in response.json
-
-
-def test_update_user_with_invalid_json_value_user_password_not_str(app, client_admin_authenticaded):
-    data = {"user_id": 2,
-            "user_name": None,
-            "user_password": 123,
-            "user_email": None,
-            "user_token": None,
-            "user_status": 0
-            }
+    data = {
+        "user_id": 2,
+        "user_name": 123,
+        "user_email": None,
+        "user_status": 0
+    }
 
     response = client_admin_authenticaded.patch(
         "user/",
@@ -648,32 +513,12 @@ def test_update_user_with_invalid_json_value_user_password_not_str(app, client_a
 
 
 def test_update_user_with_invalid_json_value_user_email_not_str(app, client_admin_authenticaded):
-    data = {"user_id": 2,
-            "user_name": None,
-            "user_password": None,
-            "user_email": 123,
-            "user_token": None,
-            "user_status": 0
-            }
-
-    response = client_admin_authenticaded.patch(
-        "user/",
-        data=json.dumps(data),
-        headers={"Content-Type": "application/json"
-                 })
-
-    assert response.status_code == 415
-    assert "error" in response.json
-
-
-def test_update_user_with_invalid_json_value_user_token_not_str(app, client_admin_authenticaded):
-    data = {"user_id": 2,
-            "user_name": None,
-            "user_password": None,
-            "user_email": None,
-            "user_token": 123,
-            "user_status": 0
-            }
+    data = {
+        "user_id": 2,
+        "user_name": None,
+        "user_email": 123,
+        "user_status": 0
+    }
 
     response = client_admin_authenticaded.patch(
         "user/",
@@ -686,13 +531,12 @@ def test_update_user_with_invalid_json_value_user_token_not_str(app, client_admi
 
 
 def test_update_user_with_invalid_json_value_user_status_not_int(app, client_admin_authenticaded):
-    data = {"user_id": 2,
-            "user_name": None,
-            "user_password": None,
-            "user_email": None,
-            "user_token": None,
-            "user_status": '0'
-            }
+    data = {
+        "user_id": 2,
+        "user_name": None,
+        "user_email": None,
+        "user_status": '0'
+    }
 
     response = client_admin_authenticaded.patch(
         "user/",
@@ -705,13 +549,12 @@ def test_update_user_with_invalid_json_value_user_status_not_int(app, client_adm
 
 
 def test_update_user_with_invalid_json_value_user_status_not_between_0_1(app, client_admin_authenticaded):
-    data = {"user_id": 2,
-            "user_name": None,
-            "user_password": None,
-            "user_email": None,
-            "user_token": None,
-            "user_status": 2
-            }
+    data = {
+        "user_id": 2,
+        "user_name": None,
+        "user_email": None,
+        "user_status": 2
+    }
 
     response = client_admin_authenticaded.patch(
         "user/",
@@ -724,13 +567,12 @@ def test_update_user_with_invalid_json_value_user_status_not_between_0_1(app, cl
 
 
 def test_update_user_with_existent_user_email(app, client_admin_authenticaded):
-    data = {"user_id": 2,
-            "user_name": None,
-            "user_password": None,
-            "user_email": app.config["ADMIN_EMAIL"],
-            "user_token": None,
-            "user_status": 1
-            }
+    data = {
+        "user_id": 2,
+        "user_name": None,
+        "user_email": app.config["ADMIN_EMAIL"],
+        "user_status": 1
+    }
 
     response = client_admin_authenticaded.patch(
         "user/",
@@ -743,13 +585,12 @@ def test_update_user_with_existent_user_email(app, client_admin_authenticaded):
 
 
 def test_update_user_with_existent_user_name(app, client_admin_authenticaded):
-    data = {"user_id": 2,
-            "user_name": app.config["ADMIN_USER_NAME"],
-            "user_password": None,
-            "user_email": None,
-            "user_token": None,
-            "user_status": 1
-            }
+    data = {
+        "user_id": 2,
+        "user_name": app.config["ADMIN_USER_NAME"],
+        "user_email": None,
+        "user_status": 1
+    }
 
     response = client_admin_authenticaded.patch(
         "user/",
@@ -762,13 +603,12 @@ def test_update_user_with_existent_user_name(app, client_admin_authenticaded):
 
 
 def test_update_user_deactivating_himself(app, client_admin_authenticaded):
-    data = {"user_id": app.config["ADMIN_USER_ID"],
-            "user_name": app.config["ADMIN_USER_NAME"],
-            "user_password": None,
-            "user_email": None,
-            "user_token": None,
-            "user_status": 0
-            }
+    data = {
+        "user_id": app.config["ADMIN_USER_ID"],
+        "user_name": app.config["ADMIN_USER_NAME"],
+        "user_email": None,
+        "user_status": 0
+    }
 
     response = client_admin_authenticaded.patch(
         "user/",

@@ -45,8 +45,7 @@ def send_email_password_new_user(email: str, password: str) -> dict:
 
         return {'success': 'mail sent'}
 
-    except Exception as e:
-        print(e)
+    except:
         return get_error_msg()
 
 
@@ -69,3 +68,43 @@ def validate_email(email: str) -> bool:
         return True
     else:
         return False
+
+
+def send_email_token_reset_password(email: str, token: str) -> dict:
+    """
+    Esta função envia um email contendo a senha passada informada.
+
+    :param token: token para resetar senha
+    :param email: email do usuário destino
+    :return: {'success': 'mail sent'} para sucesso ao enviar ou {'error': 'send mail failed to send'} em caso de error
+    """
+
+    try:
+
+        if not validate_email(email) or type(email) is not str:
+            return {'error': 'invalid email'}
+
+        if token == '' or token is None or type(token) is not str:
+            return {'error': 'invalid password'}
+
+        body = f'''
+
+        Este é seu TOKEN:
+
+       {token}
+
+        '''
+
+        msg = Message(
+            subject='Token para resetar password.',
+            sender=Configuration.MAIL_USERNAME,
+            recipients=email.split(),
+            body=body
+        )
+
+        mail.send(msg)
+
+        return {'success': 'mail sent'}
+
+    except:
+        return get_error_msg()

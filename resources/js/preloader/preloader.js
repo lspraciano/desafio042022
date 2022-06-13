@@ -1,4 +1,4 @@
-const gifPreloadingErlen = parent.document.getElementById('pre-loader_gif')
+const gifPreloadingErlen = parent.document.getElementById('pre-loader__gif')
 const boxGif = parent.document.getElementById('pre-loader')
 
 

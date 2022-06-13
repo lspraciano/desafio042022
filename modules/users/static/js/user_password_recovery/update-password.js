@@ -1,13 +1,12 @@
-export const updateUser = async (cod, username, email, status) => {
+export const updateUserPasword = async (cod, user_password,  user_token) => {
 
     const user = {
         "user_id": cod,
-        "user_name": username,
-        "user_email": email,
-        "user_status": status,
+        "user_password": user_password,
+        "user_token": user_token
     };
 
-    const url = `${window.location.origin}/user/`;
+    const url = `${window.location.origin}/user/reset-password`;
     const param = {
         method: "PATCH",
         headers: {

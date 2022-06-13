@@ -3,7 +3,7 @@ from jsonschema import validate
 json_user_update = {
     "title": "user_update",
     "type": "object",
-    "required": ["user_id", "user_name", "user_password", "user_email", "user_token", "user_status"],
+    "required": ["user_id", "user_name", "user_email", "user_status"],
     "properties": {
         "user_id": {
             "type": "integer"
@@ -11,13 +11,7 @@ json_user_update = {
         "user_name": {
             "type": ["string", "null"]
         },
-        "user_password": {
-            "type": ["string", "null"]
-        },
         "user_email": {
-            "type": ["string", "null"]
-        },
-        "user_token": {
             "type": ["string", "null"]
         },
         "user_status": {

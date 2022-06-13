@@ -1,5 +1,6 @@
 # Imports Native
 import random
+import re
 
 
 # Created Imports
@@ -28,3 +29,16 @@ def generate_password(length: int = 8) -> str:
     random.shuffle(list_pass)
     final_password = ''.join(list_pass)
     return final_password
+
+
+def validate_password(password: str) -> bool:
+    if not password or type(password) is not str:
+        return False
+
+    regex = re.compile(
+        r"^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$")
+    result = re.fullmatch(regex, password)
+    if result:
+        return True
+    else:
+        return False

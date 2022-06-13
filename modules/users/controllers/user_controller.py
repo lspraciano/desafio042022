@@ -9,12 +9,14 @@ from error.error import get_error_msg
 from modules.users.json_schema.user_authentication_json import json_validate_user_authentication
 from modules.users.json_schema.user_create_json import json_validate_create_user
 from modules.users.json_schema.user_update_json import json_validate_update_user
+from modules.users.json_schema.user_update_password import json_validate_user_password_update
 from modules.users.models.user_model import User
 from modules.users.serializers.user_seriallizer import UserBasicSchema
-from resources.py.password.password_manager import generate_password
+from resources.py.password.password_manager import generate_password, validate_password
 from resources.py.token import token_manager
-from resources.py.email.email_manager import validate_email, send_email_password_new_user
-from resources.py.token.token_manager import user_id_from_token
+from resources.py.email.email_manager import validate_email, send_email_password_new_user, \
+    send_email_token_reset_password
+from resources.py.token.token_manager import user_id_from_token, mail_token_generate
 
 session = create_session()
 
@@ -190,11 +192,11 @@ def update_user(user_dict: dict) -> make_response:
     """
     Esta função atualiza um registro de usuário no banco de dados através do seu ID que deverá ser informado dentro
     do dicionário com os outros dados que se deseja atualizar. Todos os campos do dicionário de entrada são
-    obrogatórios, porém caso não deseje atualizar algum dos campos, este campos deve ser nulo.
+    obrogatórios, porém caso não deseje atualizar algum dos campos, este campos deve ser nulo. ATENÇÃO
+    Esta função não permite atualizar password ou token
 
     :param user_dict: { "user_id": "type": "integer", "user_name": "type": ["string" ou "null"],
-     "user_password": "type": ["string" ou "null"], "user_email": "type": ["string" ou "null"],
-     "user_token": "type": ["string" ou "null"], "user_status": "type": "integer" }
+     "user_email": "type": ["string" ou "null"], "user_status": "type": "integer" }
     :return: em caso de sucesso será retornado { 'user': {user} } ou em caso de NÃO sucesso { 'error': foo }
     """
 
@@ -221,7 +223,7 @@ def update_user(user_dict: dict) -> make_response:
         validate_username = check_username_email(user_name=user_dict['user_name'])
         if 'error' in validate_username.keys():
             return make_response(validate_username, 400)
-        user.user_name = user_dict['user_name']
+        user.user_name = user_dict['user_name'].upper()
 
     if user.user_email != user_dict['user_email'] and user_dict['user_email']:
         validate_user_email = check_username_email(email=user_dict['user_email'])
@@ -234,15 +236,6 @@ def update_user(user_dict: dict) -> make_response:
     else:
         return make_response({'error': 'invalid status'}, 400)
 
-    if user_dict['user_password'] == '':
-        return make_response({'error': 'invalid password'}, 400)
-
-    if user_dict['user_password']:
-        user.user_password = generate_password_hash(user_dict['user_password'], method='sha256')
-
-    if user_dict['user_token'] and user_dict['user_token'] != '':
-        user.user_token = user_dict['user_token']
-
     user.user_last_modification_user_id = user_from_token['user_id']
 
     session.add(user)
@@ -250,3 +243,79 @@ def update_user(user_dict: dict) -> make_response:
     session.close()
 
     return make_response({'user': UserBasicSchema.dump([user])}, 200)
+
+
+def send_reset_password_token_to_user(user_request: dict) -> make_response:
+    try:
+
+        if 'user_name' not in user_request:
+            return make_response({'error': 'invalid json'}, 415)
+
+        if not user_request['user_name'] or user_request['user_name'] == '':
+            return make_response({'error': 'invalid json'}, 415)
+
+        user = get_user_by_username(user_request['user_name'].upper())
+
+        if not user:
+            return make_response({'error': 'invalid user'}, 400)
+
+        token = mail_token_generate()
+
+        user.user_token = token
+
+        session.add(user)
+        session.commit()
+        session.close()
+
+        send_email_result = send_email_token_reset_password(user.user_email, str(token))
+
+        if 'success' not in send_email_result:
+            return make_response(send_email_result, 400)
+
+        return make_response({'user_id': user.user_id}, 200)
+
+    except:
+        get_error_msg()
+
+
+def user_update_password_by_token_and_id(user_dict: dict) -> make_response:
+    try:
+        if not json_validate_user_password_update(user_dict):
+            return make_response({'error': 'invalid json'}, 415)
+
+        if not validate_password(user_dict['user_password']):
+            return make_response({'error': 'invalid password'}, 400)
+
+        user = get_user_by_id(user_dict['user_id'])
+
+        if not user:
+            return make_response({'error': 'non-existing user'}, 400)
+
+        if user_dict['user_token'] != int(user.user_token):
+            user_delete_token(user_dict['user_id'])
+            return make_response({'error': 'invalid token'}, 400)
+
+        user.user_last_modification_user_id = Configuration.ADMIN_USER_ID
+        user.user_password = generate_password_hash(user_dict['user_password'], method='sha256')
+
+        session.add(user)
+        session.commit()
+        session.close()
+
+        return make_response({'user_id': user.user_id}, 200)
+
+    except:
+        get_error_msg()
+
+
+def user_delete_token(user_id: int) -> bool:
+    try:
+        user = get_user_by_id(user_id)
+        user.user_token = None
+        session.add(user)
+        session.commit()
+        session.close()
+        return True
+    except:
+        return False
+

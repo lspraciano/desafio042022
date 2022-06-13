@@ -7,9 +7,19 @@ const inputUserPasswordConfirmation = document.getElementById("input-zone__input
 const image = document.getElementById("figure-zone__image");
 
 
-const controlStep = async () => {
+export const controlStep = async (step) => {
 
-    if (window.getComputedStyle(inputUserName, null).display === 'inline-block') {
+    if (step === 1) {
+        formTitle.innerText = 'Qual seu usuário?';
+        inputUserName.style.display = 'inline-block';
+        inputUserToken.style.display = 'none';
+        inputUserPassword.style.display = 'none';
+        inputUserPasswordConfirmation.style.display = 'none';
+        image.src = './static/images/user_password_recovery/undraw_user.svg';
+        return;
+    }
+
+    if (step === 2) {
         formTitle.innerText = 'Qual seu Token';
         inputUserName.style.display = 'none';
         inputUserToken.style.display = 'inline-block';
@@ -19,7 +29,7 @@ const controlStep = async () => {
         return;
     }
 
-    if (window.getComputedStyle(inputUserToken, null).display === 'inline-block') {
+    if (step === 3) {
         formTitle.innerText = 'Escolha sua Senha';
         inputUserName.style.display = 'none';
         inputUserToken.style.display = 'none';
@@ -29,7 +39,7 @@ const controlStep = async () => {
         return;
     }
 
-    if (window.getComputedStyle(inputUserPasswordConfirmation, null).display === 'inline-block') {
+    if (step === 4) {
         formTitle.innerText = 'Sua Senha foi Atualizada';
         formButton.value = 'Finalizar';
         inputUserName.style.display = 'none';
@@ -40,14 +50,9 @@ const controlStep = async () => {
         return;
     }
 
-    if (formTitle.innerText === 'Sua Senha foi Atualizada') {
+    if (step === 5) {
         await window.location.reload();
         window.location.href = `${window.location.origin}/`;
     }
 
 }
-
-
-formButton.addEventListener('click', async () => {
-    await controlStep();
-})

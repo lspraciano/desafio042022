@@ -2,7 +2,8 @@
 from flask import Blueprint, render_template, request
 
 # Created Imports
-from modules.users.controllers.user_controller import check_login_password, get_all_users, create_new_user, update_user
+from modules.users.controllers.user_controller import check_login_password, get_all_users, create_new_user, update_user, \
+    send_reset_password_token_to_user, user_update_password_by_token_and_id
 from resources.py.token.token_manager import token_authentication
 
 user_blueprint = Blueprint('user', __name__,
@@ -19,8 +20,7 @@ def user():
         created_user = create_new_user(request.json)
         return created_user
     elif request.method == 'PATCH':
-        updated_user = update_user(request.json)
-        return updated_user
+        return update_user(request.json)
 
 
 @user_blueprint.route('/authentication', methods=['GET', 'POST'])
@@ -38,7 +38,11 @@ def user_manager():
         return render_template('user_manager.html')
 
 
-@user_blueprint.route('/reset-password', methods=['GET'])
+@user_blueprint.route('/reset-password', methods=['GET', 'POST', 'PATCH'])
 def user_reset_password():
     if request.method == 'GET':
         return render_template('user_password_recovery.html')
+    elif request.method == 'POST':
+        return send_reset_password_token_to_user(request.json)
+    elif request.method == 'PATCH':
+        return user_update_password_by_token_and_id(request.json)
