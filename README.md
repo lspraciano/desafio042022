@@ -10,11 +10,8 @@ nos usuários e uma HomePage com Dashboards.
 ## Status do Projeto
 
 - Em Desenvolvimento
-- 90% Completo
-- Previsão de Término: 15/06/2022
 
 ### O que Falta?
-- Recuperação e mudança de senha do usuário
 - Documentar como clonar e executar o projeto
 - Documentar como consumir nossa API
 
@@ -57,6 +54,7 @@ Podemos usar esta aplicação de 3 formas:
 4. Histórico de Importações
 5. Relatório de Suspeitas de Fraude
 6. Cadastrar, Consultar, Alterar e Deletar usuário do sistema
+7. Recuperar ou Trocar Senha de Acesso
 
 Nossa app esta disponibilizado para uso atráves do link:
 
@@ -74,7 +72,7 @@ Para realizar o acesso criamos as credenciais de acesso para você testar:
     Senha: 123999
 
     obs: Nesta tela de login na região inferior a imagem econtramos um link para
-    recuperação ou troca de senha. Esta funcionalidade esta em desenvolvimento.
+    recuperação ou troca de senha. Esta será abordada no tópico 7.
 
 ##### 2. Home Page (Navegação + Relatório Geral de Transalções)
 
@@ -126,7 +124,7 @@ A tela de importação será carregada na home page
 
 ##### 4. Histórico de Importações
 
-Para acessar a tela de importação você irá escolher a opção do menu lateral:
+Para acessar a tela de histórico de importações você irá escolher a opção do menu lateral:
 
     Transações >  Histórico
 
@@ -163,7 +161,7 @@ A nova tabela exibida será assim
 
 ##### 5. Relatório de Suspeitas de Fraude
 
-Para acessar a tela de importação você irá escolher a opção do menu lateral:
+Para acessar a tela de suspeitas de fraude você irá escolher a opção do menu lateral:
 
     Transações >  Suspeitas
 
@@ -196,9 +194,9 @@ Campos para Marcar (Transações, Contas, Bancos)
 ![img.png](readme/images/suspect-transaction-checkbox-exemple.png)
 
 
-##### 5. Cadastrar, Consultar, Alterar e Deletar Usuário do Sistema
+##### 6. Cadastrar, Consultar, Alterar e Deletar Usuário do Sistema
 
-Para acessar a tela de importação você irá escolher a opção do menu lateral:
+Para acessar a tela de usuários você irá escolher a opção do menu lateral:
 
     Usuário >  Gerenciar
 
@@ -208,8 +206,8 @@ A tela de Gerenciar Usuário será carregada na home page
 
 Esta tela é composta por um campo de busca na parte supeior, um botão para adicionar
 usuário na parte superior a direta do campo de busca, uma tabela e um formulário
-oculto. Ao entrar nesta tela ela exibirá todos os usuários cadastrados
-no sistema na tabela
+oculto. Ao entrar nesta tela ela exibirá todos os usuários cadastrados no sistema
+na tabela.
 
 Campo de Busca
 
@@ -254,6 +252,64 @@ Tabela
     registro, você deverá realizar um duplo clique na linha desejad. Desta forma
     a tabela irá ser ocultado e o formulário de usuário será exibido com as
     informações referentes a linha escolhida.
+
+##### 7. Recuperar ou Trocar Senha de Acesso
+
+Esta tela se divide em 3 etapas:
+
+    1. Informar o nome do usuário que se deseja recuperar/trocar a senha
+    2. Informar o código/token enviado para email de cadastro do usuário
+    3. Informar o novo password
+    
+###### Etapa 1: Informar o nome do usuário que se deseja recuperar/trocar a senha
+
+Para acessar a tela de recuperação de senha você irá acessar a tela de login e clilar no
+link "Recuperar ou Trocar senha", localizado logo abaixo da imagem. Quando clicar no
+link você será redirecionado para a tela de Recuperação de Senha abaixo:
+
+
+![](readme/images/password-reset.png)
+
+    Ao entrar nesta tela o requisitante deve informar o nome do usuário que
+    deseja realizar a troca de senha e clicar em "Próximo". Feito isso será enviado
+    um email contendo um código/token para o email vinculado ao usuário
+    informado e a etapa 2 será carregada.
+
+###### Etapa 2: Informar o código/token enviado para email de cadastro do usuário
+
+![](readme/images/password-resset-2.png)
+
+    Nesta tela o usuário deverá informar o código/token que foi enviado para seu
+    email e clicar em "Próximo". Feito isso será carregada a etapa 3
+
+###### Etapa 3: Informar o novo password
+
+![](readme/images/passowrd-reset-3.png)
+
+    Agora o usuário deverá informar sua nova senha e confirma-la. A Senha deve
+    conter no mínimo 8 caracteres, dentre eles um caractere especial, uma letra
+    maiúscula e um número. Feito isso clique em "Próximo" para finalizar. Caso
+    ocorra tudo como esperado a tela abaixo deverá ser carregada.
+
+    Obs 1: Caso o token seja informado incorreto, você deverá repetir o processo,
+    pois este token é válido apenas para uma tentativa.
+
+    Obs 2: Cada usuário só pode realizar 3 tentativas a cada 5 minutos.
+
+![](readme/images/password-4.png)
+
+    Estando neste tela é só clicar em finalizar.
+
+
+
+
+
+
+
+
+
+
+
 
 
 ### 2. Clonando Repositório:
