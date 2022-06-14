@@ -32,6 +32,12 @@ def generate_password(length: int = 8) -> str:
 
 
 def validate_password(password: str) -> bool:
+    """
+    Função para validar o password de acordo com uma regex
+
+    :param password: password
+    :return: [True, False]
+    """
     if not password or type(password) is not str:
         return False
 
