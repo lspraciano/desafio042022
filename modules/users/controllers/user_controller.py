@@ -6,6 +6,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from configuration.configuration import Configuration
 from database.database import create_session
 from error.error import get_error_msg
+from modules.users.controllers.user_audit_controller import user_token_modification_count
 from modules.users.json_schema.user_authentication_json import json_validate_user_authentication
 from modules.users.json_schema.user_create_json import json_validate_create_user
 from modules.users.json_schema.user_update_json import json_validate_update_user
@@ -246,6 +247,14 @@ def update_user(user_dict: dict) -> make_response:
 
 
 def send_reset_password_token_to_user(user_request: dict) -> make_response:
+    """
+    Através do user_name, esta função envia um código de 6 digitos para o email vinculado ao usuário pertecente
+    ao user_name. Este código com 6 digitos tabmbém é gravado no banco sql. Para evitar spam ou tentativas
+    suspeitas, a função verifica se nos últimos 5 min foram gerados mais de 3 códigos, caso sim, será barrado.
+
+    :param user_request: {'user_name': foo}
+    :return: em caso de sucesso {'user_id': foo}, em caso de não sucesso {'error': boo}
+    """
     try:
 
         if 'user_name' not in user_request:
@@ -258,6 +267,10 @@ def send_reset_password_token_to_user(user_request: dict) -> make_response:
 
         if not user:
             return make_response({'error': 'invalid user'}, 400)
+
+        if user_token_modification_count(user.user_id) > 3:
+            return make_response(
+                {'error': 'you have made more than 3 attempts in the last 5 minutes. Please wait and try agian'}, 400)
 
         token = mail_token_generate()
 
@@ -279,6 +292,16 @@ def send_reset_password_token_to_user(user_request: dict) -> make_response:
 
 
 def user_update_password_by_token_and_id(user_dict: dict) -> make_response:
+    """
+    Esta função atualiza o user_password no banco sql. Atrvés do dicionário de entrada, a função busca
+    o usuário com id informado e compara se o token informado é igual ao token que esta registrado
+    no banco sql. Caso o token informado esteja incorreto, esta função atualiza o campo user_token no banco sql
+    para nulo. Todos os campos do dicionário são obrogatórios.
+
+    :param user_dict: {"user_id": "type": "integer" ,"user_password": "type": "string",
+     "user_token": "type": "integer"  }
+    :return: em caso de sucesso {'user_id': foo}, em caso de não sucesso {'error': boo}
+    """
     try:
         if not json_validate_user_password_update(user_dict):
             return make_response({'error': 'invalid json'}, 415)
@@ -291,6 +314,9 @@ def user_update_password_by_token_and_id(user_dict: dict) -> make_response:
         if not user:
             return make_response({'error': 'non-existing user'}, 400)
 
+        if not user.user_token:
+            return make_response({'error': 'invalid token'}, 400)
+
         if user_dict['user_token'] != int(user.user_token):
             user_delete_token(user_dict['user_id'])
             return make_response({'error': 'invalid token'}, 400)
@@ -302,6 +328,8 @@ def user_update_password_by_token_and_id(user_dict: dict) -> make_response:
         session.commit()
         session.close()
 
+        user_delete_token(user_dict['user_id'])
+
         return make_response({'user_id': user.user_id}, 200)
 
     except:
@@ -309,6 +337,13 @@ def user_update_password_by_token_and_id(user_dict: dict) -> make_response:
 
 
 def user_delete_token(user_id: int) -> bool:
+    """
+    Esta função atualiza do o user_token no banco sql para NULO. Esta funcionalidade tem como alvo
+    o user com id informado na chamda desta função.
+
+    :param user_id: id do usuário
+    :return: [True, False]
+    """
     try:
         user = get_user_by_id(user_id)
         user.user_token = None
@@ -318,4 +353,3 @@ def user_delete_token(user_id: int) -> bool:
         return True
     except:
         return False
-

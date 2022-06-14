@@ -52,7 +52,7 @@ const buttonEvent = async () => {
         if ('error' in checkUpdatePasswordResponse) {
             alert(checkUpdatePasswordResponse['error']);
 
-            if (checkUpdatePasswordResponse[''] === 'invalid token') {
+            if (checkUpdatePasswordResponse['error'] === 'invalid token') {
                 window.location.reload();
             }
             return;
