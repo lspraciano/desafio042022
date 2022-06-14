@@ -1,5 +1,6 @@
 const formTitle = document.getElementById("form__title");
 const formButton = document.getElementById("form__button");
+const formButtonCancel = document.getElementById("form__button-cancel");
 const inputUserName = document.getElementById("input-zone__input-user-name");
 const inputUserToken = document.getElementById("input-zone__input-user-token");
 const inputUserPassword = document.getElementById("input-zone__input-user-password");
@@ -34,7 +35,7 @@ export const controlStep = async (step) => {
         inputUserName.style.display = 'none';
         inputUserToken.style.display = 'none';
         inputUserPassword.style.display = 'inline-block';
-        inputUserPasswordConfirmation.style.display = 'inline-block'
+        inputUserPasswordConfirmation.style.display = 'inline-block';
         image.src = './static/images/user_password_recovery/undraw_password.svg';
         return;
     }
@@ -45,7 +46,8 @@ export const controlStep = async (step) => {
         inputUserName.style.display = 'none';
         inputUserToken.style.display = 'none';
         inputUserPassword.style.display = 'none';
-        inputUserPasswordConfirmation.style.display = 'none'
+        inputUserPasswordConfirmation.style.display = 'none';
+        formButtonCancel.style.display = 'none';
         image.src = './static/images/user_password_recovery/undraw_ok.svg';
         return;
     }

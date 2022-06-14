@@ -2,6 +2,7 @@ import {controlStep} from "./form-step-controller.js";
 import {generatePasswordToken} from "./post-generate-password-token.js";
 import {checkToken, checkUserName, validatePassword} from "./validate-form.js";
 import {updateUserPasword} from "./update-password.js";
+import {startPreloading, stopPreloading} from "../../../../../resources/js/preloader/preloader.js";
 
 const formTitle = document.getElementById("form__title");
 const formButton = document.getElementById("form__button");
@@ -70,5 +71,7 @@ const buttonEvent = async () => {
 }
 
 formButton.addEventListener('click', async () => {
+    await startPreloading();
     await buttonEvent();
+    await stopPreloading();
 })

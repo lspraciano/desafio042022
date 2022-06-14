@@ -1,6 +1,9 @@
 /* Configurações Gerais */
 @import "general.css";
 
+/* Pre Loader */
+@import "../../../../../resources/css/preloader.css";
+
 /* Plotting Zone */
 @import "plotting-zone.css";
 
