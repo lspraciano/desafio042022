@@ -8,7 +8,7 @@ from resources.py.token.token_manager import token_generator
 from run import run_server
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope='module')
 def app():
     """
     Esta função retorna uma instancia do app flask
@@ -19,7 +19,7 @@ def app():
     return app
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope='function')
 def client(app):
     """
     Esta função retorna um cliente HTTP para ser usado durante os teste desta aplicação. Este cliente NÃO
@@ -31,7 +31,7 @@ def client(app):
     return app.test_client()
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope='function')
 def client_admin_authenticaded(app):
     """
     Esta função retorna um cliente HTTP para ser usado durante os teste desta aplicação. Este cliente
@@ -41,14 +41,14 @@ def client_admin_authenticaded(app):
     :return: client HTTP
     """
 
-    cookie_value = token_generator(app.config["ADMIN_USER_ID"])['token']
-    cookie_name = app.config["TOKEN_NAME"]
+    cookie_value = token_generator(app.config['ADMIN_USER_ID'])['token']
+    cookie_name = app.config['TOKEN_NAME']
     client = app.test_client()
     client.set_cookie('localhost', cookie_name, cookie_value)
     return client
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope='function')
 def session(app):
     """
     Esta função retorna uma sessão do SQLAlchemy

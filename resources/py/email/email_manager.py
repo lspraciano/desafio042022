@@ -26,19 +26,19 @@ def send_email_password_new_user(email: str, password: str) -> dict:
         if password == '' or password is None or type(password) is not str:
             return {'error': 'invalid password'}
 
-        body = f'''
+        body = f"""
         
         Esta é sua senha temporária. Você pode troca-la para aumentar sua segurança:
     
        {password}
     
-        '''
+        """
 
         msg = Message(
             subject='Senha de acesso.',
             sender=Configuration.MAIL_USERNAME,
             recipients=email.split(),
-            body=body
+            body=body,
         )
 
         mail.send(msg)
@@ -62,7 +62,8 @@ def validate_email(email: str) -> bool:
         return False
 
     regex = re.compile(
-        r"([-!#-'*+/-9=?A-Z^-~]+(\.[-!#-'*+/-9=?A-Z^-~]+)*|\"([]!#-[^-~ \t]|(\\[\t -~]))+\")@([-!#-'*+/-9=?A-Z^-~]+(\.[-!#-'*+/-9=?A-Z^-~]+)*|\[[\t -Z^-~]*])")
+        r"([-!#-'*+/-9=?A-Z^-~]+(\.[-!#-'*+/-9=?A-Z^-~]+)*|\"([]!#-[^-~ \t]|(\\[\t -~]))+\")@([-!#-'*+/-9=?A-Z^-~]+(\.[-!#-'*+/-9=?A-Z^-~]+)*|\[[\t -Z^-~]*])"
+    )
     result = re.fullmatch(regex, email)
     if result:
         return True
@@ -87,19 +88,19 @@ def send_email_token_reset_password(email: str, token: str) -> dict:
         if token == '' or token is None or type(token) is not str:
             return {'error': 'invalid password'}
 
-        body = f'''
+        body = f"""
 
         Este é seu TOKEN:
 
        {token}
 
-        '''
+        """
 
         msg = Message(
             subject='Token para resetar password.',
             sender=Configuration.MAIL_USERNAME,
             recipients=email.split(),
-            body=body
+            body=body,
         )
 
         mail.send(msg)

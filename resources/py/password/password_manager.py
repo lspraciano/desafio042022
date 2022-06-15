@@ -42,7 +42,8 @@ def validate_password(password: str) -> bool:
         return False
 
     regex = re.compile(
-        r"^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$")
+        r'^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$'
+    )
     result = re.fullmatch(regex, password)
     if result:
         return True

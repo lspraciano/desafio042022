@@ -9,7 +9,7 @@ session = create_session()
 
 
 def test_db_is_on_test(app):
-    assert "test" in app.config['SQLALCHEMY_DATABASE_URI']
+    assert 'test' in app.config['SQLALCHEMY_DATABASE_URI']
 
 
 def test_db_is_created(app):
@@ -17,6 +17,10 @@ def test_db_is_created(app):
 
 
 def test_user_admin_is_created(app):
-    user = session.query(User).filter_by(user_name=app.config["ADMIN_USER_NAME"]).first()
+    user = (
+        session.query(User)
+        .filter_by(user_name=app.config['ADMIN_USER_NAME'])
+        .first()
+    )
     session.close()
     assert user is not None

@@ -6,18 +6,37 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from configuration.configuration import Configuration
 from database.database import create_session
 from error.error import get_error_msg
-from modules.users.controllers.user_audit_controller import user_token_modification_count
-from modules.users.json_schema.user_authentication_json import json_validate_user_authentication
-from modules.users.json_schema.user_create_json import json_validate_create_user
-from modules.users.json_schema.user_update_json import json_validate_update_user
-from modules.users.json_schema.user_update_password import json_validate_user_password_update
+from modules.users.controllers.user_audit_controller import (
+    user_token_modification_count,
+)
+from modules.users.json_schema.user_authentication_json import (
+    json_validate_user_authentication,
+)
+from modules.users.json_schema.user_create_json import (
+    json_validate_create_user,
+)
+from modules.users.json_schema.user_update_json import (
+    json_validate_update_user,
+)
+from modules.users.json_schema.user_update_password import (
+    json_validate_user_password_update,
+)
 from modules.users.models.user_model import User
 from modules.users.serializers.user_seriallizer import UserBasicSchema
-from resources.py.password.password_manager import generate_password, validate_password
+from resources.py.password.password_manager import (
+    generate_password,
+    validate_password,
+)
 from resources.py.token import token_manager
-from resources.py.email.email_manager import validate_email, send_email_password_new_user, \
-    send_email_token_reset_password
-from resources.py.token.token_manager import user_id_from_token, mail_token_generate
+from resources.py.email.email_manager import (
+    validate_email,
+    send_email_password_new_user,
+    send_email_token_reset_password,
+)
+from resources.py.token.token_manager import (
+    user_id_from_token,
+    mail_token_generate,
+)
 
 session = create_session()
 
@@ -83,13 +102,13 @@ def check_login_password(user_dict: dict) -> make_response:
         user = get_user_by_username(username)
 
         if user is None:
-            return make_response({"error": "access denied"}, 401)
+            return make_response({'error': 'access denied'}, 401)
 
         if user.user_status == 0:
-            return make_response({"error": "access denied"}, 401)
+            return make_response({'error': 'access denied'}, 401)
 
         if not check_password_hash(user.user_password, password):
-            return make_response({"error": "access denied"}, 401)
+            return make_response({'error': 'access denied'}, 401)
 
         user_id = token_manager.token_generator(user.user_id)
 
@@ -109,7 +128,11 @@ def get_all_users() -> make_response:
     :return: { 'user': [ { user }, ] }
     """
 
-    user = session.query(User).filter(User.user_id != Configuration.ADMIN_USER_ID).all()
+    user = (
+        session.query(User)
+        .filter(User.user_id != Configuration.ADMIN_USER_ID)
+        .all()
+    )
     session.close()
 
     return make_response({'users': UserBasicSchema.dump(user)}, 200)
@@ -156,8 +179,9 @@ def create_new_user(user_dict: dict) -> make_response:
     if not json_validate_create_user(user_dict):
         return make_response({'error': 'invalid json'}, 415)
 
-    validate_username_and_email = check_username_email(user_name=user_dict['user_name'],
-                                                       email=user_dict['user_email'])
+    validate_username_and_email = check_username_email(
+        user_name=user_dict['user_name'], email=user_dict['user_email']
+    )
 
     if 'error' in validate_username_and_email.keys():
         return make_response(validate_username_and_email, 400)
@@ -173,15 +197,16 @@ def create_new_user(user_dict: dict) -> make_response:
         user_password=generate_password_hash(user_password, method='sha256'),
         user_email=user_dict['user_email'].upper(),
         user_status=1,
-        user_last_modification_user_id=user_from_token['user_id']
+        user_last_modification_user_id=user_from_token['user_id'],
     )
 
     session.add(user)
     session.commit()
     session.close()
 
-    validate_send_email = send_email_password_new_user(email=user_dict['user_email'],
-                                                       password=user_password)
+    validate_send_email = send_email_password_new_user(
+        email=user_dict['user_email'], password=user_password
+    )
 
     if 'error' in validate_send_email.keys():
         return make_response(validate_send_email, 400)
@@ -217,17 +242,24 @@ def update_user(user_dict: dict) -> make_response:
     if 'user_id' not in user_from_token:
         return make_response(user_from_token, 400)
 
-    if user_dict['user_id'] == user_from_token['user_id'] and user_dict['user_status'] == 0:
+    if (
+        user_dict['user_id'] == user_from_token['user_id']
+        and user_dict['user_status'] == 0
+    ):
         return make_response({'error': 'you cannot disable your access'}, 400)
 
     if user.user_name != user_dict['user_name'] and user_dict['user_name']:
-        validate_username = check_username_email(user_name=user_dict['user_name'])
+        validate_username = check_username_email(
+            user_name=user_dict['user_name']
+        )
         if 'error' in validate_username.keys():
             return make_response(validate_username, 400)
         user.user_name = user_dict['user_name'].upper()
 
     if user.user_email != user_dict['user_email'] and user_dict['user_email']:
-        validate_user_email = check_username_email(email=user_dict['user_email'])
+        validate_user_email = check_username_email(
+            email=user_dict['user_email']
+        )
         if 'error' in validate_user_email.keys():
             return make_response(validate_user_email, 400)
         user.user_email = user_dict['user_email']
@@ -270,7 +302,11 @@ def send_reset_password_token_to_user(user_request: dict) -> make_response:
 
         if user_token_modification_count(user.user_id) > 3:
             return make_response(
-                {'error': 'you have made more than 3 attempts in the last 5 minutes. Please wait and try agian'}, 400)
+                {
+                    'error': 'you have made more than 3 attempts in the last 5 minutes. Please wait and try agian'
+                },
+                400,
+            )
 
         token = mail_token_generate()
 
@@ -280,7 +316,9 @@ def send_reset_password_token_to_user(user_request: dict) -> make_response:
         session.commit()
         session.close()
 
-        send_email_result = send_email_token_reset_password(user.user_email, str(token))
+        send_email_result = send_email_token_reset_password(
+            user.user_email, str(token)
+        )
 
         if 'success' not in send_email_result:
             return make_response(send_email_result, 400)
@@ -322,7 +360,9 @@ def user_update_password_by_token_and_id(user_dict: dict) -> make_response:
             return make_response({'error': 'invalid token'}, 400)
 
         user.user_last_modification_user_id = Configuration.ADMIN_USER_ID
-        user.user_password = generate_password_hash(user_dict['user_password'], method='sha256')
+        user.user_password = generate_password_hash(
+            user_dict['user_password'], method='sha256'
+        )
 
         session.add(user)
         session.commit()

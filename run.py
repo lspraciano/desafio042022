@@ -9,7 +9,11 @@ from configuration.configuration import app_configuration, app_active
 if __name__ == '__main__':
     config = app_configuration[app_active]
     app = create_app(config)
-    app.run(host=app.config['HOST'], port=app.config['PORT'], debug=app.config['DEBUG'])
+    app.run(
+        host=app.config['HOST'],
+        port=app.config['PORT'],
+        debug=app.config['DEBUG'],
+    )
     reload(sys)
 
 

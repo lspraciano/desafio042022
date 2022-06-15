@@ -6,7 +6,9 @@ from database.database import create_session
 from error.error import get_error_msg
 from modules.transaction.models.transaction_logs_model import TransactionLog
 from resources.py.token.token_manager import user_id_from_token
-from modules.transaction.serializers.transaction_log_schema import TransactionLogSchema
+from modules.transaction.serializers.transaction_log_schema import (
+    TransactionLogSchema,
+)
 
 TransactionLogSchema = TransactionLogSchema(many=True)
 session = create_session()
@@ -34,7 +36,8 @@ def save_transaction_log(log_date: datetime):
         transaction_log = TransactionLog(
             transactions_log_transactions_datetime=log_date,
             transactions_log_datetime=datetime.now(),
-            transactions_log_user_id=user_from_token['user_id'])
+            transactions_log_user_id=user_from_token['user_id'],
+        )
 
         session.add(transaction_log)
         session.commit()

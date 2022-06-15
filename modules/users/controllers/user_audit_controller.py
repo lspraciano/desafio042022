@@ -18,12 +18,15 @@ def user_token_modification_count(user_id: int) -> int:
     :return:
     """
     now = datetime.now()
-    past = (now - timedelta(minutes=5))
-    modification_last_five_minutes = session.query(func.count(distinct(UserAudit.user_audit_user_token))) \
+    past = now - timedelta(minutes=5)
+    modification_last_five_minutes = (
+        session.query(func.count(distinct(UserAudit.user_audit_user_token)))
         .filter(
-        UserAudit.user_audit_transaction_date_time >= past,
-        UserAudit.user_audit_user_id == user_id) \
+            UserAudit.user_audit_transaction_date_time >= past,
+            UserAudit.user_audit_user_id == user_id,
+        )
         .all()
+    )
 
     count = int(modification_last_five_minutes[0][0])
 

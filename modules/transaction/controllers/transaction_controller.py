@@ -6,10 +6,16 @@ from sqlalchemy import extract, func
 # Created Imports
 from database.database import create_session
 from error.error import get_error_msg
-from modules.transaction.controllers.transaction_log_controller import save_transaction_log
-from modules.transaction.json_schema.transactions_json import json_validate_transaction
+from modules.transaction.controllers.transaction_log_controller import (
+    save_transaction_log,
+)
+from modules.transaction.json_schema.transactions_json import (
+    json_validate_transaction,
+)
 from modules.transaction.models.transaction_model import Transaction
-from modules.transaction.serializers.transaction_schema import TransactionSchema
+from modules.transaction.serializers.transaction_schema import (
+    TransactionSchema,
+)
 
 session = create_session()
 TransactionSchema = TransactionSchema(many=True)
@@ -25,10 +31,18 @@ def get_transaction_by_date(transactions_date: datetime) -> dict:
     if not isinstance(transactions_date, datetime):
         return {'error': 'invalid date'}
 
-    transactions = session.query(Transaction).filter(
-        extract('month', Transaction.transaction_date_time) == transactions_date.month,
-        extract('year', Transaction.transaction_date_time) == transactions_date.year,
-        extract('day', Transaction.transaction_date_time) == transactions_date.day).all()
+    transactions = (
+        session.query(Transaction)
+        .filter(
+            extract('month', Transaction.transaction_date_time)
+            == transactions_date.month,
+            extract('year', Transaction.transaction_date_time)
+            == transactions_date.year,
+            extract('day', Transaction.transaction_date_time)
+            == transactions_date.day,
+        )
+        .all()
+    )
 
     session.close()
 
@@ -54,14 +68,23 @@ def validate_transaction_list(transactions_list: list) -> dict:
         if not json_validate_transaction(transactions_list):
             return {'error': 'invalid json'}
 
-        transactions_date = datetime.strptime(transactions_list[0]['transaction_date_time'], "%Y-%m-%dT%H:%M:%S")
-        check_transactions_existence_in_db = get_transaction_by_date(transactions_date)
+        transactions_date = datetime.strptime(
+            transactions_list[0]['transaction_date_time'], '%Y-%m-%dT%H:%M:%S'
+        )
+        check_transactions_existence_in_db = get_transaction_by_date(
+            transactions_date
+        )
         if check_transactions_existence_in_db['transactions']:
             return {'error': 'file with this date already exists'}
 
         for transaction in transactions_list:
-            current_transaction_date = datetime.strptime(transaction['transaction_date_time'], "%Y-%m-%dT%H:%M:%S")
-            if current_transaction_date.date() != transactions_date.date() or '' in transaction.values():
+            current_transaction_date = datetime.strptime(
+                transaction['transaction_date_time'], '%Y-%m-%dT%H:%M:%S'
+            )
+            if (
+                current_transaction_date.date() != transactions_date.date()
+                or '' in transaction.values()
+            ):
                 return {'error': 'there are records other than the file date'}
 
         return {'success': 'ok'}
@@ -69,7 +92,9 @@ def validate_transaction_list(transactions_list: list) -> dict:
         return get_error_msg()
 
 
-def get_transactions_list_by_date(transaction_request: request) -> make_response:
+def get_transactions_list_by_date(
+    transaction_request: request,
+) -> make_response:
     """
     Esta função retorna um dicionário contendo todas as transações para uma determinada data. A data deve ser informada
     como parâmentro de entrada no formato datetime.
@@ -83,7 +108,9 @@ def get_transactions_list_by_date(transaction_request: request) -> make_response
         transactions_date = transaction_request.args.get('date')
 
         try:
-            transactions_date = datetime.strptime(transactions_date, '%d/%m/%Y')
+            transactions_date = datetime.strptime(
+                transactions_date, '%d/%m/%Y'
+            )
         except:
             return make_response({'error': 'invalid date'}, 400)
 
@@ -117,18 +144,30 @@ def save_transactions_list(transactions_list: list) -> make_response:
             return make_response(check_transactions, 400)
 
         transactions = []
-        transaction_date = ""
+        transaction_date = ''
 
         for transaction in transactions_list:
-            transaction_date = datetime.strptime(transaction['transaction_date_time'], "%Y-%m-%dT%H:%M:%S")
-            row = Transaction(transaction_home_bank=transaction['transaction_home_bank'],
-                              transaction_home_branch=transaction['transaction_home_branch'],
-                              transaction_home_account=transaction['transaction_home_account'],
-                              transaction_destination_bank=transaction['transaction_destination_bank'],
-                              transaction_destination_branch=transaction['transaction_destination_branch'],
-                              transaction_destination_account=transaction['transaction_destination_account'],
-                              transaction_amount=transaction['transaction_amount'],
-                              transaction_date_time=transaction_date)
+            transaction_date = datetime.strptime(
+                transaction['transaction_date_time'], '%Y-%m-%dT%H:%M:%S'
+            )
+            row = Transaction(
+                transaction_home_bank=transaction['transaction_home_bank'],
+                transaction_home_branch=transaction['transaction_home_branch'],
+                transaction_home_account=transaction[
+                    'transaction_home_account'
+                ],
+                transaction_destination_bank=transaction[
+                    'transaction_destination_bank'
+                ],
+                transaction_destination_branch=transaction[
+                    'transaction_destination_branch'
+                ],
+                transaction_destination_account=transaction[
+                    'transaction_destination_account'
+                ],
+                transaction_amount=transaction['transaction_amount'],
+                transaction_date_time=transaction_date,
+            )
             transactions.append(row)
 
         transaction_log = save_transaction_log(transaction_date)
@@ -140,14 +179,18 @@ def save_transactions_list(transactions_list: list) -> make_response:
         session.add_all(transactions)
         session.commit()
         session.close()
-        return make_response({'success': {'transactions': len(transactions)}}, 201)
+        return make_response(
+            {'success': {'transactions': len(transactions)}}, 201
+        )
 
     except:
         session.rollback()
         return get_error_msg()
 
 
-def get_suspects_transactions_report(suspect_request: request) -> make_response:
+def get_suspects_transactions_report(
+    suspect_request: request,
+) -> make_response:
     """
     Esta função retorna um dicionário contendo as transações, agências e bancos suspeitos. Os valores que
     definem quem são ou não suspeitos são denifinidos dentro desta função.
@@ -173,74 +216,141 @@ def get_suspects_transactions_report(suspect_request: request) -> make_response:
         alert_value_for_account = 700000
         alert_value_for_branch = 4900000
 
-        transactions_suspect = session.query(Transaction).filter(
-            extract('month', Transaction.transaction_date_time) == suspect_date.month,
-            extract('year', Transaction.transaction_date_time) == suspect_date.year,
-            Transaction.transaction_amount >= alert_value_for_transaction
-        ).all()
-
-        transactions_suspect_home_account = session.query(Transaction.transaction_home_bank,
-                                                          Transaction.transaction_home_branch,
-                                                          Transaction.transaction_home_account,
-                                                          func.sum(Transaction.transaction_amount).label(
-                                                              "transaction_amount")).filter(
-            extract('month', Transaction.transaction_date_time) == suspect_date.month,
-            extract('year', Transaction.transaction_date_time) == suspect_date.year) \
-            .group_by(Transaction.transaction_home_bank,
-                      Transaction.transaction_home_branch,
-                      Transaction.transaction_home_account,
-                      ) \
-            .having(func.sum(Transaction.transaction_amount) >= alert_value_for_account) \
+        transactions_suspect = (
+            session.query(Transaction)
+            .filter(
+                extract('month', Transaction.transaction_date_time)
+                == suspect_date.month,
+                extract('year', Transaction.transaction_date_time)
+                == suspect_date.year,
+                Transaction.transaction_amount >= alert_value_for_transaction,
+            )
             .all()
+        )
 
-        transactions_suspect_destination_account = session.query(Transaction.transaction_destination_bank,
-                                                                 Transaction.transaction_destination_branch,
-                                                                 Transaction.transaction_destination_account,
-                                                                 func.sum(Transaction.transaction_amount).label(
-                                                                     "transaction_amount")).filter(
-            extract('month', Transaction.transaction_date_time) == suspect_date.month,
-            extract('year', Transaction.transaction_date_time) == suspect_date.year) \
-            .group_by(Transaction.transaction_destination_bank,
-                      Transaction.transaction_destination_branch,
-                      Transaction.transaction_destination_account,
-                      ) \
-            .having(func.sum(Transaction.transaction_amount) >= alert_value_for_account) \
+        transactions_suspect_home_account = (
+            session.query(
+                Transaction.transaction_home_bank,
+                Transaction.transaction_home_branch,
+                Transaction.transaction_home_account,
+                func.sum(Transaction.transaction_amount).label(
+                    'transaction_amount'
+                ),
+            )
+            .filter(
+                extract('month', Transaction.transaction_date_time)
+                == suspect_date.month,
+                extract('year', Transaction.transaction_date_time)
+                == suspect_date.year,
+            )
+            .group_by(
+                Transaction.transaction_home_bank,
+                Transaction.transaction_home_branch,
+                Transaction.transaction_home_account,
+            )
+            .having(
+                func.sum(Transaction.transaction_amount)
+                >= alert_value_for_account
+            )
             .all()
+        )
 
-        transactions_suspect_home_branch = session.query(Transaction.transaction_home_bank,
-                                                         Transaction.transaction_home_branch,
-                                                         func.sum(Transaction.transaction_amount).label(
-                                                             "transaction_amount")).filter(
-            extract('month', Transaction.transaction_date_time) == suspect_date.month,
-            extract('year', Transaction.transaction_date_time) == suspect_date.year) \
-            .group_by(Transaction.transaction_home_bank,
-                      Transaction.transaction_home_branch,
-                      ) \
-            .having(func.sum(Transaction.transaction_amount) >= alert_value_for_branch) \
+        transactions_suspect_destination_account = (
+            session.query(
+                Transaction.transaction_destination_bank,
+                Transaction.transaction_destination_branch,
+                Transaction.transaction_destination_account,
+                func.sum(Transaction.transaction_amount).label(
+                    'transaction_amount'
+                ),
+            )
+            .filter(
+                extract('month', Transaction.transaction_date_time)
+                == suspect_date.month,
+                extract('year', Transaction.transaction_date_time)
+                == suspect_date.year,
+            )
+            .group_by(
+                Transaction.transaction_destination_bank,
+                Transaction.transaction_destination_branch,
+                Transaction.transaction_destination_account,
+            )
+            .having(
+                func.sum(Transaction.transaction_amount)
+                >= alert_value_for_account
+            )
             .all()
+        )
 
-        transactions_suspect_destination_branch = session.query(Transaction.transaction_destination_bank,
-                                                                Transaction.transaction_destination_branch,
-                                                                func.sum(Transaction.transaction_amount).label(
-                                                                    "transaction_amount")).filter(
-            extract('month', Transaction.transaction_date_time) == suspect_date.month,
-            extract('year', Transaction.transaction_date_time) == suspect_date.year) \
-            .group_by(Transaction.transaction_destination_bank,
-                      Transaction.transaction_destination_branch,
-                      ) \
-            .having(func.sum(Transaction.transaction_amount) >= alert_value_for_branch) \
+        transactions_suspect_home_branch = (
+            session.query(
+                Transaction.transaction_home_bank,
+                Transaction.transaction_home_branch,
+                func.sum(Transaction.transaction_amount).label(
+                    'transaction_amount'
+                ),
+            )
+            .filter(
+                extract('month', Transaction.transaction_date_time)
+                == suspect_date.month,
+                extract('year', Transaction.transaction_date_time)
+                == suspect_date.year,
+            )
+            .group_by(
+                Transaction.transaction_home_bank,
+                Transaction.transaction_home_branch,
+            )
+            .having(
+                func.sum(Transaction.transaction_amount)
+                >= alert_value_for_branch
+            )
             .all()
+        )
+
+        transactions_suspect_destination_branch = (
+            session.query(
+                Transaction.transaction_destination_bank,
+                Transaction.transaction_destination_branch,
+                func.sum(Transaction.transaction_amount).label(
+                    'transaction_amount'
+                ),
+            )
+            .filter(
+                extract('month', Transaction.transaction_date_time)
+                == suspect_date.month,
+                extract('year', Transaction.transaction_date_time)
+                == suspect_date.year,
+            )
+            .group_by(
+                Transaction.transaction_destination_bank,
+                Transaction.transaction_destination_branch,
+            )
+            .having(
+                func.sum(Transaction.transaction_amount)
+                >= alert_value_for_branch
+            )
+            .all()
+        )
 
         session.close()
 
-        return {'transactions_suspect': TransactionSchema.dump(transactions_suspect),
-                'transactions_suspect_home_account': TransactionSchema.dump(transactions_suspect_home_account),
-                'transactions_suspect_destination_account': TransactionSchema.dump(
-                    transactions_suspect_destination_account),
-                'transactions_suspect_home_branch': TransactionSchema.dump(transactions_suspect_home_branch),
-                'transactions_suspect_destination_branch': TransactionSchema.dump(
-                    transactions_suspect_destination_branch)
-                }, 200
+        return {
+            'transactions_suspect': TransactionSchema.dump(
+                transactions_suspect
+            ),
+            'transactions_suspect_home_account': TransactionSchema.dump(
+                transactions_suspect_home_account
+            ),
+            'transactions_suspect_destination_account': TransactionSchema.dump(
+                transactions_suspect_destination_account
+            ),
+            'transactions_suspect_home_branch': TransactionSchema.dump(
+                transactions_suspect_home_branch
+            ),
+            'transactions_suspect_destination_branch': TransactionSchema.dump(
+                transactions_suspect_destination_branch
+            ),
+        }, 200
     except:
         return make_response(get_error_msg(), 400)
 
@@ -253,9 +363,14 @@ def get_transactions_report() -> make_response:
     :return:
     """
     now = datetime.now()
-    rows_transactions = session.query(Transaction).filter(
-        extract('month', Transaction.transaction_date_time) == now.month,
-        extract('year', Transaction.transaction_date_time) == now.year).all()
+    rows_transactions = (
+        session.query(Transaction)
+        .filter(
+            extract('month', Transaction.transaction_date_time) == now.month,
+            extract('year', Transaction.transaction_date_time) == now.year,
+        )
+        .all()
+    )
     session.close()
 
     transactions_total = len(rows_transactions)
@@ -274,36 +389,47 @@ def get_transactions_report() -> make_response:
             transactions_suspect_amount_total += r.transaction_amount
 
     if transactions_total > 0:
-        transactions_amount_mean = transactions_amount_total / transactions_total
-        transactions_suspect_percentage = transactions_suspect_total / transactions_total * 100
+        transactions_amount_mean = (
+            transactions_amount_total / transactions_total
+        )
+        transactions_suspect_percentage = (
+            transactions_suspect_total / transactions_total * 100
+        )
 
     if transactions_suspect_total > 0:
-        transactions_suspect_mean = transactions_suspect_amount_total / transactions_suspect_total
+        transactions_suspect_mean = (
+            transactions_suspect_amount_total / transactions_suspect_total
+        )
 
-    rows_transactions_total_per_day = session.query(func.count(Transaction.transaction_id).label('total'),
-                                                    extract('day', Transaction.transaction_date_time).label(
-                                                        'day'), ) \
+    rows_transactions_total_per_day = (
+        session.query(
+            func.count(Transaction.transaction_id).label('total'),
+            extract('day', Transaction.transaction_date_time).label('day'),
+        )
         .filter(
-        extract('month', Transaction.transaction_date_time) == now.month,
-        extract('year', Transaction.transaction_date_time) == now.year) \
-        .order_by(
-        'day') \
-        .group_by(
-        extract('day', Transaction.transaction_date_time)) \
+            extract('month', Transaction.transaction_date_time) == now.month,
+            extract('year', Transaction.transaction_date_time) == now.year,
+        )
+        .order_by('day')
+        .group_by(extract('day', Transaction.transaction_date_time))
         .all()
+    )
 
     session.close()
 
-    rows_transactions_total_per_bank = session.query(func.count(Transaction.transaction_id).label('total'),
-                                                     Transaction.transaction_home_bank) \
+    rows_transactions_total_per_bank = (
+        session.query(
+            func.count(Transaction.transaction_id).label('total'),
+            Transaction.transaction_home_bank,
+        )
         .filter(
-        extract('month', Transaction.transaction_date_time) == now.month,
-        extract('year', Transaction.transaction_date_time) == now.year) \
-        .order_by(
-        'total') \
-        .group_by(
-        Transaction.transaction_home_bank) \
+            extract('month', Transaction.transaction_date_time) == now.month,
+            extract('year', Transaction.transaction_date_time) == now.year,
+        )
+        .order_by('total')
+        .group_by(Transaction.transaction_home_bank)
         .all()
+    )
 
     session.close()
 
@@ -319,10 +445,12 @@ def get_transactions_report() -> make_response:
         transactions_total_per_bank.append(add)
 
     return {
-               'transactions_total': transactions_total,
-               'transactions_amount_mean': round(transactions_amount_mean, 2),
-               'transactions_suspect_mean': round(transactions_suspect_mean, 2),
-               'transactions_suspect_percentage': round(transactions_suspect_percentage, 2),
-               'transactions_total_per_day': transactions_total_per_day,
-               'transactions_total_per_bank': transactions_total_per_bank,
-           }, 200
+        'transactions_total': transactions_total,
+        'transactions_amount_mean': round(transactions_amount_mean, 2),
+        'transactions_suspect_mean': round(transactions_suspect_mean, 2),
+        'transactions_suspect_percentage': round(
+            transactions_suspect_percentage, 2
+        ),
+        'transactions_total_per_day': transactions_total_per_day,
+        'transactions_total_per_bank': transactions_total_per_bank,
+    }, 200

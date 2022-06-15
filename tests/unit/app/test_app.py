@@ -6,7 +6,7 @@ def test_app_is_created(app):
 
 
 def test_debug_is_equal_configuration(app):
-    assert app.config["DEBUG"] == TestConfig.DEBUG
+    assert app.config['DEBUG'] == TestConfig.DEBUG
 
 
 def test_host_is_equal_configuration(app):
@@ -18,7 +18,9 @@ def test_port_is_equal_configuration(app):
 
 
 def test_template_reload_is_true(app):
-    assert app.config['TEMPLATES_AUTO_RELOAD'] == TestConfig.TEMPLATES_AUTO_RELOAD
+    assert (
+        app.config['TEMPLATES_AUTO_RELOAD'] == TestConfig.TEMPLATES_AUTO_RELOAD
+    )
 
 
 def test_secret_key_is_equal_configuration(app):

@@ -22,11 +22,12 @@ def token_generator(user_id: int) -> dict:
         return {'error': 'user_id must to be int type'}
 
     payload = {
-        "id": user_id,
-        "exp": datetime.datetime.utcnow() + datetime.timedelta(minutes=Configuration.TIME_EXP_TOKEN)
+        'id': user_id,
+        'exp': datetime.datetime.utcnow()
+        + datetime.timedelta(minutes=Configuration.TIME_EXP_TOKEN),
     }
     token = jwt.encode(payload, Configuration.SECRET_KEY)
-    return {"token": token}
+    return {'token': token}
 
 
 def token_authentication(function):
@@ -52,7 +53,9 @@ def token_authentication(function):
             return make_response({'error': 'unauthorized'}, 401)
 
         try:
-            decode = jwt.decode(token_no_bearer, Configuration.SECRET_KEY, algorithms=["HS256"])
+            decode = jwt.decode(
+                token_no_bearer, Configuration.SECRET_KEY, algorithms=['HS256']
+            )
         except:
             return make_response({'error': 'unauthorized'}, 401)
         return function()
@@ -75,7 +78,9 @@ def user_id_from_token() -> dict:
         if token_from_cookie is None:
             return {'error': 'unauthorized'}
 
-        decode = jwt.decode(token_no_bearer, Configuration.SECRET_KEY, algorithms=["HS256"])
+        decode = jwt.decode(
+            token_no_bearer, Configuration.SECRET_KEY, algorithms=['HS256']
+        )
         user_id = decode['id']
         return {'user_id': user_id}
 
