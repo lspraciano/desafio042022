@@ -13,11 +13,19 @@ body {
     height: 100vh;
     width: 100vw;
     display: flex;
-    align-items: center;
     justify-content: center;
     background: #5253a4;
+    margin-top: 5vh;
 }
 
 body a {
     cursor: pointer;
+}
+
+@media only screen and (max-width: 768px) {
+
+    body {
+
+    }
+
 }

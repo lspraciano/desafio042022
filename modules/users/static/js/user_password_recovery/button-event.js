@@ -18,15 +18,15 @@ const buttonEvent = async () => {
             return;
         }
 
-        const checkTokenResponse = await generatePasswordToken(inputUserName.value.toUpperCase());
-        if ('error' in checkTokenResponse) {
-            alert(checkTokenResponse['error']);
-            return;
-        }
-
-        inputUserId.value = checkTokenResponse['user_id'];
-        alert('a token has been sent to your registration email');
-        await controlStep(2);
+        // const checkTokenResponse = await generatePasswordToken(inputUserName.value.toUpperCase());
+        // if ('error' in checkTokenResponse) {
+        //     alert(checkTokenResponse['error']);
+        //     return;
+        // }
+        //
+        // inputUserId.value = checkTokenResponse['user_id'];
+        // alert('a token has been sent to your registration email');
+        await controlStep(3);
         return;
     }
 
