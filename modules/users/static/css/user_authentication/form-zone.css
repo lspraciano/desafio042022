@@ -47,6 +47,10 @@
     outline: none;
 }
 
+.username__input:-webkit-autofill,
+.password__input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px #f8f8f8 inset !important;
+}
 
 .form__button {
     font-weight: 900;

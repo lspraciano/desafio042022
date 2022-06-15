@@ -26,6 +26,8 @@ export const controlStep = async (step) => {
         inputUserToken.style.display = 'inline-block';
         inputUserPassword.style.display = 'none';
         inputUserPasswordConfirmation.style.display = 'none';
+        inputUserPassword.value = "";
+        inputUserPasswordConfirmation.value = "";
         image.src = './static/images/user_password_recovery/undraw_token.svg';
         return;
     }
