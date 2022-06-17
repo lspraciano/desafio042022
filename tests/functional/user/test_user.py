@@ -2,7 +2,6 @@
 from flask import json
 
 # Created Imports
-from werkzeug.security import check_password_hash
 from modules.users.controllers.user_controller import get_user_by_id
 
 
